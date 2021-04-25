@@ -4,4 +4,8 @@ Root terragrunt modules for deploying cddc39 infrastructure
 
 ## Assumptions
 
-    # token = DIGITALOCEAN_TOKEN
+### Environment variables
+
+```sh
+DIGITALOCEAN_TOKEN
+```
