@@ -8,7 +8,6 @@ include {
 
 
 inputs = merge(
-  jsondecode(file(find_in_parent_folders("do-conf.json"))),
   jsondecode(file(find_in_parent_folders("networking-conf.json"))),
   {
     active_regions = [
