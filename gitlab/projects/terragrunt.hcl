@@ -8,5 +8,5 @@ include {
 
 
 inputs = merge(
-  jsondecode(file(find_in_parent_folders("projects-conf.json"))),
+  jsondecode(file(find_in_parent_folders("gitlab-conf.json"))),
 )

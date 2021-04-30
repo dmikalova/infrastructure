@@ -1,0 +1,28 @@
+{
+  "gitlab_conf": {
+    "groups": {
+      "673ab7": {
+        "description": "Terraform modules to deploy a Digital Ocean Kubernetes cluster"
+      },
+      "cddc39": {
+        "description": "Services"
+      }
+    },
+    "projects": {
+      "infrastructure": {
+        "description": "root terragrunt infrastructure modules",
+        "namespace": "dmikalova"
+      },
+      "terraform-digitalocean-kubernetes": {
+        "namespace": "673ab7"
+      },
+      "terraform-gitlab-projects": {
+        "namespace": "dmikalova",
+        "visibility_level": "public"
+      }
+    },
+    "users": {
+      "dmikalova": {}
+    }
+  }
+}
