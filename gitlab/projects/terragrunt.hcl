@@ -6,7 +6,6 @@ include {
   path = find_in_parent_folders()
 }
 
-
-inputs = merge(
-  jsondecode(file(find_in_parent_folders("gitlab-conf.json"))),
-)
+inputs = {
+  gitlab_conf = read_terragrunt_config(find_in_parent_folders("gitlab-conf.hcl")).inputs
+}
