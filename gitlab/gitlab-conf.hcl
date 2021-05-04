@@ -12,13 +12,13 @@ inputs = {
   }
   projects = {
     brocket = {
-      description = "A run-or-raise script for declarative window navigation",
-      namespace   = "dmikalova"
+      description      = "A run-or-raise script for declarative window navigation",
+      namespace        = "dmikalova"
       visibility_level = "public"
     },
     chrome-plugin-page-block = {
- description                                      = "Chrome plugin that blocks pages"
-      namespace = "dmikalova"
+      description = "Chrome plugin that blocks pages"
+      namespace   = "dmikalova"
     },
     dotfiles = {
       namespace = "dmikalova"
@@ -34,8 +34,8 @@ inputs = {
       namespace   = "dmikalova"
     },
     lists = {
-      namespace = "dmikalova",
-      note      = "Need to clear container registry to move to cddc39 group"
+      namespace        = "dmikalova",
+      note             = "Need to clear container registry to move to cddc39 group"
       visibility_level = "public"
     },
     nucamp = {
@@ -47,7 +47,7 @@ inputs = {
     },
     qmk_firmware = {
       description = "keyboard controller firmware for Atmel AVR and ARM USB families"
-      namespace = "dmikalova"
+      namespace   = "dmikalova"
     },
     screeps = {
       namespace = "dmikalova",
@@ -57,9 +57,9 @@ inputs = {
       namespace = "673ab7"
     },
     terraform-digitalocean-metadata = {
-      description = "Configuration storage for values needed before Consul KV is available"
-      namespace = "673ab7"
-      visibility_level                                 = "public"
+      description      = "Configuration storage for values needed before Consul KV is available"
+      namespace        = "673ab7"
+      visibility_level = "public"
     },
     terraform-gitlab-projects = {
       namespace        = "dmikalova",
@@ -71,7 +71,7 @@ inputs = {
     },
     zshrc = {
       description = "Personal ZSH configuration"
-      namespace = "dmikalova"
+      namespace   = "dmikalova"
     },
   }
   users = {
