@@ -6,6 +6,9 @@ inputs = {
     cddc39 = {
       description = "Services"
     },
+    e91e63 = {
+      description = "Terraform modules that deploy a Digital Ocean Kubernetes clusteer"
+    }
     screeptorio = {
       description = "Screeps private server"
     }
@@ -54,7 +57,7 @@ inputs = {
       note      = "Need to clear container registry to move to screeptorio group"
     },
     terraform-digitalocean-kubernetes = {
-      namespace = "673ab7"
+      namespace = "e91e63"
     },
     terraform-digitalocean-metadata = {
       description      = "Configuration storage for values needed before Consul KV is available"
