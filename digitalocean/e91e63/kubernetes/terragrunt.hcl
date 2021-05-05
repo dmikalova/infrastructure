@@ -1,5 +1,5 @@
 terraform {
-  source = "git@gitlab.com:673ab6/terraform-digitalocean-kubernetes.git"
+  source = "git@gitlab.com:e91e63/terraform-digitalocean-kubernetes.git"
 }
 
 include {

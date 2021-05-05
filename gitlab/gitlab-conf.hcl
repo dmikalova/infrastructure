@@ -1,13 +1,10 @@
 inputs = {
   groups = {
-    "673ab7" = {
-      description = "Terraform modules to deploy a Digital Ocean Kubernetes cluster"
-    },
     cddc39 = {
       description = "Services"
     },
     e91e63 = {
-      description = "Terraform modules that deploy a Digital Ocean Kubernetes clusteer"
+      description = "Terraform modules that deploy a Digital Ocean Kubernetes cluster"
     }
     screeptorio = {
       description = "Screeps private server"
@@ -24,6 +21,7 @@ inputs = {
       namespace   = "dmikalova"
     },
     dotfiles = {
+      description = "My dotfiles"
       namespace = "dmikalova"
     },
     ergodox-ez-serial-scanner = {
@@ -56,15 +54,23 @@ inputs = {
       namespace = "dmikalova",
       note      = "Need to clear container registry to move to screeptorio group"
     },
-    terraform-digitalocean-kubernetes = {
+    terraform-digitalocean-account-baseline = {
+      description = "Terraform modules for managing Digital Ocean accounts"
       namespace = "e91e63"
+      visibility_level = "public"
+    }
+    terraform-digitalocean-kubernetes = {
+      description = "Terraform modules for deploying a Digital Ocean Kubernetes cluster"
+      namespace = "e91e63"
+      visibility_level = "public"
     },
     terraform-digitalocean-metadata = {
       description      = "Configuration storage for values needed before Consul KV is available"
-      namespace        = "673ab7"
+      namespace        = "e91e63"
       visibility_level = "public"
     },
     terraform-gitlab-projects = {
+      description = "Terraform modules for managing Gitlab Projects and related resources"
       namespace        = "dmikalova",
       visibility_level = "public"
     },
