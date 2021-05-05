@@ -78,6 +78,8 @@ inputs = {
     },
   }
   users = {
-    "dmikalova" = {}
+    "dmikalova" = {
+      namespace_id = 368066
+    }
   }
 }
