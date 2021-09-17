@@ -1,3 +1,3 @@
 inputs = {
-    email = "dmikalova@gmail.com"
+  email = "dmikalova@gmail.com"
 }
