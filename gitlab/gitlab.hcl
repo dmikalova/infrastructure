@@ -22,7 +22,7 @@ inputs = {
     },
     dotfiles = {
       description = "My dotfiles"
-      namespace = "dmikalova"
+      namespace   = "dmikalova"
     },
     ergodox-ez-serial-scanner = {
       namespace = "dmikalova"
@@ -55,13 +55,13 @@ inputs = {
       note      = "Need to clear container registry to move to screeptorio group"
     },
     terraform-digitalocean-account-baseline = {
-      description = "Terraform modules for managing Digital Ocean accounts"
-      namespace = "e91e63"
+      description      = "Terraform modules for managing Digital Ocean accounts"
+      namespace        = "e91e63"
       visibility_level = "public"
     }
     terraform-digitalocean-kubernetes = {
-      description = "Terraform modules for deploying a Digital Ocean Kubernetes cluster"
-      namespace = "e91e63"
+      description      = "Terraform modules for deploying a Digital Ocean Kubernetes cluster"
+      namespace        = "e91e63"
       visibility_level = "public"
     },
     terraform-digitalocean-metadata = {
@@ -69,8 +69,13 @@ inputs = {
       namespace        = "e91e63"
       visibility_level = "public"
     },
+    terraform-digitalocean-networking = {
+      description      = "Terraform modules for managing Digital Ocean networking resources"
+      namespace        = "e91e63"
+      visibility_level = "public"
+    },
     terraform-gitlab-projects = {
-      description = "Terraform modules for managing Gitlab Projects and related resources"
+      description      = "Terraform modules for managing Gitlab Projects and related resources"
       namespace        = "dmikalova",
       visibility_level = "public"
     },
