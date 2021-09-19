@@ -1,7 +1,7 @@
 dependencies {
-    paths = [
-        "../../kubernetes/"
-    ]
+  paths = [
+    "../../kubernetes/"
+  ]
 }
 
 dependency "kubernetes" {
