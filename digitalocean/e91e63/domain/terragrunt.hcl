@@ -1,7 +1,7 @@
 dependencies {
-    paths = [
-        "../core-services/ambassador"
-    ]
+  paths = [
+    "../core-services/ambassador"
+  ]
 }
 
 dependency "kubernetes" {
@@ -13,10 +13,10 @@ include {
 }
 
 inputs = {
-    acme = read_terragrunt_config(find_in_parent_folders("acme.hcl")).inputs
-  domain_name = local.e91e63.domain_name
+  acme         = read_terragrunt_config(find_in_parent_folders("acme.hcl")).inputs
+  domain_name  = local.e91e63.domain_name
   project_name = local.e91e63.project_name
-  kube_config = dependency.kubernetes.outputs.kube_config
+  kube_config  = dependency.kubernetes.outputs.kube_config
 }
 
 locals {
