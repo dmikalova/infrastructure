@@ -2,12 +2,11 @@ include {
   path = find_in_parent_folders()
 }
 
-inputs = {
-  name = local.e91e63.name
+include "project" {
+  path = find_in_parent_folders("project.hcl")
 }
 
-locals {
-  e91e63 = read_terragrunt_config(find_in_parent_folders("e91e63.hcl")).inputs
+inputs = {
 }
 
 terraform {
