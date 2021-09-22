@@ -1,7 +1,7 @@
 dependencies {
   paths = [
     "../../kubernetes/",
-    "../../secrets/google-oauth"
+    "../../secrets/basic-auth"
   ]
 }
 
@@ -9,8 +9,8 @@ dependency "kubernetes" {
   config_path = "../../kubernetes/"
 }
 
-dependency "google_oauth" {
-  config_path = "../../secrets/google-oauth"
+dependency "basic_auth" {
+  config_path = "../../secrets/basic-auth"
 }
 
 include {
@@ -18,8 +18,8 @@ include {
 }
 
 inputs = {
-  kube_config  = dependency.kubernetes.outputs.kube_config
-  google_oauth = dependency.google_oauth.outputs.info
+  basic_auth  = dependency.basic_auth.outputs.info
+  kube_config = dependency.kubernetes.outputs.kube_config
 }
 
 terraform {
