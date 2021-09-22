@@ -17,7 +17,7 @@ include {
 }
 
 inputs = {
-  kube_config = dependency.kubernetes.outputs.kube_config
+  kube_config     = dependency.kubernetes.outputs.kube_config
   postgresql_conf = dependency.postgresql.outputs.terraform_role
 }
 

@@ -11,6 +11,12 @@ inputs = {
     }
   }
   projects = {
+    ambassador-basic-auth = {
+      default_branch   = "main"
+      description      = "Go service that provides basic auth for Ambassador"
+      namespace        = "e91e63"
+      visibility_level = "public"
+    },
     brocket = {
       // TODO change default branch to main
       default_branch   = "master"
@@ -71,7 +77,7 @@ inputs = {
       description      = "Terraform modules for managing Digital Ocean accounts"
       namespace        = "e91e63"
       visibility_level = "public"
-    }
+    },
     terraform-digitalocean-kubernetes = {
       default_branch   = "master"
       description      = "Terraform modules for deploying a Digital Ocean Kubernetes cluster"
@@ -91,6 +97,7 @@ inputs = {
       visibility_level = "public"
     },
     terraform-digitalocean-postgresql = {
+      default_branch   = "master"
       description      = "Terraform modules for managing Digital Ocean PostgreSQL databases"
       namespace        = "e91e63"
       visibility_level = "public"
