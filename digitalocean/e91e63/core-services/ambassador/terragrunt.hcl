@@ -13,7 +13,8 @@ include {
 }
 
 inputs = {
-  kube_config  = dependency.kubernetes.outputs.kube_config
+  ambassador_conf = { version = "v6.9.1" }
+  k8s_conf        = dependency.kubernetes.outputs.conf
 }
 
 terraform {

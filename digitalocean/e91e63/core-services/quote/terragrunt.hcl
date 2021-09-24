@@ -13,7 +13,8 @@ include {
 }
 
 inputs = {
-  kube_config = dependency.kubernetes.outputs.kube_config
+  k8s_conf   = dependency.kubernetes.outputs.conf
+  quote_conf = { image = "docker.io/datawire/quote:0.5.0" }
 }
 
 terraform {
