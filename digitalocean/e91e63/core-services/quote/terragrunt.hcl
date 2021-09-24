@@ -18,5 +18,5 @@ inputs = {
 }
 
 terraform {
-  source = "git@gitlab.com:e91e63/terraform-helm-charts.git//modules/consul/"
+  source = "git@gitlab.com:e91e63/terraform-helm-charts.git//modules/quote/"
 }

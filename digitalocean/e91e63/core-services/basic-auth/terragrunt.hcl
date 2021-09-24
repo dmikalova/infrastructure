@@ -26,5 +26,5 @@ inputs = {
 }
 
 terraform {
-  source = "git@gitlab.com:e91e63/terraform-helm-charts.git//modules/helm/"
+  source = "git@gitlab.com:e91e63/basic-auth.git//modules/"
 }

@@ -11,5 +11,5 @@ inputs = {
 }
 
 terraform {
-  source = "git@gitlab.com:e91e63/terraform-digitalocean-postgresql.git//"
+  source = "git@gitlab.com:e91e63/terraform-digitalocean-postgresql.git///"
 }
