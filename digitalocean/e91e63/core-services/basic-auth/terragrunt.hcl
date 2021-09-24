@@ -18,10 +18,13 @@ include {
 }
 
 inputs = {
-  basic_auth  = dependency.basic_auth.outputs.info
-  kube_config = dependency.kubernetes.outputs.kube_config
+  basic_auth_conf = merge(
+    dependency.basic_auth.outputs.info,
+    { image = "registry.digitalocean.com/e91e63/basic-auth:0.0.1" }
+  )
+  k8s_conf = dependency.kubernetes.outputs.conf
 }
 
 terraform {
-  source = "git@gitlab.com:e91e63/terraform-helm-charts.git///modules/helm/"
+  source = "git@gitlab.com:e91e63/terraform-helm-charts.git//modules/helm/"
 }

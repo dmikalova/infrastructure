@@ -13,7 +13,8 @@ include {
 }
 
 inputs = {
-  kube_config = dependency.kubernetes.outputs.kube_config
+  consul_conf = { version = "v0.33.0" }
+  k8s_conf    = dependency.kubernetes.outputs.conf
 }
 
 terraform {

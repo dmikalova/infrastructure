@@ -3,8 +3,8 @@ include {
 }
 
 inputs = {
-  // TODO: move this up
-  name = "e91e63"
+  k8s_conf     = { version = "1.21" }
+  project_conf = read_terragrunt_config(find_in_parent_folders("project.hcl")).inputs
 }
 
 // TODO redeploy to sfo3
