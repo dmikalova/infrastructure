@@ -7,5 +7,5 @@ inputs = {
 }
 
 terraform {
-  source = "git@gitlab.com:dmikalova/terraform-gitlab-projects.git"
+  source = "git@gitlab.com:dmikalova/terraform-gitlab-projects.git///"
 }

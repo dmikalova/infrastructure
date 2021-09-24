@@ -105,9 +105,15 @@ inputs = {
     terraform-gitlab-projects = {
       default_branch   = "master"
       description      = "Terraform modules for managing Gitlab Projects and related resources"
-      namespace        = "dmikalova",
+      namespace        = "dmikalova"
       visibility_level = "public"
     },
+    terraform-helm-charts = {
+      default_branch = "master"
+      description    = "Terraform modules for deploying services to Kubernetes"
+      namespace      = "e91e63",
+      visibility     = "public"
+    }
     toto = {
       default_branch = "master"
       namespace      = "dmikalova",
