@@ -11,8 +11,8 @@ inputs = {
     }
   }
   projects = {
-    ambassador-basic-auth = {
-      default_branch   = "main"
+    basic-auth = {
+      default_branch   = "master"
       description      = "Go service that provides basic auth for Ambassador"
       namespace        = "e91e63"
       visibility_level = "public"

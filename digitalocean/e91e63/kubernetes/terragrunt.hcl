@@ -9,5 +9,5 @@ inputs = {
 
 // TODO redeploy to sfo3
 terraform {
-  source = "git@gitlab.com:e91e63/terraform-digitalocean-kubernetes.git///"
+  source = "git@gitlab.com:e91e63/terraform-digitalocean-kubernetes.git//"
 }
