@@ -1,11 +1,17 @@
 dependencies {
   paths = [
-    "../core-services/ambassador"
+    "../core-services/ambassador",
+    "../kubernetes",
+    "../secrets/profile",
   ]
 }
 
+dependency "profile" {
+  config_path = "../secrets/profile"
+}
+
 dependency "kubernetes" {
-  config_path = "../kubernetes/"
+  config_path = "../kubernetes"
 }
 
 include {
@@ -13,16 +19,11 @@ include {
 }
 
 inputs = {
-  acme         = read_terragrunt_config(find_in_parent_folders("acme.hcl")).inputs
-  domain_name  = local.project.domain_name
-  kube_config  = dependency.kubernetes.outputs.kube_config
-  project_name = local.project.project_name
-}
-
-locals {
-  project = read_terragrunt_config(find_in_parent_folders("project.hcl")).inputs
+  acme_conf    = dependency.profile.outputs.info
+  k8s_conf     = dependency.kubernetes.outputs.conf
+  project_conf = read_terragrunt_config(find_in_parent_folders("project.hcl")).inputs
 }
 
 terraform {
-  source = "git@gitlab.com:e91e63/terraform-helm-charts.git///modules/domains/"
+  source = "git@gitlab.com:e91e63/terraform-helm-charts.git//modules/domains/"
 }
