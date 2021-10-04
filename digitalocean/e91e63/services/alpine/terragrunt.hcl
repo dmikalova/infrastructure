@@ -13,10 +13,13 @@ include {
 }
 
 inputs = {
-  ambassador_conf = { version = "v6.9.1" }
-  k8s_conf        = dependency.kubernetes.outputs.conf
+  k8s_conf = dependency.kubernetes.outputs.conf
+  alpine_conf = {
+    image = "alpine"
+    name  = "alpine"
+  }
 }
 
 terraform {
-  source = "git@gitlab.com:e91e63/terraform-helm-charts.git//modules/ambassador"
+  source = "git@gitlab.com:e91e63/terraform-helm-charts.git///modules/alpine/"
 }

@@ -15,7 +15,7 @@ include {
 inputs = {
   info_conf = merge(
     dependency.metadata.outputs.info_conf,
-    { key = "secrets/basic-auth.json" },
+    { key = "secrets/digitalocean.json" },
   )
 }
 
