@@ -1,6 +1,5 @@
 dependencies {
   paths = [
-    "../core-services/ambassador",
     "../kubernetes",
     "../secrets/profile",
   ]

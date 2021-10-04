@@ -8,3 +8,11 @@ provider "registry.terraform.io/digitalocean/digitalocean" {
     "h1:6PNfB68DDo5RkXhepEUSt95bZgT4i8J2eJNcaQTxlCs=",
   ]
 }
+
+provider "registry.terraform.io/hashicorp/kubernetes" {
+  version     = "2.5.0"
+  constraints = "2.5.0"
+  hashes = [
+    "h1:gWcWwaZRr45P/3uejuRWOPfAOIX0tuyt2oYe+c7yJgY=",
+  ]
+}
