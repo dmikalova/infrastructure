@@ -5,4 +5,5 @@ locals {
 inputs = {
   domain_name = "${local.name}.tech"
   name        = local.name
+  region      = "sfo2"
 }
