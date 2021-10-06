@@ -1,9 +1,3 @@
-dependencies {
-  paths = [
-    "../../kubernetes/",
-  ]
-}
-
 dependency "kubernetes" {
   config_path = "../../kubernetes/"
 }
