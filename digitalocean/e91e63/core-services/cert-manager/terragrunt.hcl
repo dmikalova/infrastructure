@@ -1,11 +1,3 @@
-dependencies {
-  paths = [
-    "../../kubernetes/",
-    "../../secrets/digitalocean/",
-    "../../secrets/profile/",
-  ]
-}
-
 dependency "digitalocean" {
   config_path = "../../secrets/digitalocean"
 }

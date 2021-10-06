@@ -1,9 +1,3 @@
-dependencies {
-  paths = [
-    "../../metadata",
-  ]
-}
-
 dependency "metadata" {
   config_path = "../../metadata"
 }

@@ -1,10 +1,3 @@
-dependencies {
-  paths = [
-    "../../kubernetes/",
-    "../../secrets/traefik-users",
-  ]
-}
-
 dependency "kubernetes" {
   config_path = "../../kubernetes/"
 }
