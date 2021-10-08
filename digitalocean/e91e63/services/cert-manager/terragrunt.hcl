@@ -2,16 +2,16 @@ dependency "digitalocean" {
   config_path = "../../secrets/digitalocean"
 }
 
-dependency "kubernetes" {
-  config_path = "../../kubernetes/"
-}
-
 dependency "profile" {
   config_path = "../../secrets/profile"
 }
 
-include {
-  path = find_in_parent_folders()
+include "helm" {
+  path = find_in_parent_folders("helm.hcl")
+}
+
+include "terraform" {
+  path = find_in_parent_folders("terraform/remote_state.hcl")
 }
 
 inputs = {
@@ -20,9 +20,8 @@ inputs = {
     dependency.profile.outputs.info,
     { version = "v1.5.4" }
   )
-  k8s_info = dependency.kubernetes.outputs.info
 }
 
 terraform {
-  source = "git@gitlab.com:e91e63/terraform-helm-charts.git//modules/cert-manager/"
+  source = "git@gitlab.com:e91e63/terraform-kubernetes-services.git//modules/cert-manager/"
 }

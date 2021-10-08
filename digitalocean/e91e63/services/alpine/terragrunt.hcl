@@ -1,13 +1,12 @@
-dependency "kubernetes" {
-  config_path = "../../kubernetes/"
+include "kubernetes" {
+  path = find_in_parent_folders("kubernetes.hcl")
 }
 
-include {
-  path = find_in_parent_folders()
+include "terraform" {
+  path = find_in_parent_folders("terraform/remote_state.hcl")
 }
 
 inputs = {
-  k8s_info = dependency.kubernetes.outputs.info
   alpine_conf = {
     image = "alpine"
     name  = "alpine"
@@ -15,5 +14,5 @@ inputs = {
 }
 
 terraform {
-  source = "git@gitlab.com:e91e63/terraform-helm-charts.git///modules/alpine/"
+  source = "git@gitlab.com:e91e63/terraform-kubernetes-services.git///modules/alpine/"
 }
