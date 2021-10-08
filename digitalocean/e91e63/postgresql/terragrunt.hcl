@@ -1,5 +1,5 @@
-include {
-  path = find_in_parent_folders()
+include "terraform" {
+  path = find_in_parent_folders("terraform/remote_state.hcl")
 }
 
 include "project" {
