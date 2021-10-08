@@ -12,8 +12,8 @@ inputs = {
   k8s_info    = read_terragrunt_config(find_in_parent_folders("kubernetes.hcl")).dependency.kubernetes.outputs.info
   service_conf = {
     container_port = 5000
-    image = "registry.digitalocean.com/e91e63/todo:0.0.1"
-    name  = "todo"
+    image          = "registry.digitalocean.com/e91e63/todo:0.0.1"
+    name           = "todo"
   }
 }
 

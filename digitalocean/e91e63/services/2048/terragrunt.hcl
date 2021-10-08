@@ -1,9 +1,9 @@
-dependency "kubernetes" {
-  config_path = "../../kubernetes/"
+include "kubernetes" {
+  path = find_in_parent_folders("kubernetes.hcl")
 }
 
-include {
-  path = find_in_parent_folders()
+include "terraform" {
+  path = find_in_parent_folders("terraform/remote_state.hcl")
 }
 
 inputs = {
@@ -12,9 +12,8 @@ inputs = {
     image       = "alexwhen/docker-2048"
     name        = "game-2048"
   }
-  info = dependency.kubernetes.outputs.info
 }
 
 terraform {
-  source = "git@gitlab.com:e91e63/terraform-helm-charts.git///modules/2048/"
+  source = "git@gitlab.com:e91e63/terraform-kubernetes-services.git///modules/2048/"
 }
