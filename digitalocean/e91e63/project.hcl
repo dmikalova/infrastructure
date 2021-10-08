@@ -1,9 +1,4 @@
-locals {
-  name = "e91e63"
-}
-
 inputs = {
-  domain_name = "${local.name}.tech"
-  name        = local.name
+  name        = "e91e63"
   region      = "sfo2"
 }
