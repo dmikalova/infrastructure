@@ -1,6 +1,14 @@
 # This file is maintained automatically by "terraform init".
 # Manual edits may be lost in future updates.
 
+provider "registry.terraform.io/cyrilgdn/postgresql" {
+  version     = "1.14.0"
+  constraints = "1.14.0"
+  hashes = [
+    "h1:QyrI7ZVtwZsz39bDCkSfXdoH/VEuQlBQKhEfD1Z7BWo=",
+  ]
+}
+
 provider "registry.terraform.io/digitalocean/digitalocean" {
   version     = "2.11.1"
   constraints = "2.11.1"
@@ -10,8 +18,7 @@ provider "registry.terraform.io/digitalocean/digitalocean" {
 }
 
 provider "registry.terraform.io/hashicorp/kubernetes" {
-  version     = "2.5.0"
-  constraints = "2.5.0"
+  version = "2.5.0"
   hashes = [
     "h1:gWcWwaZRr45P/3uejuRWOPfAOIX0tuyt2oYe+c7yJgY=",
     "zh:00aa1fe7c5a1872d2861a0c45dab7a927e445ed5ea49aed497d61cd739926b5d",
@@ -43,5 +50,13 @@ provider "registry.terraform.io/hashicorp/local" {
     "zh:e57ab4771a9d999401f6badd8b018558357d3cbdf3d33cc0c4f83e818ca8e94b",
     "zh:ebdcde208072b4b0f8d305ebf2bfdc62c926e0717599dcf8ec2fd8c5845031c3",
     "zh:ef34c52b68933bedd0868a13ccfd59ff1c820f299760b3c02e008dc95e2ece91",
+  ]
+}
+
+provider "registry.terraform.io/hashicorp/random" {
+  version     = "3.1.0"
+  constraints = "3.1.0"
+  hashes = [
+    "h1:BZMEPucF+pbu9gsPk0G0BHx7YP04+tKdq2MrRDF1EDM=",
   ]
 }
