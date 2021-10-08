@@ -20,7 +20,7 @@ inputs = {
     dependency.profile.outputs.info,
     { version = "v1.5.4" }
   )
-  k8s_conf = dependency.kubernetes.outputs.conf
+  k8s_info = dependency.kubernetes.outputs.info
 }
 
 terraform {

@@ -12,7 +12,7 @@ inputs = {
     image       = "alexwhen/docker-2048"
     name        = "game-2048"
   }
-  k8s_conf = dependency.kubernetes.outputs.conf
+  info = dependency.kubernetes.outputs.info
 }
 
 terraform {

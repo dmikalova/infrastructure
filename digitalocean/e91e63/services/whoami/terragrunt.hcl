@@ -7,7 +7,7 @@ include {
 }
 
 inputs = {
-  k8s_conf = dependency.kubernetes.outputs.conf
+  k8s_info = dependency.kubernetes.outputs.info
   whoami_conf = {
     domain_name = "e91e63.tech"
     image       = "containous/whoami"
