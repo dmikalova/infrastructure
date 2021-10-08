@@ -20,7 +20,7 @@ inputs = {
     brocket = {
       // TODO change default branch to main
       default_branch   = "master"
-      description      = "A run-or-raise script for declarative window navigation",
+      description      = "A run-or-raise script for declarative window navigation"
       namespace        = "dmikalova"
       visibility_level = "public"
     },
@@ -44,12 +44,12 @@ inputs = {
     },
     infrastructure = {
       default_branch = "master"
-      description    = "root terragrunt infrastructure modules",
+      description    = "root terragrunt infrastructure modules"
       namespace      = "dmikalova"
     },
     lists = {
       default_branch   = "master"
-      namespace        = "dmikalova",
+      namespace        = "dmikalova"
       note             = "Need to clear container registry to move to cddc39 group"
       visibility_level = "public"
     },
@@ -59,7 +59,7 @@ inputs = {
     },
     practice = {
       default_branch = "master"
-      description    = "Practice work for reference",
+      description    = "Practice work for reference"
       namespace      = "dmikalova"
     },
     qmk_firmware = {
@@ -69,7 +69,7 @@ inputs = {
     },
     screeps = {
       default_branch = "master"
-      namespace      = "dmikalova",
+      namespace      = "dmikalova"
       note           = "Need to clear container registry to move to screeptorio group"
     },
     terraform-digitalocean-account-baseline = {
@@ -108,15 +108,19 @@ inputs = {
       namespace        = "dmikalova"
       visibility_level = "public"
     },
-    terraform-helm-charts = {
+    terraform-kubernetes-services = {
       default_branch = "master"
       description    = "Terraform modules for deploying services to Kubernetes"
-      namespace      = "e91e63",
+      namespace      = "e91e63"
       visibility     = "public"
-    }
+    },
+    todo = {
+      description = "An automated todo list"
+      namespace   = "cddc39"
+    },
     toto = {
       default_branch = "master"
-      namespace      = "dmikalova",
+      namespace      = "dmikalova"
       note           = "Need to clear container registry to move to cddc39 group"
     },
     zshrc = {
