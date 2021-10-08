@@ -7,7 +7,7 @@ include {
 }
 
 inputs = {
-  k8s_conf = dependency.kubernetes.outputs.conf
+  k8s_info = dependency.kubernetes.outputs.info
   alpine_conf = {
     image = "alpine"
     name  = "alpine"

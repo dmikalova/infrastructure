@@ -8,7 +8,7 @@ include {
 
 inputs = {
   consul_conf = { version = "v0.33.0" }
-  k8s_conf    = dependency.kubernetes.outputs.conf
+  k8s_info    = dependency.kubernetes.outputs.info
 }
 
 terraform {
