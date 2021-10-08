@@ -4,7 +4,7 @@ remote_state {
     bucket                      = "e91e63"
     encrypt                     = true
     endpoint                    = "https://sfo3.digitaloceanspaces.com"
-    key                         = "tfstates/${path_relative_to_include()}/terraform.tfstate"
+    key                         = "tfstates/terraform/${path_relative_to_include()}/terraform.tfstate"
     region                      = "us-east-1"
     skip_region_validation      = true
     skip_credentials_validation = true
