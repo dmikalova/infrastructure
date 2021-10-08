@@ -16,7 +16,7 @@ inputs = {
     users   = dependency.traefik_users.outputs.info,
     version = "10.3.6",
   }
-  k8s_conf = dependency.kubernetes.outputs.conf
+  k8s_info = dependency.kubernetes.outputs.info
 }
 
 terraform {
