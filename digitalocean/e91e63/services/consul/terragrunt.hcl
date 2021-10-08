@@ -1,16 +1,15 @@
-dependency "kubernetes" {
-  config_path = "../../kubernetes/"
+include "helm" {
+  path = find_in_parent_folders("helm.hcl")
 }
 
-include {
-  path = find_in_parent_folders()
+include "terraform" {
+  path = find_in_parent_folders("terraform/remote_state.hcl")
 }
 
 inputs = {
   consul_conf = { version = "v0.33.0" }
-  k8s_info    = dependency.kubernetes.outputs.info
 }
 
 terraform {
-  source = "git@gitlab.com:e91e63/terraform-helm-charts.git//modules/consul/"
+  source = "git@gitlab.com:e91e63/terraform-kubernetes-services.git//modules/consul/"
 }

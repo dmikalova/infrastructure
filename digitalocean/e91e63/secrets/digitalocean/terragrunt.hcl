@@ -2,8 +2,8 @@ dependency "metadata" {
   config_path = "../../metadata"
 }
 
-include {
-  path = find_in_parent_folders()
+include "terraform" {
+  path = find_in_parent_folders("terraform/remote_state.hcl")
 }
 
 inputs = {
