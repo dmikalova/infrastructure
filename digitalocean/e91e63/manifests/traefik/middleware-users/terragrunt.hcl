@@ -14,9 +14,16 @@ include "terraform" {
 
 inputs = {
   basic_auth_conf = {
-    name  = "admins"
-    users = jsondecode(sops_decrypt_file(find_in_parent_folders("traefik-users.sops.json"))).admins,
+    name = "users"
+    users = concat(
+      local.users_file.admins,
+      local.users_file.users,
+    )
   }
+}
+
+locals {
+  users_file = jsondecode(sops_decrypt_file(find_in_parent_folders("traefik-users.sops.json")))
 }
 
 terraform {

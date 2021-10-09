@@ -1,13 +1,13 @@
-include "terraform" {
-  path = find_in_parent_folders("terraform/remote_state.hcl")
+dependency "project" {
+  config_path = "../project/"
 }
 
-include "project" {
-  path = find_in_parent_folders("project.hcl")
+include "terraform" {
+  path = find_in_parent_folders("terraform.hcl")
 }
 
 inputs = {
-  project_conf = read_terragrunt_config(find_in_parent_folders("project.hcl")).inputs
+  project_info = dependency.project.outputs.info
 }
 
 terraform {
