@@ -1,16 +1,28 @@
+dependency "middleware_admins" {
+  config_path = "../../manifests/traefik/middleware-admins"
+}
+
+include "domain" {
+  path = find_in_parent_folders("domain.hcl")
+}
+
 include "kubernetes" {
   path = find_in_parent_folders("kubernetes.hcl")
 }
 
 include "terraform" {
-  path = find_in_parent_folders("terraform/remote_state.hcl")
+  path = find_in_parent_folders("terraform.hcl")
 }
 
 inputs = {
-  quote_conf = {
+  route_conf = {
+    active      = true
+    middlewares = [dependency.middleware_admins.outputs.info]
+  }
+  service_conf = {
     container_port = 8080
-    image = "docker.io/datawire/quote:0.5.0"
-    name  = "quote"
+    image          = "docker.io/datawire/quote:0.5.0"
+    name           = "quote"
   }
 }
 

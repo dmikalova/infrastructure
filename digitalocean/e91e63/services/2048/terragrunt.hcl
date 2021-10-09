@@ -1,5 +1,5 @@
 include "domain" {
-  path =  find_in_parent_folders("domain.hcl")
+  path = find_in_parent_folders("domain.hcl")
 }
 
 include "kubernetes" {
@@ -7,15 +7,18 @@ include "kubernetes" {
 }
 
 include "terraform" {
-  path = find_in_parent_folders("terraform/remote_state.hcl")
+  path = find_in_parent_folders("terraform.hcl")
 }
 
 inputs = {
+  route_conf = {
+    active      = true
+    middlewares = []
+  }
   service_conf = {
     container_port = 80
-    image       = "alexwhen/docker-2048"
-    middlewares = []
-    name        = "game-2048"
+    image          = "alexwhen/docker-2048"
+    name           = "game-2048"
   }
 }
 

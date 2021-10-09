@@ -1,9 +1,5 @@
-dependency "digitalocean" {
-  config_path = "../../secrets/digitalocean"
-}
-
-dependency "profile" {
-  config_path = "../../secrets/profile"
+include "domain" {
+  path = find_in_parent_folders("domain.hcl")
 }
 
 include "helm" {
@@ -11,17 +7,21 @@ include "helm" {
 }
 
 include "terraform" {
-  path = find_in_parent_folders("terraform/remote_state.hcl")
+  path = find_in_parent_folders("terraform.hcl")
 }
 
 inputs = {
-  cert_manager_conf = merge(
-    dependency.digitalocean.outputs.info,
-    dependency.profile.outputs.info,
-    { version = "v1.5.4" }
-  )
+  helm_conf = {
+    chart         = "cert-manager"
+    chart_version = "v1.5.4"
+    name          = "cert-manager"
+    repository    = "https://charts.jetstack.io"
+    values = {
+      installCRDs = true
+    }
+  }
 }
 
 terraform {
-  source = "git@gitlab.com:e91e63/terraform-kubernetes-services.git//modules/cert-manager/"
+  source = "git@gitlab.com:e91e63/terraform-kubernetes-manifests.git//modules/helm-chart/"
 }
