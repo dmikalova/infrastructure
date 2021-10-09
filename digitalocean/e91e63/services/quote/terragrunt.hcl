@@ -8,11 +8,12 @@ include "terraform" {
 
 inputs = {
   quote_conf = {
+    container_port = 8080
     image = "docker.io/datawire/quote:0.5.0"
     name  = "quote"
   }
 }
 
 terraform {
-  source = "git@gitlab.com:e91e63/terraform-kubernetes-services.git///modules/quote/"
+  source = "git@gitlab.com:e91e63/terraform-kubernetes-manifests.git///modules/service/"
 }

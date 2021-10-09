@@ -1,3 +1,7 @@
+include "domain" {
+  path =  find_in_parent_folders("domain.hcl")
+}
+
 include "kubernetes" {
   path = find_in_parent_folders("kubernetes.hcl")
 }
@@ -8,6 +12,7 @@ include "terraform" {
 
 inputs = {
   service_conf = {
+    container_port = 80
     image       = "alexwhen/docker-2048"
     middlewares = []
     name        = "game-2048"
@@ -15,5 +20,5 @@ inputs = {
 }
 
 terraform {
-  source = "git@gitlab.com:e91e63/terraform-kubernetes-services.git///modules/service-manifest/"
+  source = "git@gitlab.com:e91e63/terraform-kubernetes-manifests.git///modules/service/"
 }

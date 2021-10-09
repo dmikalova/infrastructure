@@ -1,27 +1,13 @@
-dependencies {
-  paths = [
-    "../services/cert-manager/"
-  ]
-}
-
-dependency "digitalocean" {
-  config_path = "../secrets/digitalocean"
-}
-
-dependency "kubernetes" {
-  config_path = "../kubernetes/"
-}
-
-dependency "profile" {
-  config_path = "../secrets/profile"
+dependency "cert_issuer" {
+  config_path = "../manifests/cert-issuer"
 }
 
 dependency "load_balancer" {
   config_path = "../load-balancer/"
 }
 
-include "provider_kubernetes" {
-  path = find_in_parent_folders("terraform/providers/kubernetes.hcl")
+include "kubernetes" {
+  path = find_in_parent_folders("kubernetes.hcl")
 }
 
 include "terraform" {
@@ -29,11 +15,7 @@ include "terraform" {
 }
 
 inputs = {
-  cert_issuer_conf = {
-    email                 = dependency.profile.outputs.info.email,
-    personal_access_token = dependency.digitalocean.outputs.info.personal_access_token,
-  }
-  k8s_info           = dependency.kubernetes.outputs.info
+  cert_issuer_info   = dependency.cert_issuer.outputs.info
   load_balancer_info = dependency.load_balancer.outputs.info
   project_conf       = read_terragrunt_config(find_in_parent_folders("project.hcl")).inputs
 }
