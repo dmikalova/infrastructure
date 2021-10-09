@@ -9,7 +9,7 @@ include "kubernetes" {
 }
 
 include "terraform" {
-  path = find_in_parent_folders("terraform/remote_state.hcl")
+  path = find_in_parent_folders("terraform.hcl")
 }
 
 inputs = {
