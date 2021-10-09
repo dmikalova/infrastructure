@@ -1,7 +1,4 @@
-locals {
-  name = "cddc39"
-}
-
 inputs = {
-  name        = local.name
+  name        = "cddc39"
+  domain_name = "cddc39.tech"
 }
