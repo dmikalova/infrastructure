@@ -7,13 +7,13 @@ include "terraform" {
 }
 
 inputs = {
-  _2048_conf = {
-    domain_name = "e91e63.tech"
+  service_conf = {
     image       = "alexwhen/docker-2048"
+    middlewares = []
     name        = "game-2048"
   }
 }
 
 terraform {
-  source = "git@gitlab.com:e91e63/terraform-kubernetes-services.git///modules/2048/"
+  source = "git@gitlab.com:e91e63/terraform-kubernetes-services.git///modules/service-manifest/"
 }
