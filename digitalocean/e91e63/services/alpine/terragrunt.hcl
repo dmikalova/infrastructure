@@ -9,11 +9,11 @@ include "terraform" {
 inputs = {
   pod_conf = {
     command = ["sleep", "infinity"]
-    image = "alpine"
-    name  = "alpine"
+    image   = "alpine"
+    name    = "alpine"
   }
 }
 
 terraform {
-  source = "git@gitlab.com:e91e63/terraform-kubernetes-services.git///modules/pod-manifest/"
+  source = "git@gitlab.com:e91e63/terraform-kubernetes-manifests.git///modules/pod/"
 }
