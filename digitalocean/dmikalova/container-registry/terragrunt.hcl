@@ -3,10 +3,10 @@ include "project" {
 }
 
 inputs = {
-    container_registry_conf = {
-        name = read_terragrunt_config(find_in_parent_folders("project.hcl")).inputs.name
-        subscription_tier_slug = "basic"
-    }
+  container_registry_conf = {
+    name                   = read_terragrunt_config(find_in_parent_folders("project.hcl")).inputs.name
+    subscription_tier_slug = "basic"
+  }
 }
 
 terraform {

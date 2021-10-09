@@ -21,7 +21,7 @@ include "terraform" {
 }
 
 inputs = {
-  domain_conf = { name = "cddc39.tech }
+  domain_conf        = { name = "cddc39.tech" }
   load_balancer_info = dependency.load_balancer.outputs.info
   k8s_info           = dependency.kubernetes.outputs.info
   project_conf       = read_terragrunt_config(find_in_parent_folders("project.hcl")).inputs

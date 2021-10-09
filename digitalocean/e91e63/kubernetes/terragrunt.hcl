@@ -7,12 +7,12 @@ include "terraform" {
 }
 
 inputs = {
-  k8s_conf = { version = "1.21" }
-  project_info       = dependency.project.outputs.info
-  // project_info = {
-  //   name = "e91e63"
-  //   id   = "this"
-  // }
+  k8s_conf     = { version = "1.21" }
+  // project_info = dependency.project.outputs.info
+  project_info = {
+    name = "e91e63"
+    id   = "b13099d8-5d42-4529-94ce-ae0f786bb000"
+  }
 }
 
 // TODO redeploy to sfo3
