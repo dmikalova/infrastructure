@@ -108,9 +108,9 @@ inputs = {
       namespace        = "dmikalova"
       visibility_level = "public"
     },
-    terraform-kubernetes-services = {
+    terraform-kubernetes-manifests = {
       default_branch = "master"
-      description    = "Terraform modules for deploying services to Kubernetes"
+      description    = "Terraform modules for managing Kubernetes manifests"
       namespace      = "e91e63"
       visibility     = "public"
     },
