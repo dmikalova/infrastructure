@@ -20,6 +20,10 @@ dependency "load_balancer" {
   config_path = "../load-balancer/"
 }
 
+include "provider_kubernetes" {
+  path = find_in_parent_folders("terraform/providers/kubernetes.hcl")
+}
+
 include "terraform" {
   path = find_in_parent_folders("terraform/remote_state.hcl")
 }
