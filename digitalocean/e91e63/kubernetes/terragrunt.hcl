@@ -2,20 +2,26 @@ dependency "project" {
   config_path = "../project/"
 }
 
+dependency "vpc" {
+  config_path = "../vpc/"
+}
+
 include "terraform" {
   path = find_in_parent_folders("terraform.hcl")
 }
 
 inputs = {
-  k8s_conf     = { version = "1.21" }
-  // project_info = dependency.project.outputs.info
-  project_info = {
-    name = "e91e63"
-    id   = "b13099d8-5d42-4529-94ce-ae0f786bb000"
+  kubernetes_conf = {
+    node_pool_worker = {
+      node_droplet_size_slug = "s-2vcpu-2gb"
+    }
+    region   = dependency.vpc.outputs.info.region
+    version  = "1.21"
+    vpc_uuid = dependency.vpc.outputs.info.id
   }
+  project_info = dependency.project.outputs.info
 }
 
-// TODO redeploy to sfo3
 terraform {
-  source = "git@gitlab.com:e91e63/terraform-digitalocean-kubernetes.git///"
+  source = "git@gitlab.com:e91e63/terraform-digitalocean-kubernetes.git///modules/cluster/"
 }

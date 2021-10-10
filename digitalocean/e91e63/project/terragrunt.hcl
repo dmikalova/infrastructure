@@ -1,3 +1,7 @@
+include "terraform" {
+  path = find_in_parent_folders("terraform.hcl")
+}
+
 inputs = {
   project_conf = {
     description = "Infrastructure"
