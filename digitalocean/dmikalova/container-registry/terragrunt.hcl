@@ -2,6 +2,10 @@ include "project" {
   path = find_in_parent_folders("project.hcl")
 }
 
+include "terraform" {
+  path = find_in_parent_folders("terraform.hcl")
+}
+
 inputs = {
   container_registry_conf = {
     name                   = read_terragrunt_config(find_in_parent_folders("project.hcl")).inputs.name

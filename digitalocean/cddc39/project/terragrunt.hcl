@@ -1,12 +1,16 @@
+include "terraform" {
+  path = find_in_parent_folders("terraform.hcl")
+}
+
 inputs = {
   project_conf = {
     description = "Services"
     environment = "Production"
-    name        = read_terragrunt_config(find_in_parent_folders("project.hcl")).inputs.name
+    name        = "cddc39"
     purpose     = "Web Application"
   }
 }
 
 terraform {
-  source = "git@gitlab.com:e91e63/terraform-digitalocean-metadata.git///modules/project/"
+  source = "git@gitlab.com:e91e63/terraform-digitalocean-account-baseline.git///modules/project/"
 }
