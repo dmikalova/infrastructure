@@ -2,6 +2,10 @@ include "helm" {
   path = find_in_parent_folders("helm.hcl")
 }
 
+include "terraform" {
+  path = find_in_parent_folders("terraform.hcl")
+}
+
 inputs = {
   helm_conf = {
     chart         = "argo-workflows"

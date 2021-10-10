@@ -4,16 +4,20 @@ dependencies {
   ]
 }
 
-dependency "kubernetes" {
-  config_path = "../../e91e63/kubernetes/"
+dependency "cert_issuer" {
+  config_path = "../../e91e63/manifests/cert-issuer/"
 }
 
 dependency "load_balancer" {
   config_path = "../../e91e63/load-balancer/"
 }
 
-include "provider_kubernetes" {
-  path = find_in_parent_folders("terraform/providers/kubernetes.hcl")
+dependency "project" {
+  config_path = "../project/"
+}
+
+include "kubernetes" {
+  path = find_in_parent_folders("e91e63/kubernetes.hcl")
 }
 
 include "terraform" {
@@ -21,10 +25,10 @@ include "terraform" {
 }
 
 inputs = {
+  cert_issuer_info   = dependency.cert_issuer.outputs.info
   domain_conf        = { name = "cddc39.tech" }
   load_balancer_info = dependency.load_balancer.outputs.info
-  k8s_info           = dependency.kubernetes.outputs.info
-  project_conf       = read_terragrunt_config(find_in_parent_folders("project.hcl")).inputs
+  project_info       = dependency.project.outputs.info
 }
 
 terraform {

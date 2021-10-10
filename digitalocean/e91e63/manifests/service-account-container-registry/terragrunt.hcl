@@ -6,6 +6,10 @@ include "kubernetes" {
   path = find_in_parent_folders("kubernetes.hcl")
 }
 
+include "terraform" {
+  path = find_in_parent_folders("terraform.hcl")
+}
+
 inputs = {
   container_registry_info = dependency.container_registry.outputs.info
 }
