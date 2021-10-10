@@ -15,7 +15,7 @@ include "terraform" {
 }
 
 inputs = {
-    route_conf = {
+  route_conf = {
     active      = true
     middlewares = [dependency.middleware_admins.outputs.info]
   }
