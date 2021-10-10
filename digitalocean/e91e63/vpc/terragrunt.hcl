@@ -15,9 +15,9 @@ inputs = {
 }
 
 locals {
-    digitalocean_conf = read_terragrunt_config(find_in_parent_folders("digitalocean.hcl"))
-  ip_ranges = local.digitalocean_conf.inputs.networks.vpcs_managed[local.region]
-//   ip_range = local.ip_ranges[dependency.project.outputs.info.name]
+  digitalocean_conf = read_terragrunt_config(find_in_parent_folders("digitalocean.hcl"))
+  ip_ranges         = local.digitalocean_conf.inputs.networks.vpcs_managed[local.region]
+  //   ip_range = local.ip_ranges[dependency.project.outputs.info.name]
   ip_range = local.ip_ranges["e91e63"]
   region   = "sfo3"
 }
