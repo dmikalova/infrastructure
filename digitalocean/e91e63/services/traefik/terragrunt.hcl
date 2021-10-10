@@ -1,5 +1,5 @@
-dependency "middleware_admins" {
-  config_path = "../../manifests/traefik/middleware-admins"
+dependency "load_balancer" {
+  config_path = "../../load-balancer/"
 }
 
 include "domain" {
@@ -38,11 +38,11 @@ inputs = {
       }
       ports = {
         web = {
-          nodePort = 32080
+          nodePort = dependency.load_balancer.outputs.info.http_target_port
           port     = 8080
         }
         websecure = {
-          nodePort = 32443
+          nodePort = dependency.load_balancer.outputs.info.https_target_port
           port     = 8443
         }
       }
