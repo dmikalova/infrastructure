@@ -1,10 +1,18 @@
+dependency "project" {
+  config_path = "../project/"
+}
+
+dependency "vpc" {
+  config_path = "../vpc/"
+}
+
 include "terraform" {
   path = find_in_parent_folders("terraform.hcl")
 }
 
 inputs = {
-  do_conf      = read_terragrunt_config(find_in_parent_folders("digitalocean.hcl")).inputs
-  project_conf = read_terragrunt_config(find_in_parent_folders("project.hcl")).inputs
+  bucket_conf  = { region = dependency.vpc.outputs.info.region }
+  project_info = dependency.project.outputs.info
 }
 
 terraform {

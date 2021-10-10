@@ -12,5 +12,5 @@ inputs = {
 }
 
 terraform {
-  source = "git@gitlab.com:e91e63/terraform-digitalocean-metadata.git///modules/project/"
+  source = "git@gitlab.com:e91e63/terraform-digitalocean-account-baseline.git///modules/project/"
 }
