@@ -8,5 +8,5 @@ inputs = {
 }
 
 terraform {
-  source = "git@gitlab.com:e91e63/terraform-digitalocean-metadata.git///"
+  source = "git@gitlab.com:e91e63/terraform-digitalocean-spaces.git///modules/bucket"
 }
