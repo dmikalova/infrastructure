@@ -1,3 +1,9 @@
+dependencies {
+  paths = [
+    "../../account-baseline",
+  ]
+}
+
 include "terraform" {
   path = find_in_parent_folders("terraform.hcl")
 }
