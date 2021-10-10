@@ -1,3 +1,9 @@
+dependencies {
+  paths = [
+    "../traefik/",
+  ]
+}
+
 dependency "middleware_admins" {
   config_path = "../../manifests/traefik/middleware-admins"
 }
