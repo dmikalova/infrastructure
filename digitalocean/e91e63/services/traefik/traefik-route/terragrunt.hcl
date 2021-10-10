@@ -1,6 +1,12 @@
 // This manifest is needed to break dependency cycles
+dependencies {
+  paths = [
+    "../"
+  ]
+}
+
 dependency "middleware_admins" {
-  config_path = "../middleware-admins"
+  config_path = "../../../manifests/traefik/middleware-admins"
 }
 
 include "domain" {

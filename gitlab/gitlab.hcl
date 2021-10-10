@@ -84,12 +84,6 @@ inputs = {
       namespace        = "e91e63"
       visibility_level = "public"
     },
-    terraform-digitalocean-metadata = {
-      default_branch   = "master"
-      description      = "Configuration storage for values needed before Consul KV is available"
-      namespace        = "e91e63"
-      visibility_level = "public"
-    },
     terraform-digitalocean-networking = {
       default_branch   = "master"
       description      = "Terraform modules for managing Digital Ocean networking resources"
@@ -99,6 +93,12 @@ inputs = {
     terraform-digitalocean-postgresql = {
       default_branch   = "master"
       description      = "Terraform modules for managing Digital Ocean PostgreSQL databases"
+      namespace        = "e91e63"
+      visibility_level = "public"
+    },
+    terraform-digitalocean-spaces = {
+      default_branch   = "master"
+      description      = "Terraform modules for Digital Ocean spaces"
       namespace        = "e91e63"
       visibility_level = "public"
     },
