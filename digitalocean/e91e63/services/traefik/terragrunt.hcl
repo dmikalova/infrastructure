@@ -19,6 +19,7 @@ inputs = {
     chart         = "traefik"
     chart_version = "10.3.6"
     name          = "traefik"
+    namespace     = "default"
     repository    = "https://helm.traefik.io/traefik"
     values = {
       additionalArguments = [
@@ -27,6 +28,7 @@ inputs = {
         // "--providers.consulcatalog.connectAware=true",
         // "--providers.consulcatalog.connectByDefault=true",
         // "--providers.consulcatalog.exposedByDefault=false",
+        "--providers.kubernetescrd.allowCrossNamespace=true",
       ]
       deployment = {
         kind = "DaemonSet"
@@ -50,10 +52,6 @@ inputs = {
         type = "NodePort"
       }
     }
-    // route_conf = {
-    //   active      = true
-    //   middlewares = [dependency.middleware_admins.outputs.info]
-    // }
   }
 }
 
