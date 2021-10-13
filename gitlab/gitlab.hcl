@@ -23,18 +23,18 @@ inputs = {
       visibility_level = "public"
     },
     chrome-plugin-page-block = {
-      description    = "Chrome plugin that blocks pages"
-      namespace      = "dmikalova"
+      description = "Chrome plugin that blocks pages"
+      namespace   = "dmikalova"
     },
     dotfiles = {
-      description    = "My dotfiles"
-      namespace      = "dmikalova"
+      description = "My dotfiles"
+      namespace   = "dmikalova"
     },
     ergodox-ez-serial-scanner = {
-      namespace      = "dmikalova"
+      namespace = "dmikalova"
     },
     ergodox-ez-sketch = {
-      namespace      = "dmikalova"
+      namespace = "dmikalova"
     },
     infrastructure = {
       description      = "root terragrunt infrastructure modules"
@@ -42,24 +42,40 @@ inputs = {
       visibility_level = "public"
     },
     lists = {
-      namespace        = "dmikalova"
-      note             = "Need to clear container registry to move to cddc39 group"
+      namespace        = "cddc39"
       visibility_level = "public"
     },
     nucamp = {
-      namespace      = "dmikalova"
+      namespace = "dmikalova"
     },
     practice = {
-      description    = "Practice work for reference"
-      namespace      = "dmikalova"
+      description = "Practice work for reference"
+      namespace   = "dmikalova"
     },
     qmk_firmware = {
-      description    = "keyboard controller firmware for Atmel AVR and ARM USB families"
-      namespace      = "dmikalova"
+      description = "keyboard controller firmware for Atmel AVR and ARM USB families"
+      namespace   = "dmikalova"
+    },
+    rem = {
+      description = "An app for spaced repetition flashcards."
+      namespace   = "cddc39"
+    },
+    rem-vue = {
+      description = "An app for spaced repetition flashcards."
+      namespace   = "cddc39"
+    },
+    rurl = {
+      description = "A site that redirects to a random url from a list."
+      namespace   = "cddc39"
     },
     screeps = {
-      namespace      = "dmikalova"
-      note           = "Need to clear container registry to move to screeptorio group"
+      namespace = "screeptorio"
+    },
+    screeps-bot = {
+      namespace = "screeptorio"
+    },
+    screeps-mongo-docker = {
+      namespace = "screeptorio"
     },
     terraform-digitalocean-account-baseline = {
       description      = "Terraform modules for managing Digital Ocean accounts"
@@ -92,26 +108,25 @@ inputs = {
       visibility_level = "public"
     },
     terraform-kubernetes-manifests = {
-      description    = "Terraform modules for managing Kubernetes manifests"
-      namespace      = "e91e63"
-      visibility     = "public"
+      description = "Terraform modules for managing Kubernetes manifests"
+      namespace   = "e91e63"
+      visibility  = "public"
     },
     terraform-tekton-pipelines = {
-      description    = "Terraform modules for building reusable Tekton pipelines"
-      namespace      = "e91e63"
-      visibility     = "public"
+      description = "Terraform modules for building reusable Tekton pipelines"
+      namespace   = "e91e63"
+      visibility  = "public"
     },
     todo = {
       description = "An automated todo list"
       namespace   = "cddc39"
     },
     toto = {
-      namespace      = "dmikalova"
-      note           = "Need to clear container registry to move to cddc39 group"
+      namespace = "cddc39"
     },
     zshrc = {
-      description    = "Personal ZSH configuration"
-      namespace      = "dmikalova"
+      description = "Personal ZSH configuration"
+      namespace   = "dmikalova"
     },
   }
   users = {
