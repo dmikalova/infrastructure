@@ -43,9 +43,10 @@ inputs = {
       namespace      = "dmikalova"
     },
     infrastructure = {
-      default_branch = "master"
-      description    = "root terragrunt infrastructure modules"
-      namespace      = "dmikalova"
+      default_branch   = "master"
+      description      = "root terragrunt infrastructure modules"
+      namespace        = "dmikalova"
+      visibility_level = "public"
     },
     lists = {
       default_branch   = "master"
