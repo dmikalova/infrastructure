@@ -26,8 +26,8 @@ inputs = {
     ]
   }
   route_conf = {
-    active       = true
-    middlewares  = [dependency.middleware_admins.outputs.info]
+    active      = true
+    middlewares = [dependency.middleware_admins.outputs.info]
     // middlewares = []
     service_name = "tekton-dashboard"
     service_port = 9097
