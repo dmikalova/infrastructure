@@ -107,21 +107,23 @@ inputs = {
       visibility_level = "public"
     },
     terraform-kubernetes-manifests = {
-      description = "Terraform modules for managing Kubernetes manifests"
-      namespace   = "e91e63"
-      visibility  = "public"
+      description      = "Terraform modules for managing Kubernetes manifests"
+      namespace        = "e91e63"
+      visibility_level = "public"
     },
     terraform-tekton-pipelines = {
-      description = "Terraform modules for building reusable Tekton pipelines"
-      namespace   = "e91e63"
-      visibility  = "public"
+      description      = "Terraform modules for building reusable Tekton pipelines"
+      namespace        = "e91e63"
+      visibility_level = "public"
     },
     todo = {
       description = "An automated todo list"
       namespace   = "cddc39"
+      visibility_level = "public"
     },
     toto = {
       namespace = "cddc39"
+      visibility_level = "public"
     },
     zshrc = {
       description = "Personal ZSH configuration"
