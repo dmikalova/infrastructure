@@ -9,6 +9,5 @@ generate "kubernetes" {
 }
 
 inputs = {
-  domain_info = dependency.domain.outputs.info
-  k8s_info    = dependency.kubernetes.outputs.info
+  k8s_info = dependency.kubernetes.outputs.info
 }
