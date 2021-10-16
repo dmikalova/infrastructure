@@ -17,7 +17,6 @@ inputs = {
       visibility_level = "public"
     },
     brocket = {
-      // TODO change default branch to main
       description      = "A run-or-raise script for declarative window navigation"
       namespace        = "dmikalova"
       visibility_level = "public"
