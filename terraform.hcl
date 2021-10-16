@@ -25,7 +25,7 @@ terraform {
     commands = get_terraform_commands_that_need_vars()
     env_vars = {
       DIGITALOCEAN_TOKEN = local.credentials.DIGITALOCEAN_TOKEN
-      GITLAB_TOKEN = local.credentials.GITLAB_TOKEN
+      GITLAB_TOKEN       = local.credentials.GITLAB_TOKEN
     }
   }
 }
