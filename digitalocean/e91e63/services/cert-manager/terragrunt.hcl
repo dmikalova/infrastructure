@@ -1,7 +1,3 @@
-include "domain" {
-  path = find_in_parent_folders("domain.hcl")
-}
-
 include "helm" {
   path = find_in_parent_folders("helm.hcl")
 }
@@ -15,6 +11,7 @@ inputs = {
     chart         = "cert-manager"
     chart_version = "v1.5.4"
     name          = "cert-manager"
+    namespace     = "default"
     repository    = "https://charts.jetstack.io"
     values = {
       installCRDs = true
