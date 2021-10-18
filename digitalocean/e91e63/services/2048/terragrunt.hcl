@@ -1,3 +1,7 @@
+dependency "traefik" {
+  config_path = find_in_parent_folders("traefik/")
+}
+
 include "domain" {
   path = find_in_parent_folders("domain.hcl")
 }
