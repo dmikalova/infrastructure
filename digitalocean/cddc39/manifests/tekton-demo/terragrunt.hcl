@@ -6,6 +6,10 @@ dependency "deploy_key" {
   config_path = find_in_parent_folders("gitlab/deploy-key/")
 }
 
+dependency "tekton" {
+  config_path = find_in_parent_folders("e91e63/services/tekton")
+}
+
 include "kubernetes" {
   path = find_in_parent_folders("kubernetes.hcl")
 }
