@@ -13,7 +13,7 @@ include "terraform" {
 inputs = {
   kubernetes_conf = {
     node_pool_worker = {
-      node_droplet_size_slug = "s-2vcpu-2gb"
+      node_droplet_size_slug = "s-2vcpu-4gb"
     }
     region   = dependency.vpc.outputs.info.region
     version  = "1.21"
