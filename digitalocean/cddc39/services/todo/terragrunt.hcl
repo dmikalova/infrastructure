@@ -21,9 +21,13 @@ inputs = {
   }
   service_conf = {
     container_port = 5000
-    image          = "registry.digitalocean.com/dmikalova/todo:0.0.1"
+    image          = local.image
     name           = "todo"
   }
+}
+
+locals {
+  image = "registry.digitalocean.com/dmikalova/todo:0.0.1"
 }
 
 terraform {
