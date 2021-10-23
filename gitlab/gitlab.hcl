@@ -117,12 +117,12 @@ inputs = {
       visibility_level = "public"
     },
     todo = {
-      description = "An automated todo list"
-      namespace   = "cddc39"
+      description      = "An automated todo list"
+      namespace        = "cddc39"
       visibility_level = "public"
     },
     toto = {
-      namespace = "cddc39"
+      namespace        = "cddc39"
       visibility_level = "public"
     },
     zshrc = {
