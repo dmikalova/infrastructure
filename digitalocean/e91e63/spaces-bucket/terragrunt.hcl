@@ -1,9 +1,9 @@
 dependency "project" {
-  config_path = "../project/"
+  config_path = find_in_parent_folders("project")
 }
 
 dependency "vpc" {
-  config_path = "../vpc/"
+  config_path = find_in_parent_folders("vpc")
 }
 
 include "terraform" {
