@@ -1,5 +1,5 @@
 dependency "dependency" {
-    config_path = find_in_parent_folders("dependency")
+    config_path = "../dependency"
 }
 
 // include "generate" {
