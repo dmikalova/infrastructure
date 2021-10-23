@@ -2,10 +2,10 @@
 # Manual edits may be lost in future updates.
 
 provider "registry.terraform.io/digitalocean/digitalocean" {
-  version     = "2.11.1"
-  constraints = "2.11.1"
+  version     = "2.14.0"
+  constraints = "~> 2.0"
   hashes = [
-    "h1:6PNfB68DDo5RkXhepEUSt95bZgT4i8J2eJNcaQTxlCs=",
+    "h1:VgOC/Y3OIYezumhYMYhETZyQWjYLzDZwHBNRSezuf90=",
   ]
 }
 
@@ -18,9 +18,9 @@ provider "registry.terraform.io/hashicorp/helm" {
 }
 
 provider "registry.terraform.io/hashicorp/kubernetes" {
-  version     = "2.5.0"
-  constraints = "2.5.0"
+  version     = "2.6.1"
+  constraints = "~> 2.0"
   hashes = [
-    "h1:gWcWwaZRr45P/3uejuRWOPfAOIX0tuyt2oYe+c7yJgY=",
+    "h1:xC0zk0wWTlWLwGLp9cBRJG8672Pp1PZQmHCA4FAJp4U=",
   ]
 }
