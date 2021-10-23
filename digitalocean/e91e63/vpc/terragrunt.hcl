@@ -1,5 +1,5 @@
 dependency "project" {
-  config_path = "../project"
+  config_path = "../project/"
 }
 
 include "terraform" {
