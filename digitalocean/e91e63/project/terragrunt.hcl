@@ -1,6 +1,6 @@
 dependencies {
   paths = [
-    find_in_parent_folders("account-baseline"),
+    "../../account-baseline/",
   ]
 }
 
