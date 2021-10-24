@@ -1,5 +1,7 @@
 {
-	"personal_access_token": "ENC[AES256_GCM,data:EFsD0yPPMiMy1CAsT0wPJzZv73Ue42NKiwGam1L5Y7HoVh8OB0KBm6+BpWV28eHJvwfYPgqhM3rOkbyGZepavg==,iv:2DOhemE8B3/9dPMBTitqE/XXaoxY8x2ybiV9uvdlvqU=,tag:uTOTAujAbio6tCYKjfXVlw==,type:str]",
+	"DIGITALOCEAN_SPACES_KEY": "ENC[AES256_GCM,data:DiDD2U5DZDFU2dzoetJ/JLN1OUs=,iv:B235K7lMu8oddHlMQJjGw8+bIVC+fe0HaN8NLVi8DRs=,tag:OM5dcxnyJQ28tNktsFIANg==,type:str]",
+	"DIGITALOCEAN_SPACES_SECRET": "ENC[AES256_GCM,data:S4bxkRyU55kP6wABSn4IrWhbPftqqvd1nLxqg2Nk4o3vio7MHK65VZMg7A==,iv:Ap2im6aRJZpTe+c1WIaj9MyKeh/kPxa2go34BKEcAoQ=,tag:AVVV0dvhM/Epsn0a1Ta0UQ==,type:str]",
+	"DIGITALOCEAN_TOKEN": "ENC[AES256_GCM,data:Qi2Z+N7sfZ6pOMX6NeZsBb0JNpoNZadKJCJXGbKZaz/gMXXCr1yBrWptHejh3nDLJnbYXkOxcubW4wsjoLsPhw==,iv:TZsatpYypUMdDDZSom5j7T84dPNGYTruUaZL89z2vOc=,tag:X+DW7OnBW2PB6LrRoaJy0w==,type:str]",
 	"sops": {
 		"kms": null,
 		"gcp_kms": null,
@@ -11,8 +13,8 @@
 				"enc": "-----BEGIN AGE ENCRYPTED FILE-----\nYWdlLWVuY3J5cHRpb24ub3JnL3YxCi0+IFgyNTUxOSBmS1hPOVBTWFAxNDVVL2tp\nc2RiYVpJeUQ1QVVKdW1Dc21RQzdkUVFobEZzCk9pZG5PNHZGSE81UWxHM0ltVEZL\nSmhjOEs1a1NBeDJxczIyVk9DQkJmTGcKLS0tIHZPSzZlOEhyeTc1NUxRZEJIWEIv\nM0ZJajRySVRlU0g4bHgzdG9JcTdDYWMKGcQ5dshYqxkS2zWI0OY0ZDNChF+DLR3X\n8sB0v5Xsv25OaN/h7qp/qy5RAh3K+W32RhCtCcxCaIy9yIfZr5b1KA==\n-----END AGE ENCRYPTED FILE-----\n"
 			}
 		],
-		"lastmodified": "2021-10-09T03:52:26Z",
-		"mac": "ENC[AES256_GCM,data:w4ofitzlo5UYToUSJAerDQ+jeqOyRFz/putAPvmptePggQt5s0XiQn1Ryj0UWG53dSe6JPiK38kWIeFsJjL8NjO0Tk56F/F/dAeFiA+ZpSOJdrtXKySIUxmk8033M9Km/fNEvMmOQunwS21zHP1cQkogIEEdj9NoTXYkdPav75c=,iv:iQ08n5Dx0HzZOlqwgiyrX+REAxfQ0TVilNWpVsVu5Zw=,tag:oWwV88NI7Vh1FkdNPaZ5ww==,type:str]",
+		"lastmodified": "2021-10-23T23:01:41Z",
+		"mac": "ENC[AES256_GCM,data:pSyQG8v0/r/sL8Res9l4tKSTk5mu1pg5KvQkyzFssZGx3FqamR/F3cV1YnDk4NAFzKo5f3pTPWMClAJQGmFNcpjIBLge0EAJqFR7ty1Kr43Z+u8t/kYap6l4eQQk4pprZCqpz+PNAy8NPlRj6rO5FDl93eA4o+jD17bcWF0DC98=,iv:FkQ9NlgQ44iGKuIMpnnzijcXb8iQpKiymgzn6ZL1AcQ=,tag:4MotUVJhtw88i5u7YGmB/g==,type:str]",
 		"pgp": null,
 		"unencrypted_suffix": "_unencrypted",
 		"version": "3.7.1"

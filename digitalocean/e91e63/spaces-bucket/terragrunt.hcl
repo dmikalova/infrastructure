@@ -6,6 +6,10 @@ dependency "vpc" {
   config_path = find_in_parent_folders("vpc")
 }
 
+include "spaces" {
+  path = find_in_parent_folders("credentials.hcl")
+}
+
 include "terraform" {
   path = find_in_parent_folders("terraform.hcl")
 }
