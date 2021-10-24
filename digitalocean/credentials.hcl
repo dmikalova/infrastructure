@@ -1,5 +1,5 @@
 locals {
-  credentials = jsondecode(sops_decrypt_file("${get_parent_terragrunt_dir()}/digitalocean.sops.json"))
+  credentials = jsondecode(sops_decrypt_file("${get_parent_terragrunt_dir()}/credentials.sops.json"))
 }
 
 terraform {
