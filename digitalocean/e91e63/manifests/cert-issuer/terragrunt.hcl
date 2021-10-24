@@ -15,7 +15,7 @@ include "terraform" {
 inputs = {
   cert_issuer_conf = {
     email                              = jsondecode(sops_decrypt_file(find_in_parent_folders("profile.sops.json"))).email,
-    digitalocean_personal_access_token = jsondecode(sops_decrypt_file(find_in_parent_folders("digitalocean.sops.json"))).personal_access_token,
+    digitalocean_personal_access_token = jsondecode(sops_decrypt_file(find_in_parent_folders("digitalocean.sops.json"))).DIGITALOCEAN_TOKEN,
   }
 }
 
