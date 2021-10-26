@@ -6,8 +6,16 @@ dependency "deploy_key" {
   config_path = find_in_parent_folders("gitlab/deploy-key")
 }
 
+dependency "gitlab_projects" {
+  config_path = find_in_parent_folders("gitlab/projects")
+}
+
 dependency "tekton" {
   config_path = find_in_parent_folders("e91e63/services/tekton")
+}
+
+include "domain" {
+  path = find_in_parent_folders("e91e63/domain.hcl")
 }
 
 include "kubernetes" {
@@ -30,6 +38,7 @@ inputs = {
     namespace       = "default"
     private_key_pem = dependency.deploy_key.outputs.info.private_key_pem
   }
+  gitlab_project_info = dependency.gitlab_projects.outputs.info["cddc39/todo"]
 }
 
 locals {
