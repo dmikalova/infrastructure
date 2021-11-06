@@ -29,8 +29,8 @@ include "terraform" {
 inputs = {
   container_registry_info = dependency.container_registry.outputs.info
   tekton_conf = {
-    age_keys_file_base64 = local.age_keys_file_base64,
-    digitalocean_spaces_key = local.digitalocean_credentials.DIGITALOCEAN_SPACES_KEY,
+    age_keys_file_base64       = local.age_keys_file_base64,
+    digitalocean_spaces_key    = local.digitalocean_credentials.DIGITALOCEAN_SPACES_KEY,
     digitalocean_spaces_secret = local.digitalocean_credentials.DIGITALOCEAN_SPACES_SECRET,
   }
   git_conf = {
@@ -42,7 +42,7 @@ inputs = {
 }
 
 locals {
-  age_keys_file_base64 = jsondecode(sops_decrypt_file("${get_terragrunt_dir()}/age-keys.sops.json")).file_base64
+  age_keys_file_base64     = jsondecode(sops_decrypt_file("${get_terragrunt_dir()}/age-keys.sops.json")).file_base64
   digitalocean_credentials = jsondecode(sops_decrypt_file(find_in_parent_folders("credentials.sops.json")))
 }
 

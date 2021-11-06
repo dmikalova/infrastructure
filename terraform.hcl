@@ -1,6 +1,6 @@
 locals {
   credentials_digitalocean = jsondecode(sops_decrypt_file("${get_parent_terragrunt_dir()}/digitalocean/credentials.sops.json"))
-  credentials_gitlab = jsondecode(sops_decrypt_file("${get_parent_terragrunt_dir()}/gitlab/credentials.sops.json"))
+  credentials_gitlab       = jsondecode(sops_decrypt_file("${get_parent_terragrunt_dir()}/gitlab/credentials.sops.json"))
 }
 
 remote_state {

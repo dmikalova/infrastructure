@@ -27,8 +27,8 @@ inputs = {
   }
   route_conf = {
     middlewares  = [dependency.middleware_admins.outputs.info]
-    service_name = "api@internal"
     service_kind = "TraefikService"
+    service_name = "api@internal"
     service_port = 9000
   }
 }

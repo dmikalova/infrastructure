@@ -3,9 +3,9 @@ include "terraform" {
 }
 
 inputs = {
-  key_conf = {
+  conf = {
     ecdsa_curve = "P256"
-    name        = "gitlab-deploy-key"
+    name        = "infrastructure-deploy-key"
   }
 }
 
