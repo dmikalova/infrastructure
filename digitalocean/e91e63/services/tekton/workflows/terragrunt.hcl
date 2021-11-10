@@ -25,24 +25,24 @@ include "terraform" {
 inputs = {
   conf = {
     credentials = {
-      age = local.age_credentials
+      age    = local.age_credentials
       docker = dependency.container_registry.outputs.info
       git    = dependency.deploy_key.outputs.info
       terraform_remote_state = {
-        access_key_id = local.digitalocean_credentials.DIGITALOCEAN_SPACES_KEY
+        access_key_id     = local.digitalocean_credentials.DIGITALOCEAN_SPACES_KEY
         secret_access_key = local.digitalocean_credentials.DIGITALOCEAN_SPACES_SECRET
       }
     }
     images = {
-        alpine = "alpine"
-        cypress = "cypress/base:16.5.0"
-        kaniko = "gcr.io/kaniko-project/executor:v1.6.0"
-        node = "node:16-alpine"
-        terragrunt = "alpine/terragrunt"
+      alpine     = "alpine"
+      cypress    = "cypress/base:16.5.0"
+      kaniko     = "gcr.io/kaniko-project/executor:v1.6.0"
+      node       = "node:16-alpine"
+      terragrunt = "alpine/terragrunt"
     }
     interceptors = {
       git = {
-        name = "gitlab"
+        name        = "gitlab"
         event_types = ["Push Hook"]
       }
     }
