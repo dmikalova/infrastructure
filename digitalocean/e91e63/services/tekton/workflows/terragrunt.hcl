@@ -40,6 +40,12 @@ inputs = {
         node = "node:16-alpine"
         terragrunt = "alpine/terragrunt"
     }
+    interceptors = {
+      git = {
+        name = "gitlab"
+        event_types = ["Push Hook"]
+      }
+    }
     namespace = dependency.tekton.outputs.info.namespace
   }
 }
