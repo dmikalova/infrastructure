@@ -24,15 +24,6 @@ include "terraform" {
 
 inputs = {
   conf = {
-    credentials = {
-      age    = local.age_credentials
-      docker = dependency.container_registry.outputs.info
-      git    = dependency.deploy_key.outputs.info
-      terraform_remote_state = {
-        access_key_id     = local.digitalocean_credentials.DIGITALOCEAN_SPACES_KEY
-        secret_access_key = local.digitalocean_credentials.DIGITALOCEAN_SPACES_SECRET
-      }
-    }
     images = {
       alpine     = "alpine"
       cypress    = "cypress/base:16.5.0"
@@ -47,6 +38,15 @@ inputs = {
       }
     }
     namespace = dependency.tekton.outputs.info.namespace
+    secrets = {
+      age    = local.age_credentials
+      docker = dependency.container_registry.outputs.info
+      git    = dependency.deploy_key.outputs.info
+      terraform_remote_state = {
+        access_key_id     = local.digitalocean_credentials.DIGITALOCEAN_SPACES_KEY
+        secret_access_key = local.digitalocean_credentials.DIGITALOCEAN_SPACES_SECRET
+      }
+    }
   }
 }
 
