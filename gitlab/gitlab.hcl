@@ -1,10 +1,10 @@
 inputs = {
   groups = {
     cddc39 = {
-      description = "Services"
+      description = "Containerized web services"
     },
     e91e63 = {
-      description = "Terraform modules that deploy a Digital Ocean Kubernetes cluster"
+      description = "Terraform modules for managing Digital Ocean Kubernetes clusters"
     }
     screeptorio = {
       description = "Screeps private server"
