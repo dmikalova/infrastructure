@@ -27,7 +27,7 @@ inputs = {
     images = {
       alpine     = "alpine"
       cypress    = "cypress/base:16.5.0"
-      kaniko     = "gcr.io/kaniko-project/executor:v1.6.0"
+      kaniko     = "gcr.io/kaniko-project/executor:v1.7.0"
       node       = "node:16-alpine"
       terragrunt = "alpine/terragrunt"
     }
