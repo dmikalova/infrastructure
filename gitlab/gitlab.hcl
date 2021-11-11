@@ -119,6 +119,7 @@ inputs = {
     todo = {
       description      = "An automated todo list"
       namespace        = "cddc39"
+      topics           = ["javascript"]
       visibility_level = "public"
     },
     toto = {
