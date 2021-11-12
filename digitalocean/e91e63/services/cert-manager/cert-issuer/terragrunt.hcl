@@ -1,6 +1,6 @@
 dependencies {
   paths = [
-    "../../services/cert-manager/"
+    "../../cert-manager"
   ]
 }
 
@@ -15,7 +15,7 @@ include "terraform" {
 inputs = {
   cert_issuer_conf = {
     email                              = jsondecode(sops_decrypt_file(find_in_parent_folders("profile.sops.json"))).email,
-    digitalocean_personal_access_token = jsondecode(sops_decrypt_file(find_in_parent_folders("digitalocean/credentials.sops.json"))).DIGITALOCEAN_TOKEN,
+    digitalocean_personal_access_token = jsondecode(sops_decrypt_file(find_in_parent_folders("digitalocean/credentials-digitalocean.sops.json"))).DIGITALOCEAN_TOKEN,
   }
 }
 

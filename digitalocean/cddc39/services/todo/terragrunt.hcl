@@ -1,5 +1,5 @@
 dependency "middleware_admins" {
-  config_path = find_in_parent_folders("e91e63/manifests/traefik/middleware-admins")
+  config_path = find_in_parent_folders("e91e63/services/traefik/middlewares/admins")
 }
 
 include "domain" {

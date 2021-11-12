@@ -1,5 +1,5 @@
 dependency "cert_issuer" {
-  config_path = "../manifests/cert-issuer/"
+  config_path = "../services/cert-manager/cert-issuer/"
 }
 
 dependency "load_balancer" {

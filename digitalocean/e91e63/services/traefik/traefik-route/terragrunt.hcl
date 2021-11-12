@@ -6,7 +6,7 @@ dependencies {
 }
 
 dependency "middleware_admins" {
-  config_path = "../../../manifests/traefik/middleware-admins"
+  config_path = find_in_parent_folders("traefik/middlewares/admins")
 }
 
 include "domain" {

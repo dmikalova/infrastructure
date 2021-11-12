@@ -7,7 +7,7 @@ dependency "vpc" {
 }
 
 include "spaces" {
-  path = find_in_parent_folders("credentials.hcl")
+  path = find_in_parent_folders("credentials-digitalocean.hcl")
 }
 
 include "terraform" {
