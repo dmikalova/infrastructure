@@ -3,7 +3,7 @@ dependency "container_registry" {
 }
 
 dependency "deploy_key" {
-  config_path = find_in_parent_folders("gitlab/deploy-key")
+  config_path = find_in_parent_folders("gitlab/projects/deploy-key")
 }
 
 include "domain" {
