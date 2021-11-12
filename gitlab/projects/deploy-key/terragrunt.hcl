@@ -8,9 +8,9 @@ include "terraform" {
 
 inputs = {
   conf = {
-    ecdsa_curve = "P256"
+    ecdsa_curve     = "P256"
     gitlab_projects = dependency.projects.outputs.info
-    title        = "infrastructure-deploy-key"
+    title           = "infrastructure-deploy-key"
   }
 }
 
