@@ -4,13 +4,13 @@ include "terraform" {
 
 inputs = {
   conf = {
-      default_vpcs = {
-        blr1 = { active = true }
-        nyc1 = { active = true }
-        nyc3 = { active = true }
-        sfo2 = { active = true }
-        sfo3 = { active = true }
-      }
+    default_vpcs = {
+      blr1 = { active = true }
+      nyc1 = { active = true }
+      nyc3 = { active = true }
+      sfo2 = { active = true }
+      sfo3 = { active = true }
+    }
   }
 }
 
