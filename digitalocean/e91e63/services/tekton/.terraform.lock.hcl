@@ -2,10 +2,10 @@
 # Manual edits may be lost in future updates.
 
 provider "registry.terraform.io/gavinbunney/kubectl" {
-  version     = "1.13.0"
+  version     = "1.13.1"
   constraints = "~> 1.0"
   hashes = [
-    "h1:blP230ezSDEmb3WNUI8kDHCYrykyEucz7N7IZmODd/k=",
+    "h1:Kqo0t1R22DYLNsw8kFCBLPeV9zwns+86ijDnBUhJ+iw=",
   ]
 }
 
