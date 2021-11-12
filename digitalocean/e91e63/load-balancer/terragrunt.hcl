@@ -16,11 +16,12 @@ include "terraform" {
 
 inputs = {
   load_balancer_conf = {
-    droplet_tag       = dependency.kubernetes.outputs.info.worker_droplet_tag
-    http_target_port  = 32080
-    https_target_port = 32443
-    region            = dependency.vpc.outputs.info.region
-    vpc_id            = dependency.vpc.outputs.info.id
+    droplet_tag                      = dependency.kubernetes.outputs.info.worker_droplet_tag
+    http_target_port                 = 32080
+    https_target_port                = 32443
+    region                           = dependency.vpc.outputs.info.region
+    size                             = "lb-small"
+    vpc_id                           = dependency.vpc.outputs.info.id
   }
   project_info = dependency.project.outputs.info
 }
