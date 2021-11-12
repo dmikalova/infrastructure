@@ -35,11 +35,11 @@ inputs = {
       },
       ergodox-ez-serial-scanner = {
         description = "ergodox-ez serial scanner"
-        namespace = "dmikalova"
+        namespace   = "dmikalova"
       },
       ergodox-ez-sketch = {
         description = "ergodox-ez sketch"
-        namespace = "dmikalova"
+        namespace   = "dmikalova"
       },
       infrastructure = {
         description      = "root terragrunt infrastructure modules"
@@ -47,13 +47,13 @@ inputs = {
         visibility_level = "public"
       },
       lists = {
-        description = "create personal lists"
+        description      = "create personal lists"
         namespace        = "cddc39"
         visibility_level = "public"
       },
       nucamp = {
         description = "nucamp practice"
-        namespace = "dmikalova"
+        namespace   = "dmikalova"
       },
       practice = {
         description = "Practice work for reference"
@@ -77,17 +77,17 @@ inputs = {
       },
       screeps = {
         description = "a screeps repo"
-        namespace = "screeptorio"
+        namespace   = "screeptorio"
       },
       screeps-bot = {
         description = "a bot to play screeps"
-        namespace = "screeptorio"
+        namespace   = "screeptorio"
       },
       screeps-mongo-docker = {
         description = "docker container to deploy screeps server"
-        namespace = "screeptorio"
+        namespace   = "screeptorio"
       },
-      terraform-digitalocean-account-baseline = {
+      terraform-digitalocean-account = {
         description      = "Terraform modules for managing Digital Ocean accounts"
         namespace        = "e91e63"
         visibility_level = "public"
@@ -134,7 +134,7 @@ inputs = {
         visibility_level = "public"
       },
       toto = {
-        description = "a todo list app"
+        description      = "a todo list app"
         namespace        = "cddc39"
         visibility_level = "public"
       },

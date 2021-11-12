@@ -1,6 +1,6 @@
 dependencies {
   paths = [
-    find_in_parent_folders("account-baseline"),
+    find_in_parent_folders("baseline"),
   ]
 }
 
@@ -18,5 +18,5 @@ inputs = {
 }
 
 terraform {
-  source = "git@gitlab.com:e91e63/terraform-digitalocean-account-baseline.git///modules/project/"
+  source = "git@gitlab.com:e91e63/terraform-digitalocean-account.git///modules/project/"
 }
