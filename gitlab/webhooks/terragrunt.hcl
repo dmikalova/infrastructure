@@ -16,5 +16,5 @@ inputs = {
 }
 
 terraform {
-  source = "git@gitlab.com:dmikalova/terraform-gitlab-projects.git///modules/webhooks"
+  source = "git@gitlab.com:e91e63/terraform-gitlab-projects.git///modules/webhooks"
 }

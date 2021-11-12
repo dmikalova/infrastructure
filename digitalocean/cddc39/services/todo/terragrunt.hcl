@@ -15,14 +15,13 @@ include "terraform" {
 }
 
 inputs = {
-  route_conf = {
-    active      = true
-    middlewares = [dependency.middleware_admins.outputs.info]
-  }
-  service_conf = {
-    container_port = 5000
+  conf = {
     image          = local.image
     name           = "todo"
+    port_container = 5000
+    route = {
+      middlewares = [dependency.middleware_admins.outputs.info]
+    }
   }
 }
 
