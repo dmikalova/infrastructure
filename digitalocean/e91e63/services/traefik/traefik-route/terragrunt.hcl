@@ -1,8 +1,6 @@
 // This manifest is needed to break dependency cycles
-dependencies {
-  paths = [
-    find_in_parent_folders("traefik"),
-  ]
+dependency "traefik" {
+  config_path = find_in_parent_folders("traefik")
 }
 
 dependency "middleware_admins" {
@@ -22,17 +20,18 @@ include "terraform" {
 }
 
 inputs = {
-  service_conf = {
-    name = "traefik"
-  }
-  route_conf = {
-    middlewares  = [dependency.middleware_admins.outputs.info]
-    service_kind = "TraefikService"
-    service_name = "api@internal"
-    service_port = 9000
+  conf = {
+    middlewares = [dependency.middleware_admins.outputs.info]
+    kind        = "TraefikService"
+    service = {
+      name      = "api@internal"
+      namespace = dependency.traefik.outputs.info.namespace
+      port      = 9000
+    }
+    subdomain = "traefik"
   }
 }
 
 terraform {
-  source = "git@gitlab.com:e91e63/terraform-kubernetes-manifests.git//modules/traefik-ingress-route/"
+  source = "git@gitlab.com:e91e63/terraform-kubernetes-manifests.git//modules/traefik/ingress-route/"
 }

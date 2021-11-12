@@ -15,14 +15,14 @@ include "terraform" {
 }
 
 inputs = {
-  route_conf = {
-    active      = true
-    middlewares = [dependency.middleware_admins.outputs.info]
-  }
-  service_conf = {
-    container_port = 8080
+  conf = {
     image          = "docker.io/datawire/quote:0.5.0"
     name           = "quote"
+    port_container = 8080
+    route = {
+      active      = true
+      middlewares = [dependency.middleware_admins.outputs.info]
+    }
   }
 }
 

@@ -13,12 +13,12 @@ include "terraform" {
 }
 
 inputs = {
-  basic_auth_conf = {
+  conf = {
     name  = "admins"
     users = jsondecode(sops_decrypt_file(find_in_parent_folders("traefik-users.sops.json"))).admins,
   }
 }
 
 terraform {
-  source = "git@gitlab.com:e91e63/terraform-kubernetes-manifests.git//modules/traefik-middleware-basic-auth/"
+  source = "git@gitlab.com:e91e63/terraform-kubernetes-manifests.git//modules/traefik/middlewares/basic-auth/"
 }

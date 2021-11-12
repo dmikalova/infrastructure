@@ -15,62 +15,65 @@ include "terraform" {
 }
 
 inputs = {
-  helm_conf = {
-    chart         = "consul"
-    chart_version = "v0.33.0"
-    name          = "consul"
-    repository    = "https://helm.releases.hashicorp.com"
-    values = {
-      connectInject = {
-        default = false
-        enabled = true
-      }
-      controller = {
-        enabled = true
-      }
-      global = {
-        name       = "consul"
-        datacenter = "dc1"
-        metrics = {
+  conf = {
+    helm = {
+      chart         = "consul"
+      chart_version = "v0.33.0"
+      name          = "consul"
+      repository    = "https://helm.releases.hashicorp.com"
+      values = {
+        connectInject = {
+          default = false
           enabled = true
         }
-        # tls = {
-        #   # acls = {
-        #   #   manageSystemACLs = true
-        #   # }
-        #   enabled           = true
-        #   enableAutoEncrypt = true
-        #   # gossipEncryption = {
-        #   #   secretName = "consul-gossip-encryption-key"
-        #   #   secretKey  = "key"
-        #   # }
-        #   verify = true
-        #   serverAdditionalDNSSANs = [
-        #     "consul-server.default.svc.cluster.local"
-        #   ]
-        # }
-      }
-      grafana = {
-        enabled = true
-      }
-      prometheus = {
-        enabled = true
-      }
-      syncCatalog = {
-        default  = false
-        enabled  = true
-        toConsul = true
-        toK8S    = false
-      },
-      ui = {
-        enabled = true
+        controller = {
+          enabled = true
+        }
+        global = {
+          name       = "consul"
+          datacenter = "dc1"
+          metrics = {
+            enabled = true
+          }
+          # tls = {
+          #   # acls = {
+          #   #   manageSystemACLs = true
+          #   # }
+          #   enabled           = true
+          #   enableAutoEncrypt = true
+          #   # gossipEncryption = {
+          #   #   secretName = "consul-gossip-encryption-key"
+          #   #   secretKey  = "key"
+          #   # }
+          #   verify = true
+          #   serverAdditionalDNSSANs = [
+          #     "consul-server.default.svc.cluster.local"
+          #   ]
+          # }
+        }
+        grafana = {
+          enabled = true
+        }
+        prometheus = {
+          enabled = true
+        }
+        syncCatalog = {
+          default  = false
+          enabled  = true
+          toConsul = true
+          toK8S    = false
+        },
+        ui = {
+          enabled = true
+        }
       }
     }
-  }
-  route_conf = {
-    active       = true
-    middlewares  = [dependency.middleware_admins.outputs.info]
-    service_name = "consul-ui"
+    route = {
+      middlewares = [dependency.middleware_admins.outputs.info]
+      service = {
+        name = "consul-ui"
+      }
+    }
   }
 }
 

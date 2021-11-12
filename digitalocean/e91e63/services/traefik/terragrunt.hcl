@@ -15,41 +15,43 @@ include "terraform" {
 }
 
 inputs = {
-  helm_conf = {
-    chart         = "traefik"
-    chart_version = "10.3.6"
-    name          = "traefik"
-    namespace     = "default"
-    repository    = "https://helm.traefik.io/traefik"
-    values = {
-      additionalArguments = [
-        "--entryPoints.web.http.redirections.entryPoint.scheme=https",
-        "--entryPoints.web.http.redirections.entryPoint.to=websecure",
-        // "--providers.consulcatalog.connectAware=true",
-        // "--providers.consulcatalog.connectByDefault=true",
-        // "--providers.consulcatalog.exposedByDefault=false",
-        "--providers.kubernetescrd.allowCrossNamespace=true",
-      ]
-      deployment = {
-        kind = "DaemonSet"
-      }
-      ingressRoute = {
-        dashboard = {
-          enabled = false
+  conf = {
+    helm = {
+      chart         = "traefik"
+      chart_version = "10.3.6"
+      name          = "traefik"
+      namespace     = "default"
+      repository    = "https://helm.traefik.io/traefik"
+      values = {
+        additionalArguments = [
+          "--entryPoints.web.http.redirections.entryPoint.scheme=https",
+          "--entryPoints.web.http.redirections.entryPoint.to=websecure",
+          // "--providers.consulcatalog.connectAware=true",
+          // "--providers.consulcatalog.connectByDefault=true",
+          // "--providers.consulcatalog.exposedByDefault=false",
+          "--providers.kubernetescrd.allowCrossNamespace=true",
+        ]
+        deployment = {
+          kind = "DaemonSet"
         }
-      }
-      ports = {
-        web = {
-          nodePort = dependency.load_balancer.outputs.info.http_target_port
-          port     = 8080
+        ingressRoute = {
+          dashboard = {
+            enabled = false
+          }
         }
-        websecure = {
-          nodePort = dependency.load_balancer.outputs.info.https_target_port
-          port     = 8443
+        ports = {
+          web = {
+            nodePort = dependency.load_balancer.outputs.info.http_target_port
+            port     = 8080
+          }
+          websecure = {
+            nodePort = dependency.load_balancer.outputs.info.https_target_port
+            port     = 8443
+          }
         }
-      }
-      service = {
-        type = "NodePort"
+        service = {
+          type = "NodePort"
+        }
       }
     }
   }
