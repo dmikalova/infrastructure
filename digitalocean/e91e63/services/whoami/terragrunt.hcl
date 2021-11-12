@@ -15,14 +15,12 @@ include "terraform" {
 }
 
 inputs = {
-  route_conf = {
-    active      = true
-    middlewares = [dependency.middleware_users.outputs.info]
-  }
-  service_conf = {
-    container_port = 80
-    image          = "containous/whoami"
-    name           = "whoami"
+  conf = {
+    image = "containous/whoami"
+    name  = "whoami"
+    route = {
+      middlewares = [dependency.middleware_users.outputs.info]
+    }
   }
 }
 
