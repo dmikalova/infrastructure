@@ -7,14 +7,16 @@ include "terraform" {
 }
 
 inputs = {
-  helm_conf = {
-    chart         = "cert-manager"
-    chart_version = "v1.5.4"
-    name          = "cert-manager"
-    namespace     = "default"
-    repository    = "https://charts.jetstack.io"
-    values = {
-      installCRDs = true
+  conf = {
+    helm = {
+      chart         = "cert-manager"
+      chart_version = "v1.5.4"
+      name          = "cert-manager"
+      namespace     = "default"
+      repository    = "https://charts.jetstack.io"
+      values = {
+        installCRDs = true
+      }
     }
   }
 }

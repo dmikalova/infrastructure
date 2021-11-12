@@ -15,21 +15,24 @@ include "terraform" {
 }
 
 inputs = {
-  release_conf = {
-    name      = "tekton"
-    namespace = "tekton-pipelines"
-    urls = [
-      "https://storage.googleapis.com/tekton-releases/pipeline/previous/v0.28.1/release.yaml",
-      "https://storage.googleapis.com/tekton-releases/triggers/previous/v0.16.0/release.yaml",
-      "https://storage.googleapis.com/tekton-releases/triggers/previous/v0.16.0/interceptors.yaml",
-      "https://github.com/tektoncd/dashboard/releases/download/v0.21.0/tekton-dashboard-release.yaml",
-    ]
-  }
-  route_conf = {
-    active       = true
-    middlewares  = [dependency.middleware_admins.outputs.info]
-    service_name = "tekton-dashboard"
-    service_port = 9097
+  conf = {
+    release = {
+      name      = "tekton"
+      namespace = "tekton-pipelines"
+      urls = [
+        "https://storage.googleapis.com/tekton-releases/pipeline/previous/v0.28.1/release.yaml",
+        "https://storage.googleapis.com/tekton-releases/triggers/previous/v0.16.0/release.yaml",
+        "https://storage.googleapis.com/tekton-releases/triggers/previous/v0.16.0/interceptors.yaml",
+        "https://github.com/tektoncd/dashboard/releases/download/v0.21.0/tekton-dashboard-release.yaml",
+      ]
+    }
+    route = {
+      middlewares = [dependency.middleware_admins.outputs.info]
+      service = {
+        name = "tekton-dashboard"
+        port = 9097
+      }
+    }
   }
 }
 
