@@ -1,7 +1,7 @@
 // This manifest is needed to break dependency cycles
 dependencies {
   paths = [
-    "../"
+    find_in_parent_folders("traefik"),
   ]
 }
 

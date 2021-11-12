@@ -1,6 +1,6 @@
 dependencies {
   paths = [
-    "../../../services/traefik/"
+    find_in_parent_folders("traefik"),
   ]
 }
 
