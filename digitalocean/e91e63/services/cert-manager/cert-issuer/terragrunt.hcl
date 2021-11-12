@@ -1,6 +1,6 @@
 dependencies {
   paths = [
-    "../../cert-manager"
+    find_in_parent_folders("cert-manager"),
   ]
 }
 
