@@ -103,7 +103,7 @@ inputs = {
     },
     terraform-gitlab-projects = {
       description      = "Terraform modules for managing Gitlab Projects and related resources"
-      namespace        = "dmikalova"
+      namespace        = "e91e63"
       visibility_level = "public"
     },
     terraform-kubernetes-manifests = {
