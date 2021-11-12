@@ -13,7 +13,7 @@ include "terraform" {
 }
 
 inputs = {
-  basic_auth_conf = {
+  conf = {
     name = "users"
     users = concat(
       local.users_file.admins,
@@ -27,5 +27,5 @@ locals {
 }
 
 terraform {
-  source = "git@gitlab.com:e91e63/terraform-kubernetes-manifests.git//modules/traefik-middleware-basic-auth/"
+  source = "git@gitlab.com:e91e63/terraform-kubernetes-manifests.git//modules/traefik/middlewares/basic-auth/"
 }
