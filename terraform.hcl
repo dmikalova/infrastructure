@@ -1,6 +1,6 @@
 locals {
-  credentials_digitalocean = jsondecode(sops_decrypt_file("${get_parent_terragrunt_dir()}/digitalocean/credentials.sops.json"))
-  credentials_gitlab       = jsondecode(sops_decrypt_file("${get_parent_terragrunt_dir()}/gitlab/credentials.sops.json"))
+  credentials_digitalocean = jsondecode(sops_decrypt_file("${get_parent_terragrunt_dir()}/digitalocean/credentials-digitalocean.sops.json"))
+  credentials_gitlab       = jsondecode(sops_decrypt_file("${get_parent_terragrunt_dir()}/gitlab/credentials-gitlab.sops.json"))
 }
 
 remote_state {
@@ -21,6 +21,8 @@ remote_state {
   }
 }
 
+// TODO: split this out with multi-level-includes
+// https://github.com/gruntwork-io/terragrunt/issues/1566
 terraform {
   extra_arguments "credentials" {
     commands = get_terraform_commands_that_need_vars()

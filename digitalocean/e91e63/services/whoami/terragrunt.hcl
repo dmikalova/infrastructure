@@ -1,5 +1,5 @@
 dependency "middleware_users" {
-  config_path = "../../manifests/traefik/middleware-users"
+  config_path = find_in_parent_folders("traefik/middlewares/users")
 }
 
 include "domain" {
