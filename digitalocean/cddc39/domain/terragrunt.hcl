@@ -1,11 +1,5 @@
-dependencies {
-  paths = [
-    "../../e91e63/services/cert-manager/"
-  ]
-}
-
 dependency "cert_issuer" {
-  config_path = "../../e91e63/manifests/cert-issuer/"
+  config_path = "../../e91e63/services/cert-manager/cert-issuer/"
 }
 
 dependency "load_balancer" {

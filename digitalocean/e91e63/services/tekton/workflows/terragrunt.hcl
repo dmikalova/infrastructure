@@ -39,20 +39,20 @@ inputs = {
     }
     namespace = dependency.tekton.outputs.info.namespace
     secrets = {
-      age    = local.age_credentials
+      age    = local.credentials_age
       docker = dependency.container_registry.outputs.info
       git    = dependency.deploy_key.outputs.info
       terraform_remote_state = {
-        access_key_id     = local.digitalocean_credentials.DIGITALOCEAN_SPACES_KEY
-        secret_access_key = local.digitalocean_credentials.DIGITALOCEAN_SPACES_SECRET
+        access_key_id     = local.credentials_digitalocean.DIGITALOCEAN_SPACES_KEY
+        secret_access_key = local.credentials_digitalocean.DIGITALOCEAN_SPACES_SECRET
       }
     }
   }
 }
 
 locals {
-  age_credentials          = jsondecode(sops_decrypt_file("${get_terragrunt_dir()}/age.sops.json"))
-  digitalocean_credentials = jsondecode(sops_decrypt_file(find_in_parent_folders("credentials.sops.json")))
+  credentials_age          = jsondecode(sops_decrypt_file("${get_terragrunt_dir()}/credentials-age.sops.json"))
+  credentials_digitalocean = jsondecode(sops_decrypt_file(find_in_parent_folders("credentials-digitalocean.sops.json")))
 }
 
 terraform {
@@ -63,8 +63,8 @@ terraform {
 //   container_registry_info = dependency.container_registry.outputs.info
 //   tekton_conf = {
 //     age_keys_file_base64       = local.age_keys_file_base64,
-//     digitalocean_spaces_key    = local.digitalocean_credentials.DIGITALOCEAN_SPACES_KEY,
-//     digitalocean_spaces_secret = local.digitalocean_credentials.DIGITALOCEAN_SPACES_SECRET,
+//     digitalocean_spaces_key    = local.credentials_digitalocean.DIGITALOCEAN_SPACES_KEY,
+//     digitalocean_spaces_secret = local.credentials_digitalocean.DIGITALOCEAN_SPACES_SECRET,
 //   }
 //   git_conf = {
 //     domain          = "gitlab.com"
