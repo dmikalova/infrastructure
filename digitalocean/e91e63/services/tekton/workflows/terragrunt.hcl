@@ -6,6 +6,10 @@ dependency "deploy_key" {
   config_path = find_in_parent_folders("gitlab/projects/deploy-key")
 }
 
+dependency "middleware_public" {
+  config_path = find_in_parent_folders("traefik/middlewares/public")
+}
+
 include "domain" {
   path = find_in_parent_folders("e91e63/domain.hcl")
 }
@@ -49,6 +53,9 @@ inputs = {
         access_key_id     = local.credentials_digitalocean.DIGITALOCEAN_SPACES_KEY
         secret_access_key = local.credentials_digitalocean.DIGITALOCEAN_SPACES_SECRET
       }
+    }
+    webhooks = {
+      middlewares = [ dependency.middleware_public.outputs.info ]
     }
   }
 }
