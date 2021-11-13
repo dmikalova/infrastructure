@@ -24,6 +24,9 @@ include "terraform" {
 
 inputs = {
   conf = {
+    bindings = {
+      git_repo_infra_url = "git@gitlab.com:dmikalova/infrastructure.git"
+    }
     images = {
       alpine     = "alpine"
       cypress    = "cypress/base:16.5.0"
@@ -51,7 +54,7 @@ inputs = {
 }
 
 locals {
-  credentials_age          = jsondecode(sops_decrypt_file("${get_terragrunt_dir()}/credentials-age.sops.json"))
+  credentials_age          = jsondecode(sops_decrypt_file(find_in_parent_folders("age.sops.json")))
   credentials_digitalocean = jsondecode(sops_decrypt_file(find_in_parent_folders("credentials-digitalocean.sops.json")))
 }
 
