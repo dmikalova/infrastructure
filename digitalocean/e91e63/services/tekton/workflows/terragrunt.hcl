@@ -68,18 +68,3 @@ locals {
 terraform {
   source = "git@gitlab.com:e91e63/terraform-tekton-pipelines.git//modules/workflows/"
 }
-
-// inputs = {
-//   container_registry_info = dependency.container_registry.outputs.info
-//   tekton_conf = {
-//     age_keys_file_base64       = local.age_keys_file_base64,
-//     digitalocean_spaces_key    = local.credentials_digitalocean.DIGITALOCEAN_SPACES_KEY,
-//     digitalocean_spaces_secret = local.credentials_digitalocean.DIGITALOCEAN_SPACES_SECRET,
-//   }
-//   git_conf = {
-//     domain          = "gitlab.com"
-//     namespace       = "default"
-//     private_key_pem = dependency.deploy_key.outputs.info.private_key_pem
-//   }
-//   gitlab_project_info = dependency.gitlab_projects.outputs.info["cddc39/todo"]
-// }
