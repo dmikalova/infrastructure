@@ -1,11 +1,3 @@
-# cddc39-infra
+# dmikalova infrastructure
 
-Root terragrunt modules for deploying cddc39 infrastructure
-
-## Assumptions
-
-### Environment variables
-
-```sh
-DIGITALOCEAN_TOKEN
-```
+Terragrunt configuration for deploying Kubernetes infrastructure and services to DigitalOcean

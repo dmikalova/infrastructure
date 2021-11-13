@@ -42,7 +42,7 @@ inputs = {
         namespace   = "dmikalova"
       },
       infrastructure = {
-        description      = "root terragrunt infrastructure modules"
+        description      = "terragrunt infrastructure configuration"
         namespace        = "dmikalova"
         visibility_level = "public"
       },
