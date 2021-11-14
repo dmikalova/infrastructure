@@ -35,6 +35,7 @@ inputs = {
       alpine     = "alpine"
       cypress    = "cypress/base:16.5.0"
       kaniko     = "gcr.io/kaniko-project/executor:v1.7.0"
+      kubectl    = "alpine/k8s:1.20.7"
       node       = "node:16-alpine"
       terragrunt = "alpine/terragrunt"
     }
@@ -55,7 +56,7 @@ inputs = {
       }
     }
     webhooks = {
-      middlewares = [ dependency.middleware_public.outputs.info ]
+      middlewares = [dependency.middleware_public.outputs.info]
     }
   }
 }
