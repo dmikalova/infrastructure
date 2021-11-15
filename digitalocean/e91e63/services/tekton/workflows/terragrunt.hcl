@@ -47,12 +47,14 @@ inputs = {
     }
     namespace = dependency.tekton.outputs.info.namespace
     secrets = {
-      age    = local.credentials_age
-      docker = dependency.container_registry.outputs.info
-      git    = dependency.deploy_key.outputs.info
-      terraform_remote_state = {
-        access_key_id     = local.credentials_digitalocean.DIGITALOCEAN_SPACES_KEY
-        secret_access_key = local.credentials_digitalocean.DIGITALOCEAN_SPACES_SECRET
+      data = {
+        age    = local.credentials.age
+        docker = dependency.container_registry.outputs.info
+        git    = dependency.deploy_key.outputs.info
+        terraform_remote_state = {
+          access_key_id     = local.credentials.digitalocean.DIGITALOCEAN_SPACES_KEY
+          secret_access_key = local.credentials.digitalocean.DIGITALOCEAN_SPACES_SECRET
+        }
       }
     }
     webhooks = {
@@ -62,10 +64,12 @@ inputs = {
 }
 
 locals {
-  credentials_age          = jsondecode(sops_decrypt_file(find_in_parent_folders("age.sops.json")))
-  credentials_digitalocean = jsondecode(sops_decrypt_file(find_in_parent_folders("credentials-digitalocean.sops.json")))
+  credentials = {
+    age          = jsondecode(sops_decrypt_file(find_in_parent_folders("age.sops.json")))
+    digitalocean = jsondecode(sops_decrypt_file(find_in_parent_folders("digitalocean.sops.json")))
+  }
 }
 
 terraform {
-  source = "git@gitlab.com:e91e63/terraform-tekton-pipelines.git//modules/workflows/"
+  source = "git@gitlab.com:e91e63/terraform-tekton-pipelines.git///"
 }

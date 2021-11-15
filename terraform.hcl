@@ -1,6 +1,8 @@
 locals {
-  credentials_digitalocean = jsondecode(sops_decrypt_file("${get_parent_terragrunt_dir()}/digitalocean/credentials-digitalocean.sops.json"))
-  credentials_gitlab       = jsondecode(sops_decrypt_file("${get_parent_terragrunt_dir()}/gitlab/credentials-gitlab.sops.json"))
+  credentials = {
+    digitalocean = jsondecode(sops_decrypt_file("${get_parent_terragrunt_dir()}/digitalocean/digitalocean.sops.json"))
+    gitlab       = jsondecode(sops_decrypt_file("${get_parent_terragrunt_dir()}/gitlab/gitlab.sops.json"))
+  }
 }
 
 remote_state {
@@ -27,8 +29,8 @@ terraform {
   extra_arguments "credentials" {
     commands = get_terraform_commands_that_need_vars()
     env_vars = {
-      DIGITALOCEAN_TOKEN = local.credentials_digitalocean.DIGITALOCEAN_TOKEN
-      GITLAB_TOKEN       = local.credentials_gitlab.GITLAB_TOKEN
+      DIGITALOCEAN_TOKEN = local.credentials.digitalocean.DIGITALOCEAN_TOKEN
+      GITLAB_TOKEN       = local.credentials.gitlab.GITLAB_TOKEN
     }
   }
 }
