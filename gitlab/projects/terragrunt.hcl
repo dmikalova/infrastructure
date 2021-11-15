@@ -47,7 +47,7 @@ inputs = {
         visibility_level = "public"
       },
       lists = {
-        description      = "create personal lists"
+        description      = "manage lists"
         namespace        = "cddc39"
         visibility_level = "public"
       },
@@ -62,6 +62,12 @@ inputs = {
       qmk_firmware = {
         description = "keyboard controller firmware for Atmel AVR and ARM USB families"
         namespace   = "dmikalova"
+      },
+      recipes = {
+        description      = "manage recipes"
+        namespace        = "cddc39"
+        topics           = ["javascript"]
+        visibility_level = "public"
       },
       rem = {
         description = "An app for spaced repetition flashcards."
@@ -127,8 +133,8 @@ inputs = {
         namespace        = "e91e63"
         visibility_level = "public"
       },
-      todo = {
-        description      = "An automated todo list"
+      todos = {
+        description      = "manage todos with automated planning"
         namespace        = "cddc39"
         topics           = ["javascript"]
         visibility_level = "public"
