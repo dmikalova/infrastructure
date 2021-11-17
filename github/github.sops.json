@@ -1,0 +1,20 @@
+{
+	"GITHUB_TOKEN": "ENC[AES256_GCM,data:MBM7oy3kRt5y6pdjrXMH922BeBAXHBFI4v80o6w73hHqsl8uUULxNQ==,iv:Th0ElSTBJXjst9KwTsEBbIMDDD4Mjs1hd23NDVfquWw=,tag:wBhkpejk5AShxXVqvJsyKw==,type:str]",
+	"sops": {
+		"kms": null,
+		"gcp_kms": null,
+		"azure_kv": null,
+		"hc_vault": null,
+		"age": [
+			{
+				"recipient": "age1ahclcge5vrwwsc6nsud3t4h2mpx4e8ad3ta6aaxu4k87yeqc6vaqdxtpkx",
+				"enc": "-----BEGIN AGE ENCRYPTED FILE-----\nYWdlLWVuY3J5cHRpb24ub3JnL3YxCi0+IFgyNTUxOSBKUGJTZFpoU05pcERqZE9Q\nNXpLMDNYemFaN1VPM3dPckk0UDlSbC9nMUMwCjVJK1VzallLVTFuM3Ywa2RTRXVa\nWjFsTHhkaDNCVTBNMjYvVGJINU8yR00KLS0tIGk4L0FjcWhIV3NpTVVSQ1dUUFBW\ndHNLREplMGVkMVA2VDQ5UFpackxwelUKC4R5yJtsxEEE4mv6HjGiGIpL5E5Y3n6F\nIBT6kKvYgi28MSEg7MvNwzxRj2vC1bifGbjmv2JkCcOTgRA/hKeVtg==\n-----END AGE ENCRYPTED FILE-----\n"
+			}
+		],
+		"lastmodified": "2021-11-17T05:18:36Z",
+		"mac": "ENC[AES256_GCM,data:85AfDFcPUytQuFEfZRQaqLt2fKMEzSaEH5fMXoCwygpTTX8Jm+DzPSxBCETil8CfVXJue+alhofnXnX/90CRkK5/vngoeM7JoyR0TZBS6TfvVCwVZfmWzUbL+PrmGL1OA4ChH50+XJxssL2rIhvGmmd0p8YIXp6A/6xGCsKq1uc=,iv:l2O20+lN8LzkkKjfa9BgojiOWPtHLYuz1v7ggupZ+DE=,tag:QC6BnNWO1CVNKgUFVBkAmw==,type:str]",
+		"pgp": null,
+		"unencrypted_suffix": "_unencrypted",
+		"version": "3.7.1"
+	}
+}
