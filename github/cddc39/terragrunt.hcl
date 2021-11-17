@@ -16,22 +16,9 @@ inputs = {
         topics           = ["javascript"]
         visibility_level = "public"
       },
-      rem = {
-        description = "An app for spaced repetition flashcards"
-      },
-      rem-vue = {
-        description = "An app for spaced repetition flashcards"
-      },
-      rurl = {
-        description = "A site that redirects to a random url from a list"
-      },
       todos = {
         description      = "manage todos with automated planning"
         topics           = ["javascript"]
-        visibility_level = "public"
-      },
-      toto = {
-        description      = "a todo list app"
         visibility_level = "public"
       },
     }
