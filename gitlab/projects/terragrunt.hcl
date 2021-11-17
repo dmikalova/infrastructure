@@ -15,30 +15,13 @@ inputs = {
     groups = dependency.groups.outputs.info
     users  = dependency.users.outputs.info
     projects = {
-      basic-auth = {
-        description      = "Go service that provides basic auth for Ambassador"
-        namespace        = "e91e63"
-        visibility_level = "public"
-      },
       brocket = {
         description      = "A run-or-raise script for declarative window navigation"
         namespace        = "dmikalova"
         visibility_level = "public"
       },
-      chrome-plugin-page-block = {
-        description = "Chrome plugin that blocks pages"
-        namespace   = "dmikalova"
-      },
       dotfiles = {
         description = "My dotfiles"
-        namespace   = "dmikalova"
-      },
-      ergodox-ez-serial-scanner = {
-        description = "ergodox-ez serial scanner"
-        namespace   = "dmikalova"
-      },
-      ergodox-ez-sketch = {
-        description = "ergodox-ez sketch"
         namespace   = "dmikalova"
       },
       infrastructure = {
@@ -51,35 +34,11 @@ inputs = {
         namespace        = "cddc39"
         visibility_level = "public"
       },
-      nucamp = {
-        description = "nucamp practice"
-        namespace   = "dmikalova"
-      },
-      practice = {
-        description = "Practice work for reference"
-        namespace   = "dmikalova"
-      },
-      qmk_firmware = {
-        description = "keyboard controller firmware for Atmel AVR and ARM USB families"
-        namespace   = "dmikalova"
-      },
       recipes = {
         description      = "manage recipes"
         namespace        = "cddc39"
         topics           = ["javascript"]
         visibility_level = "public"
-      },
-      rem = {
-        description = "An app for spaced repetition flashcards."
-        namespace   = "cddc39"
-      },
-      rem-vue = {
-        description = "An app for spaced repetition flashcards."
-        namespace   = "cddc39"
-      },
-      rurl = {
-        description = "A site that redirects to a random url from a list."
-        namespace   = "cddc39"
       },
       screeps = {
         description = "a screeps repo"
@@ -137,11 +96,6 @@ inputs = {
         description      = "manage todos with automated planning"
         namespace        = "cddc39"
         topics           = ["javascript"]
-        visibility_level = "public"
-      },
-      toto = {
-        description      = "a todo list app"
-        namespace        = "cddc39"
         visibility_level = "public"
       },
       zshrc = {

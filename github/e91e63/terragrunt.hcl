@@ -6,10 +6,6 @@ inputs = {
   conf = {
     owner = "e91e63"
     repositories = {
-      basic-auth = {
-        description      = "Go service that provides basic auth for Ambassador"
-        visibility_level = "public"
-      },
       terraform-digitalocean-account = {
         description      = "Terraform modules for managing Digital Ocean accounts"
         visibility_level = "public"
