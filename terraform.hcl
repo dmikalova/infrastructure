@@ -1,6 +1,7 @@
 locals {
   credentials = {
     digitalocean = jsondecode(sops_decrypt_file("${get_parent_terragrunt_dir()}/digitalocean/digitalocean.sops.json"))
+    github       = jsondecode(sops_decrypt_file("${get_parent_terragrunt_dir()}/github/github.sops.json"))
     gitlab       = jsondecode(sops_decrypt_file("${get_parent_terragrunt_dir()}/gitlab/gitlab.sops.json"))
   }
 }
@@ -30,6 +31,7 @@ terraform {
     commands = get_terraform_commands_that_need_vars()
     env_vars = {
       DIGITALOCEAN_TOKEN = local.credentials.digitalocean.DIGITALOCEAN_TOKEN
+      GITHUB_TOKEN       = local.credentials.github.GITHUB_TOKEN
       GITLAB_TOKEN       = local.credentials.gitlab.GITLAB_TOKEN
     }
   }
