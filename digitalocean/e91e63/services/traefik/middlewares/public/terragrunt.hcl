@@ -11,5 +11,5 @@ include "terraform" {
 inputs = {}
 
 terraform {
-  source = "git@gitlab.com:e91e63/terraform-kubernetes-manifests.git//modules/traefik/middlewares/null"
+  source = "git@github.com:e91e63/terraform-kubernetes-manifests.git//modules/traefik/middlewares/null"
 }

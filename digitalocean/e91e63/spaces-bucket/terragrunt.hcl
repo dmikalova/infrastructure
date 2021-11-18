@@ -28,5 +28,5 @@ terraform {
       SPACES_SECRET_ACCESS_KEY = local.credentials_digitalocean.DIGITALOCEAN_SPACES_SECRET
     }
   }
-  source = "git@gitlab.com:e91e63/terraform-digitalocean-spaces.git///modules/bucket"
+  source = "git@github.com:e91e63/terraform-digitalocean-spaces.git///modules/bucket"
 }

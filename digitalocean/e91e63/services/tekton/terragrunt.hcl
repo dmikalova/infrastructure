@@ -37,5 +37,5 @@ inputs = {
 }
 
 terraform {
-  source = "git@gitlab.com:e91e63/terraform-kubernetes-manifests.git//modules/remote-release/"
+  source = "git@github.com:e91e63/terraform-kubernetes-manifests.git//modules/remote-release/"
 }

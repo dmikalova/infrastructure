@@ -29,7 +29,7 @@ include "terraform" {
 inputs = {
   conf = {
     bindings = {
-      git_repo_infra_url = "git@gitlab.com:dmikalova/infrastructure.git"
+      git_repo_infra_url = "git@github.com:dmikalova/infrastructure.git"
     }
     images = {
       alpine     = "alpine"
@@ -71,5 +71,5 @@ locals {
 }
 
 terraform {
-  source = "git@gitlab.com:e91e63/terraform-tekton-pipelines.git///"
+  source = "git@github.com:e91e63/terraform-tekton-pipelines.git///"
 }

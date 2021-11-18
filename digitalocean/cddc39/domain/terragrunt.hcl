@@ -26,5 +26,5 @@ inputs = {
 }
 
 terraform {
-  source = "git@gitlab.com:e91e63/terraform-digitalocean-networking.git///modules/domain/"
+  source = "git@github.com:e91e63/terraform-digitalocean-networking.git///modules/domain/"
 }

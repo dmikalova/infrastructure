@@ -14,13 +14,8 @@ inputs = {
         description = "personal dotfiles"
       },
       infrastructure = {
-<<<<<<< HEAD
-        description      = "terragrunt infrastructure configuration"
-        visibility = "public"
-=======
         description = "terragrunt infrastructure configuration"
         visibility  = "public"
->>>>>>> e1cf96e7ae3ded9cebe9df8f1042009a3bfa6d6b
       },
       synths = {
         description = "personal notes and resources on eurorack synths"
