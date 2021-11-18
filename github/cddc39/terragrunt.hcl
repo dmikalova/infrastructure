@@ -7,19 +7,19 @@ inputs = {
     owner = "cddc39"
     repositories = {
       lists = {
-        description      = "manage lists"
-        organization     = "cddc39"
-        visibility = "public"
+        description  = "manage lists"
+        organization = "cddc39"
+        visibility   = "public"
       },
       recipes = {
-        description      = "manage recipes"
-        topics           = ["javascript"]
-        visibility = "public"
+        description = "manage recipes"
+        topics      = ["javascript"]
+        visibility  = "public"
       },
       todos = {
-        description      = "manage todos with automated planning"
-        topics           = ["javascript"]
-        visibility = "public"
+        description = "manage todos with automated planning"
+        topics      = ["javascript"]
+        visibility  = "public"
       },
     }
   }
