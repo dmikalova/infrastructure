@@ -7,15 +7,15 @@ inputs = {
     owner = "dmikalova"
     repositories = {
       brocket = {
-        description      = "A run-or-raise script for declarative window navigation"
-        visibility_level = "public"
+        description = "A run-or-raise script for declarative window navigation"
+        visibility  = "public"
       },
       dotfiles = {
         description = "personal dotfiles"
       },
       infrastructure = {
-        description      = "terragrunt infrastructure configuration"
-        visibility_level = "public"
+        description = "terragrunt infrastructure configuration"
+        visibility  = "public"
       },
       synths = {
         description = "personal notes and resources on eurorack synths"
