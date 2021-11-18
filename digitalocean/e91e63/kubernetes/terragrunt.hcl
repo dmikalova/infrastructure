@@ -23,5 +23,5 @@ inputs = {
 }
 
 terraform {
-  source = "git@gitlab.com:e91e63/terraform-digitalocean-kubernetes.git///modules/cluster/"
+  source = "git@github.com:e91e63/terraform-digitalocean-kubernetes.git///modules/cluster/"
 }

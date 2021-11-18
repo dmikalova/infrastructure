@@ -15,5 +15,5 @@ inputs = {
 }
 
 terraform {
-  source = "git@gitlab.com:e91e63/terraform-digitalocean-kubernetes.git//modules/default-service-account/"
+  source = "git@github.com:e91e63/terraform-digitalocean-kubernetes.git//modules/default-service-account/"
 }
