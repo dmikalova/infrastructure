@@ -14,12 +14,12 @@ inputs = {
     basic-auth = {
       description      = "Go service that provides basic auth for Ambassador"
       namespace        = "e91e63"
-      visibility_level = "public"
+      visibility = "public"
     },
     brocket = {
       description      = "A run-or-raise script for declarative window navigation"
       namespace        = "dmikalova"
-      visibility_level = "public"
+      visibility = "public"
     },
     chrome-plugin-page-block = {
       description = "Chrome plugin that blocks pages"
@@ -38,11 +38,11 @@ inputs = {
     infrastructure = {
       description      = "root terragrunt infrastructure modules"
       namespace        = "dmikalova"
-      visibility_level = "public"
+      visibility = "public"
     },
     lists = {
       namespace        = "cddc39"
-      visibility_level = "public"
+      visibility = "public"
     },
     nucamp = {
       namespace = "dmikalova"
@@ -79,52 +79,52 @@ inputs = {
     terraform-digitalocean-account-baseline = {
       description      = "Terraform modules for managing Digital Ocean accounts"
       namespace        = "e91e63"
-      visibility_level = "public"
+      visibility = "public"
     },
     terraform-digitalocean-kubernetes = {
       description      = "Terraform modules for deploying a Digital Ocean Kubernetes cluster"
       namespace        = "e91e63"
-      visibility_level = "public"
+      visibility = "public"
     },
     terraform-digitalocean-networking = {
       description      = "Terraform modules for managing Digital Ocean networking resources"
       namespace        = "e91e63"
-      visibility_level = "public"
+      visibility = "public"
     },
     terraform-digitalocean-postgresql = {
       description      = "Terraform modules for managing Digital Ocean PostgreSQL databases"
       namespace        = "e91e63"
-      visibility_level = "public"
+      visibility = "public"
     },
     terraform-digitalocean-spaces = {
       description      = "Terraform modules for Digital Ocean spaces"
       namespace        = "e91e63"
-      visibility_level = "public"
+      visibility = "public"
     },
     terraform-gitlab-projects = {
       description      = "Terraform modules for managing Gitlab Projects and related resources"
       namespace        = "e91e63"
-      visibility_level = "public"
+      visibility = "public"
     },
     terraform-kubernetes-manifests = {
       description      = "Terraform modules for managing Kubernetes manifests"
       namespace        = "e91e63"
-      visibility_level = "public"
+      visibility = "public"
     },
     terraform-tekton-pipelines = {
       description      = "Terraform modules for building reusable Tekton pipelines"
       namespace        = "e91e63"
-      visibility_level = "public"
+      visibility = "public"
     },
     todo = {
       description      = "An automated todo list"
       namespace        = "cddc39"
       topics           = ["javascript"]
-      visibility_level = "public"
+      visibility = "public"
     },
     toto = {
       namespace        = "cddc39"
-      visibility_level = "public"
+      visibility = "public"
     },
     zshrc = {
       description = "Personal ZSH configuration"

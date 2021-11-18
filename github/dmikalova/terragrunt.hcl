@@ -8,14 +8,14 @@ inputs = {
     repositories = {
       brocket = {
         description      = "A run-or-raise script for declarative window navigation"
-        visibility_level = "public"
+        visibility = "public"
       },
       dotfiles = {
         description = "personal dotfiles"
       },
       infrastructure = {
         description      = "terragrunt infrastructure configuration"
-        visibility_level = "public"
+        visibility = "public"
       },
       synths = {
         description = "personal notes and resources on eurorack synths"
