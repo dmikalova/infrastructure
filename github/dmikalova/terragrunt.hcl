@@ -12,6 +12,7 @@ inputs = {
       },
       dotfiles = {
         description = "personal dotfiles"
+        visibility  = "public"
       },
       infrastructure = {
         description = "terragrunt infrastructure configuration"
