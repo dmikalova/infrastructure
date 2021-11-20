@@ -7,7 +7,7 @@ inputs = {
     owner = "dmikalova"
     repositories = {
       brocket = {
-        description = "A run-or-raise script for declarative window navigation"
+        description = "run-or-raise script for declarative window navigation"
         visibility  = "public"
       },
       dotfiles = {
@@ -19,9 +19,7 @@ inputs = {
       },
       synths = {
         description = "personal notes and resources on eurorack synths"
-      },
-      zshrc = {
-        description = "Personal ZSH configuration"
+        visibility = "public"
       },
     }
   }
