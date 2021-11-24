@@ -16,14 +16,16 @@ inputs = {
   conf = {
     name = "users"
     users = concat(
-      local.users_file.admins,
-      local.users_file.users,
+      local.secrets.users.admins,
+      local.secrets.users.users,
     )
   }
 }
 
 locals {
-  users_file = jsondecode(sops_decrypt_file(find_in_parent_folders("traefik-users.sops.json")))
+  secrets = {
+    users = jsondecode(sops_decrypt_file(find_in_parent_folders("secrets/traefik-users.sops.json")))
+  }
 }
 
 terraform {
