@@ -15,7 +15,13 @@ include "terraform" {
 inputs = {
   conf = {
     name  = "admins"
-    users = jsondecode(sops_decrypt_file(find_in_parent_folders("traefik-users.sops.json"))).admins,
+    users = local.secrets.users.admins
+  }
+}
+
+locals {
+  secrets = {
+    users = jsondecode(sops_decrypt_file(find_in_parent_folders("secrets/traefik-users.sops.json")))
   }
 }
 
