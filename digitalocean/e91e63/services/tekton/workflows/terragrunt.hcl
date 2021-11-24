@@ -41,19 +41,24 @@ inputs = {
     }
     interceptors = {
       git = {
-        name        = "gitlab"
-        event_types = ["Push Hook"]
+        name        = "github"
+        event_types = ["push"]
       }
     }
     namespace = dependency.tekton.outputs.info.namespace
     secrets = {
       data = {
-        age    = local.credentials.age
+        age    = local.secrets.age
         docker = dependency.container_registry.outputs.info
-        git    = dependency.deploy_key.outputs.info
+        git_ssh_key = {
+          domain             = "github.com"
+          known_hosts        = "github.com ecdsa-sha2-nistp256 AAAAE2VjZHNhLXNoYTItbmlzdHAyNTYAAAAIbmlzdHAyNTYAAABBBEmKSENjQEezOmxkZMy7opKgwFB9nkt5YRrYMjNuG5N87uRgg6CLrbo5wAdT/y6v0mKV0U2w0WZ2YB/++Tpockg="
+          private_key_base64 = local.secrets.ssh.private_key_base64
+        }
+        gpg = local.secrets.gpg
         terraform_remote_state = {
-          access_key_id     = local.credentials.digitalocean.DIGITALOCEAN_SPACES_KEY
-          secret_access_key = local.credentials.digitalocean.DIGITALOCEAN_SPACES_SECRET
+          access_key_id     = local.secrets.digitalocean.DIGITALOCEAN_SPACES_KEY
+          secret_access_key = local.secrets.digitalocean.DIGITALOCEAN_SPACES_SECRET
         }
       }
     }
@@ -64,9 +69,11 @@ inputs = {
 }
 
 locals {
-  credentials = {
-    age          = jsondecode(sops_decrypt_file(find_in_parent_folders("age.sops.json")))
-    digitalocean = jsondecode(sops_decrypt_file(find_in_parent_folders("digitalocean.sops.json")))
+  secrets = {
+    age          = jsondecode(sops_decrypt_file(find_in_parent_folders("secrets/age.sops.json")))
+    digitalocean = jsondecode(sops_decrypt_file(find_in_parent_folders("secrets/digitalocean.sops.json")))
+    ssh          = jsondecode(sops_decrypt_file(find_in_parent_folders("secrets/ssh.sops.json")))
+    gpg          = jsondecode(sops_decrypt_file(find_in_parent_folders("secrets/gpg.sops.json")))
   }
 }
 

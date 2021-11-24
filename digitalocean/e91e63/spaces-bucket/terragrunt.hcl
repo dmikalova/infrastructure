@@ -16,16 +16,18 @@ inputs = {
 }
 
 locals {
-  credentials_digitalocean = jsondecode(sops_decrypt_file(find_in_parent_folders("digitalocean.sops.json")))
+  secrets = {
+    digitalocean = jsondecode(sops_decrypt_file(find_in_parent_folders("secrets/digitalocean.sops.json")))
+  }
 }
 
 terraform {
-  extra_arguments "credentials-digitalocean" {
+  extra_arguments "secrets-digitalocean" {
     commands = get_terraform_commands_that_need_vars()
     env_vars = {
-      DIGITALOCEAN_TOKEN       = local.credentials_digitalocean.DIGITALOCEAN_TOKEN
-      SPACES_ACCESS_KEY_ID     = local.credentials_digitalocean.DIGITALOCEAN_SPACES_KEY
-      SPACES_SECRET_ACCESS_KEY = local.credentials_digitalocean.DIGITALOCEAN_SPACES_SECRET
+      DIGITALOCEAN_TOKEN       = local.secrets.digitalocean.DIGITALOCEAN_TOKEN
+      SPACES_ACCESS_KEY_ID     = local.secrets.digitalocean.DIGITALOCEAN_SPACES_KEY
+      SPACES_SECRET_ACCESS_KEY = local.secrets.digitalocean.DIGITALOCEAN_SPACES_SECRET
     }
   }
   source = "git@github.com:e91e63/terraform-digitalocean-spaces.git///modules/bucket"

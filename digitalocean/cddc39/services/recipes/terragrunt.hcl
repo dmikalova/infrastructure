@@ -18,7 +18,7 @@ inputs = {
   conf = {
     image          = local.image
     name           = "recipes"
-    port_container = 5000
+    port_container = 3000
     route = {
       middlewares = [dependency.middleware_admins.outputs.info]
     }

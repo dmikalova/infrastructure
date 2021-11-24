@@ -17,8 +17,8 @@ include "terraform" {
 inputs = {
   conf = {
     image          = local.image
-    name           = "todo"
-    port_container = 5000
+    name           = "todos"
+    port_container = 3000
     route = {
       middlewares = [dependency.middleware_admins.outputs.info]
     }
