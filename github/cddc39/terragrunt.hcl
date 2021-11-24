@@ -1,3 +1,7 @@
+dependency "workflows" {
+  config_path = find_in_parent_folders("digitalocean/e91e63/services/tekton/workflows")
+}
+
 include "terraform" {
   path = find_in_parent_folders("terraform.hcl")
 }
@@ -23,6 +27,7 @@ inputs = {
       },
     }
   }
+  workflows_info = dependency.workflows.outputs.info
 }
 
 terraform {

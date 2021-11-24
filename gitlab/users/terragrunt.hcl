@@ -4,7 +4,7 @@ include "terraform" {
 
 inputs = {
   conf = {
-    gitlab_token = local.credentials.gitlab.GITLAB_TOKEN
+    gitlab_token = local.secrets.gitlab.GITLAB_TOKEN
     usernames = [
       "dmikalova"
     ]
@@ -12,8 +12,8 @@ inputs = {
 }
 
 locals {
-  credentials = {
-    gitlab = jsondecode(sops_decrypt_file(find_in_parent_folders("gitlab.sops.json")))
+  secrets = {
+    gitlab = jsondecode(sops_decrypt_file(find_in_parent_folders("secrets/gitlab.sops.json")))
   }
 }
 
