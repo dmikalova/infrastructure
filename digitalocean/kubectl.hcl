@@ -1,5 +1,11 @@
 dependency "kubernetes" {
-  config_path = "${get_parent_terragrunt_dir()}/kubernetes/"
+  config_path = find_in_parent_folders("e91e63/kubernetes")
+}
+
+generate "kubectl" {
+  contents  = file(find_in_parent_folders("terraform/providers/kubectl.tf"))
+  if_exists = "overwrite"
+  path      = "provider-kubectl.tf"
 }
 
 generate "kubernetes" {

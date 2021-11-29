@@ -1,5 +1,5 @@
 dependency "kubernetes" {
-  config_path = find_in_parent_folders("e91e63/kubernetes/")
+  config_path = find_in_parent_folders("e91e63/kubernetes")
 }
 
 generate "kubernetes" {
