@@ -26,7 +26,7 @@ inputs = {
 }
 
 locals {
-  image = "registry.digitalocean.com/dmikalova/cddc39/todos:v0.0.1-dev-61d6edd"
+  image = "registry.digitalocean.com/dmikalova/cddc39/todos:v0.0.1-dev-8a3b439"
 }
 
 terraform {
