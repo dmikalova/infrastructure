@@ -34,10 +34,6 @@ inputs = {
         description = "Terraform modules for managing Github Repositories"
         visibility  = "public"
       },
-      terraform-gitlab-projects = {
-        description = "Terraform modules for managing Gitlab Projects and related resources"
-        visibility  = "public"
-      },
       terraform-kubernetes-manifests = {
         description = "Terraform modules for managing Kubernetes manifests"
         visibility  = "public"

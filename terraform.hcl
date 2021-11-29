@@ -2,7 +2,6 @@ locals {
   secrets = {
     digitalocean = jsondecode(sops_decrypt_file("${get_parent_terragrunt_dir()}/secrets/digitalocean.sops.json"))
     github       = jsondecode(sops_decrypt_file("${get_parent_terragrunt_dir()}/secrets/github.sops.json"))
-    gitlab       = jsondecode(sops_decrypt_file("${get_parent_terragrunt_dir()}/secrets/gitlab.sops.json"))
   }
 }
 
@@ -32,7 +31,6 @@ terraform {
     env_vars = {
       DIGITALOCEAN_TOKEN = local.secrets.digitalocean.DIGITALOCEAN_TOKEN
       GITHUB_TOKEN       = local.secrets.github.GITHUB_TOKEN
-      GITLAB_TOKEN       = local.secrets.gitlab.GITLAB_TOKEN
     }
   }
 }

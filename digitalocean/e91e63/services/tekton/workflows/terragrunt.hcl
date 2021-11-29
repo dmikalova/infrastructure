@@ -2,10 +2,6 @@ dependency "container_registry" {
   config_path = find_in_parent_folders("dmikalova/container-registry")
 }
 
-dependency "deploy_key" {
-  config_path = find_in_parent_folders("gitlab/projects/deploy-key")
-}
-
 dependency "middleware_public" {
   config_path = find_in_parent_folders("traefik/middlewares/public")
 }
