@@ -1,9 +1,5 @@
-dependency "domain" {
-  config_path = "${get_parent_terragrunt_dir()}/../domain/"
-}
-
 dependency "kubernetes" {
-  config_path = "${get_parent_terragrunt_dir()}/../../e91e63/kubernetes/"
+  config_path = find_in_parent_folders("e91e63/kubernetes")
 }
 
 generate "helm" {
@@ -19,6 +15,5 @@ generate "kubernetes" {
 }
 
 inputs = {
-  domain_info = dependency.domain.outputs.info
-  k8s_info    = dependency.kubernetes.outputs.info
+  k8s_info = dependency.kubernetes.outputs.info
 }

@@ -1,17 +1,17 @@
 dependency "cert_issuer" {
-  config_path = "../../e91e63/services/cert-manager/cert-issuer/"
+  config_path = find_in_parent_folders("e91e63/services/cert-manager/cert-issuer")
 }
 
 dependency "load_balancer" {
-  config_path = "../../e91e63/load-balancer/"
+  config_path = find_in_parent_folders("e91e63/load-balancer")
 }
 
 dependency "project" {
-  config_path = "../project/"
+  config_path = find_in_parent_folders("project")
 }
 
 include "kubernetes" {
-  path = find_in_parent_folders("e91e63/kubernetes.hcl")
+  path = find_in_parent_folders("kubernetes.hcl")
 }
 
 include "terraform" {
