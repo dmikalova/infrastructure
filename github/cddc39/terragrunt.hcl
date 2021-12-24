@@ -27,7 +27,7 @@ inputs = {
         visibility = "public"
 =======
         description  = "manage lists"
-        organization = "cddc39"
+        topics      = ["javascript"]
         visibility   = "public"
       },
       recipes = {
@@ -36,7 +36,7 @@ inputs = {
         visibility  = "public"
       },
       todos = {
-        description = "manage todos with automated planning"
+        description = "manage todos"
         topics      = ["javascript"]
         visibility  = "public"
 >>>>>>> c05ee3c (Updated github repos)
