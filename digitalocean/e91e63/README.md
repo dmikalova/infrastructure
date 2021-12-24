@@ -1,5 +1,3 @@
-# 673ab7 - an automated Kubernetes workflow
+# e91e63 - backend compute resources
 
-- https://kubernetes.io/docs/concepts/overview/components/
-- https://terragrunt.gruntwork.io/docs/reference/built-in-functions/
-- 
+This folder contains Terragrunt configuration that deploys and configures a Kubernetes cluster including network and data planes.

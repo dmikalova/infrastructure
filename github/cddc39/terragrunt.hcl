@@ -11,24 +11,21 @@ inputs = {
     owner = "cddc39"
     repositories = {
       lists = {
-<<<<<<< HEAD
-        description      = "manage lists"
-        organization     = "cddc39"
-        visibility = "public"
+        description  = "manage lists"
+        organization = "cddc39"
+        visibility   = "public"
       },
       recipes = {
-        description      = "manage recipes"
-        topics           = ["javascript"]
-        visibility = "public"
+        description = "manage recipes"
+        topics      = ["javascript"]
+        visibility  = "public"
       },
       todos = {
-        description      = "manage todos with automated planning"
-        topics           = ["javascript"]
-        visibility = "public"
-=======
-        description  = "manage lists"
+        description = "manage todos with automated planning"
         topics      = ["javascript"]
-        visibility   = "public"
+        visibility  = "public"
+        topics      = ["javascript"]
+        visibility  = "public"
       },
       recipes = {
         description = "manage recipes"
@@ -39,7 +36,6 @@ inputs = {
         description = "manage todos"
         topics      = ["javascript"]
         visibility  = "public"
->>>>>>> c05ee3c (Updated github repos)
       },
     }
   }
