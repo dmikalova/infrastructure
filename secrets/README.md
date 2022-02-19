@@ -1,6 +1,6 @@
 # Infrastructure Secrets
 
-This folder contains all of the secrets shared among Terragrunt configurations.
+This folder contains the secrets used by Terragrunt configurations.
 
 ## Usage
 
