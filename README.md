@@ -1,6 +1,6 @@
 # Infrastructure
 
-[![maintained by dmikalova](https://img.shields.io/static/v1?&color=ccff90&label=maintained%20by&labelColor=424242&logo=&logoColor=fff&message=dmikalova&&style=flat-square)](https://github.com/dmikalova/infrastructure)
+[![maintained by dmikalova](https://img.shields.io/static/v1?&color=ccff90&label=maintained%20by&labelColor=424242&logo=&logoColor=fff&message=dmikalova&&style=flat-square)](https://github.com/dmikalova)
 [![terragrunt](https://img.shields.io/static/v1?&color=706BF4&label=%20&labelColor=424242&logo=&logoColor=fff&message=terragrunt&&style=flat-square)](https://terragrunt.gruntwork.io/)
 [![sops](https://img.shields.io/static/v1?&color=fff&label=%20&labelColor=424242&logo=sops&logoColor=fff&message=sops&&style=flat-square)](https://github.com/mozilla/sops)
 
