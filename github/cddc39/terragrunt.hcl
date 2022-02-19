@@ -11,9 +11,9 @@ inputs = {
     owner = "cddc39"
     repositories = {
       lists = {
-        description  = "manage lists"
+        description = "manage lists"
         topics      = ["javascript"]
-        visibility   = "public"
+        visibility  = "public"
       },
       recipes = {
         description = "manage recipes"
