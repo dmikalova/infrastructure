@@ -7,28 +7,28 @@
 
 ## 2. Terramate Root Configuration
 
-- [ ] 2.1 Create `gcp/` directory structure (`gcp/infra/baseline/`, `gcp/project/`)
-- [ ] 2.2 Create `gcp/terramate.tm.hcl` with root configuration
-- [ ] 2.3 Define globals: `project_id`, `region`, `fabric_version`, `billing_account`
-- [ ] 2.4 Add code generation block for GCS backend (`_backend.tf`)
-- [ ] 2.5 Add code generation block for Google provider (`_providers.tf`)
+- [x] 2.1 Create `gcp/` directory structure (`gcp/infra/baseline/`, `gcp/project/`)
+- [x] 2.2 Create `gcp/terramate.tm.hcl` with root configuration
+- [x] 2.3 Define globals: `project_id`, `region`, `fabric_version`, `billing_account`
+- [x] 2.4 Add code generation block for GCS backend (`_backend.tf`)
+- [x] 2.5 Add code generation block for Google provider (`_providers.tf`)
 
 ## 3. Baseline Stack Setup
 
-- [ ] 3.1 Create `gcp/infra/baseline/stack.tm.hcl` with stack configuration
-- [ ] 3.2 Create `gcp/infra/baseline/main.tf` with Fabric `project` module
-- [ ] 3.3 Configure required APIs (Cloud Run, Artifact Registry, Secret Manager, IAM, Cloud Billing)
-- [ ] 3.4 Disable default Compute Engine service account in project module
-- [ ] 3.5 Add Fabric `iam-service-account` module for CI/CD service account
-- [ ] 3.6 Configure service account roles (Cloud Run Admin, Artifact Registry Writer, Secret Manager Accessor)
+- [x] 3.1 Create `gcp/infra/baseline/stack.tm.hcl` with stack configuration
+- [x] 3.2 Create `gcp/infra/baseline/main.tf` with Fabric `project` module
+- [x] 3.3 Configure required APIs (Cloud Run, Artifact Registry, Secret Manager, IAM, Cloud Billing)
+- [x] 3.4 Disable default Compute Engine service account in project module
+- [x] 3.5 Add Fabric `iam-service-account` module for CI/CD service account
+- [x] 3.6 Configure service account roles (Cloud Run Admin, Artifact Registry Writer, Secret Manager Accessor)
 
 ## 4. State Bucket and Budget
 
-- [ ] 4.1 Add Fabric `gcs` module for Terraform state bucket
-- [ ] 4.2 Enable versioning and set `prevent_destroy = true` lifecycle
-- [ ] 4.3 Add Fabric `billing-account` module for budget alerts
-- [ ] 4.4 Configure budget thresholds (50%, 80%, 100%) and email notification
-- [ ] 4.5 Create `variables.tf` with budget amount variable (default: $10)
+- [x] 4.1 Add Fabric `gcs` module for Terraform state bucket
+- [x] 4.2 Enable versioning and set `prevent_destroy = true` lifecycle
+- [x] 4.3 Add Fabric `billing-account` module for budget alerts
+- [x] 4.4 Configure budget thresholds (50%, 80%, 100%) and email notification
+- [x] 4.5 Create `variables.tf` with budget amount variable (default: $10)
 
 ## 5. Bootstrap with Local State
 
