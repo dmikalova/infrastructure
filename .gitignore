@@ -1,4 +1,27 @@
+# Crash logs
+crash.*.log
+crash.log
+
+# Override files
+*_override.tf
+*_override.tf.json
+override.tf
+override.tf.json
+
+# Secrets - unencrypted files should never be committed
+# Encrypted *.sops.json files ARE safe to commit
+secrets/*.json
+!secrets/*.sops.json
+secrets/.decrypted~*
+
+# OpenTofu/Terraform files
+*.tfplan
+*.tfstate
+*.tfstate.*
+.terraform/
+.opentofu/
+
+# Terragrunt files
 .terragrunt-cache
-.terraform
 node_modules
 .DS_Store
