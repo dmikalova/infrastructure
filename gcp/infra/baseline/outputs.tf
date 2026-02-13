@@ -12,7 +12,7 @@ output "ci_service_account_id" {
 
 output "project_id" {
   description = "GCP project ID"
-  value       = var.project_id
+  value       = local.project_id
 }
 
 output "state_bucket_name" {

@@ -12,17 +12,14 @@ override.tf.json
 # Encrypted *.sops.json files ARE safe to commit
 secrets/*.json
 !secrets/*.sops.json
-!secrets/*.sops.json.example
+secrets/.decrypted~*
 
-# Terraform files
+# OpenTofu/Terraform files
 *.tfplan
 *.tfstate
 *.tfstate.*
 .terraform/
-.terraform.lock.hcl
+.opentofu/
 
 # Terragrunt files
 .terragrunt-cache
-
-# Terramate generated files
-_*.tf

@@ -48,7 +48,7 @@ Terramate SHALL generate the Google provider configuration for each stack.
 Terramate SHALL respect stack dependencies when running commands.
 
 #### Scenario: Baseline runs first
-- **WHEN** `terramate run -- terraform apply` is executed
+- **WHEN** `terramate run -- tofu apply` is executed
 - **THEN** `gcp/infra/baseline` is applied before any workload stacks
 - **AND** workload stacks can depend on baseline outputs
 

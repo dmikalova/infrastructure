@@ -54,7 +54,7 @@ gcp/
 
 - `project` - GCP project with API enablement, IAM, and disabled default Compute SA
 - `iam-service-account` - CI/CD service account with role bindings
-- `gcs` - Cloud Storage for Terraform state bucket
+- `gcs` - Cloud Storage for OpenTofu state bucket
 - `billing-account` - Budget alerts with email notifications
 
 **Workload Modules** (for `gcp/project/<name>/`):
@@ -79,7 +79,7 @@ gcp/
 
 - Custom modules in `terraform/modules/gcp/` - unnecessary maintenance burden for standard patterns
 - Google provider resources directly - more verbose, less consistent, no built-in best practices
-- Terraform Registry modules - Fabric is more comprehensive and opinionated for GCP
+- OpenTofu Registry modules - Fabric is more comprehensive and opinionated for GCP
 
 ### 3. GCP Project Configuration
 
@@ -96,7 +96,7 @@ gcp/
 
 ### 4. IAM Strategy
 
-**Decision**: Two principals - owner account and Terraform service account
+**Decision**: Two principals - owner account and OpenTofu service account
 
 - Owner: Full access for manual operations and initial bootstrap
 - Service account: Limited roles for CI/CD (Cloud Run Admin, Artifact Registry Writer, Secret Manager Accessor)
@@ -124,13 +124,13 @@ Cloud Run has built-in internet egress and doesn't require VPC configuration for
 
 ### 6. State Backend
 
-**Decision**: GCS bucket for Terraform state, bootstrapped via local-then-remote migration
+**Decision**: GCS bucket for OpenTofu state, bootstrapped via local-then-remote migration
 
 **Bootstrap approach**:
 
-1. Create state bucket with Terraform using local state
+1. Create state bucket with OpenTofu using local state
 2. Add GCS backend configuration
-3. Run `terraform init -migrate-state` to move state to GCS
+3. Run `tofu init -migrate-state` to move state to GCS
 4. Bucket has `prevent_destroy = true` lifecycle rule
 
 **Rationale**: Keep GCP state in GCP. Solves chicken/egg problem without manual Console steps. Prevent-destroy ensures state bucket cannot be accidentally removed.
@@ -168,7 +168,7 @@ Cloud Run has built-in internet egress and doesn't require VPC configuration for
 1. **Bootstrap** (local state):
    - Create GCP project via Console (one-time manual step)
    - Run `gcp/infra/baseline/` with local state to create state bucket + service account
-   - Add GCS backend config, run `terraform init -migrate-state`
+   - Add GCS backend config, run `tofu init -migrate-state`
    - Generate service account key, store in `secrets/gcp.sops.json`
 
 2. **Validation**:
@@ -176,4 +176,4 @@ Cloud Run has built-in internet egress and doesn't require VPC configuration for
    - Test service account permissions
    - Confirm budget alerts configured
 
-3. **Rollback**: `terraform destroy` on baseline (state bucket protected by prevent_destroy)
+3. **Rollback**: `tofu destroy` on baseline (state bucket protected by prevent_destroy)
