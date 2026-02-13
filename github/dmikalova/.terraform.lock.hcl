@@ -1,31 +1,55 @@
-# This file is maintained automatically by "terraform init".
+# This file is maintained automatically by "tofu init".
 # Manual edits may be lost in future updates.
 
-provider "registry.terraform.io/hashicorp/tls" {
-  version     = "3.1.0"
-  constraints = "~> 3.0"
+provider "registry.opentofu.org/hashicorp/github" {
+  version = "6.11.1"
   hashes = [
-    "h1:fUJX8Zxx38e2kBln+zWr1Tl41X+OuiE++REjrEyiOM4=",
+    "h1:nanzeesukYMHAFrSaq7rnWx7iRDHMpme5KzQI3m/ZZo=",
+    "zh:0a5262b033a30d8a77ebf844dc3afd7e726d5f53ac1c9d4072cf9157820d1f73",
+    "zh:437236181326f92d1a7c56985b2ac3223efd73f75c528323b90f4b7d1b781090",
+    "zh:49a12c14d1d3a143a124ba81f15fbf18714af90752c993698c76e84fa85da004",
+    "zh:61eaf17b559a26ca14deb597375a6678d054d739e8b81c586ef1d0391c307916",
+    "zh:7f3f1e2c36f4787ca9a5aeb5317b8c3f6cc652368d1f8f00fb80f404109d4db1",
+    "zh:85a232f2e96e5adafa2676f38a96b8cc074e96f715caf6ee1d169431174897d2",
+    "zh:979d005af2a9003d887413195948c899e9f5aba4a79cce1eed40f3ba50301af1",
+    "zh:b8c8cd3254504d2184d2b2233ad41b5fdfda91a36fc864926cbc5c7eee1bfea3",
+    "zh:d00959e62930fb75d2b97c1d66ab0143120541d5a1b3f26d3551f24cb0361f83",
+    "zh:d0b544eed171c7563387fe87f0af3d238bb3804798159b4d0453c97927237daf",
+    "zh:ecfa19b1219aa55b1ece98d8cff5b1494dc0387329c8ae0d8f762ec3871fb75d",
+    "zh:f2c99825f38c92ac599ad36b9d093ea0c0d790fd0c02e861789e14735a605f86",
+    "zh:f33b5abe14ad5fb9978da5dbd3bc6989f69766150d4b30ed283a2c281871eda3",
+    "zh:f6c2fe9dd958c554170dc0c35ca41b60fcc6253304cde0b9941c5c872b18ac54",
+    "zh:fbd1fee2c9df3aa19cf8851ce134dea6e45ea01cb85695c1726670c285797e25",
   ]
 }
 
-provider "registry.terraform.io/integrations/github" {
-  version     = "4.18.0"
-  constraints = "~> 4.0"
+provider "registry.opentofu.org/integrations/github" {
+  version     = "6.11.1"
+  constraints = "~> 6.0"
   hashes = [
-    "h1:yTEXySPROJMj1geWud4QuIos9H5hMnj2qAZzlkhFQo4=",
-    "zh:2462d9bee40d18e3c0a87499503ae45f9a3dbf11e5004333ee379ca93e1bcff6",
-    "zh:4c4376356dd9c2be857f2120d01ceddbd532c92c13c3c2eeed30b064aeb3a136",
-    "zh:61e0a9138dff28f0b98b32adaa75f73b99b65f4debc861a4cbdb2fd0ab4410d2",
-    "zh:6778d3fb0fa5827448c1bcc2d2b1dea0c318204dc7494250f6ac3179bd8eba20",
-    "zh:7a76398b04c60dfa85616a469d6927249d92e49d0ef885017f2b201db9cdb2c0",
-    "zh:8ef587e458e0af47144b8f07e3475da619d5850215d637a1ab4c82ecbae2c107",
-    "zh:938b6c507cbd869a71573fe9defd8292a902fa0855c3782a18bc37f98c477b63",
-    "zh:99068a7abcfb52b89ac862d59cc8cda774c7ed265e0582b07c0ba06ab8b42602",
-    "zh:b192875264e813560369d9407be03198ff5b3ac3bb89c810df71d7b7ba626c23",
-    "zh:bcf418f68fdd84e863cbd93ebbf3a0f1d3f2f357301002002b47ad2edc56e9bd",
-    "zh:d923e9fb51c87904425f28345cbff42241a48e0a9deb06582beca30ab750fd2e",
-    "zh:e1e5515d25f311041b23be65b27492d471bf5a6d28dc0d717e48fcb7e67f4ad7",
-    "zh:f60511699a7ab1b88cc5d58a64a6af8087cfb927dcf46783d98fd35f8ee550dc",
+    "h1:nanzeesukYMHAFrSaq7rnWx7iRDHMpme5KzQI3m/ZZo=",
+    "zh:0a5262b033a30d8a77ebf844dc3afd7e726d5f53ac1c9d4072cf9157820d1f73",
+    "zh:437236181326f92d1a7c56985b2ac3223efd73f75c528323b90f4b7d1b781090",
+    "zh:49a12c14d1d3a143a124ba81f15fbf18714af90752c993698c76e84fa85da004",
+    "zh:61eaf17b559a26ca14deb597375a6678d054d739e8b81c586ef1d0391c307916",
+    "zh:7f3f1e2c36f4787ca9a5aeb5317b8c3f6cc652368d1f8f00fb80f404109d4db1",
+    "zh:85a232f2e96e5adafa2676f38a96b8cc074e96f715caf6ee1d169431174897d2",
+    "zh:979d005af2a9003d887413195948c899e9f5aba4a79cce1eed40f3ba50301af1",
+    "zh:b8c8cd3254504d2184d2b2233ad41b5fdfda91a36fc864926cbc5c7eee1bfea3",
+    "zh:d00959e62930fb75d2b97c1d66ab0143120541d5a1b3f26d3551f24cb0361f83",
+    "zh:d0b544eed171c7563387fe87f0af3d238bb3804798159b4d0453c97927237daf",
+    "zh:ecfa19b1219aa55b1ece98d8cff5b1494dc0387329c8ae0d8f762ec3871fb75d",
+    "zh:f2c99825f38c92ac599ad36b9d093ea0c0d790fd0c02e861789e14735a605f86",
+    "zh:f33b5abe14ad5fb9978da5dbd3bc6989f69766150d4b30ed283a2c281871eda3",
+    "zh:f6c2fe9dd958c554170dc0c35ca41b60fcc6253304cde0b9941c5c872b18ac54",
+    "zh:fbd1fee2c9df3aa19cf8851ce134dea6e45ea01cb85695c1726670c285797e25",
+  ]
+}
+
+provider "registry.opentofu.org/nobbs/sops" {
+  version     = "0.3.1"
+  constraints = "~> 0.3"
+  hashes = [
+    "h1:ezi2lTiqJ8k33HkGfp2DCH/29rOjGHQPTjUBkUoRCNo=",
   ]
 }

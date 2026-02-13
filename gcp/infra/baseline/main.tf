@@ -97,9 +97,10 @@ module "state_bucket" {
 }
 
 # Budget alerts
+# Billing account budget (covers all projects under this billing account)
 resource "google_billing_budget" "monthly" {
   billing_account = local.billing_account_id
-  display_name    = "${google_project.main.project_id}-monthly-budget"
+  display_name    = "billing-account-monthly-budget"
 
   all_updates_rule {
     disable_default_iam_recipients   = false
@@ -113,10 +114,6 @@ resource "google_billing_budget" "monthly" {
       currency_code = "USD"
       units         = "10" # USD per month
     }
-  }
-
-  budget_filter {
-    projects = ["projects/${google_project.main.number}"]
   }
 
   threshold_rules {
