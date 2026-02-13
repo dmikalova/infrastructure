@@ -56,8 +56,8 @@ _Changed approach: Using service account impersonation instead of JSON keys for 
 
 ## 8. Validation
 
-- [ ] 8.1 Run `terramate list` and verify baseline stack appears
-- [ ] 8.2 Run `terramate run -- tofu plan` and verify no changes
-- [ ] 8.3 Verify budget alerts configured in GCP Console
-- [ ] 8.4 Test service account permissions with a dry-run Cloud Run deploy
-- [ ] 8.5 Confirm Terragrunt commands in `digitalocean/` still work
+- [x] 8.1 Run `terramate list` and verify baseline stack appears
+- [x] 8.2 Run `terramate run -- tofu plan` and verify no changes
+- [x] 8.3 Verify budget alerts configured in GCP Console
+- [x] 8.4 Test service account permissions with a dry-run Cloud Run deploy
+- [x] 8.5 Confirm Terragrunt commands in `digitalocean/` still work
