@@ -29,7 +29,7 @@ The baseline stack SHALL create a service account for CI/CD automation using the
 
 #### Scenario: Service account creation
 - **WHEN** the baseline stack is applied
-- **THEN** a service account named `terraform-ci` (or similar) is created
+- **THEN** a service account named `tofu-ci` (or similar) is created
 - **AND** it has roles: Cloud Run Admin, Artifact Registry Writer, Secret Manager Accessor
 
 #### Scenario: Service account key generation
@@ -48,8 +48,8 @@ The baseline stack SHALL create budget alerts using the Fabric `billing-account`
 - **WHEN** the baseline stack is configured
 - **THEN** the monthly budget amount is specified as a variable (e.g., $10)
 
-### Requirement: Terraform state bucket
-The baseline stack SHALL create a GCS bucket for Terraform state using the Fabric `gcs` module with deletion protection.
+### Requirement: OpenTofu state bucket
+The baseline stack SHALL create a GCS bucket for OpenTofu state using the Fabric `gcs` module with deletion protection.
 
 #### Scenario: State bucket creation
 - **WHEN** the baseline stack is applied with local state
@@ -59,11 +59,11 @@ The baseline stack SHALL create a GCS bucket for Terraform state using the Fabri
 #### Scenario: State bucket protection
 - **WHEN** the state bucket is created
 - **THEN** it has `prevent_destroy = true` lifecycle rule
-- **AND** `terraform destroy` fails if it would delete the bucket
+- **AND** `tofu destroy` fails if it would delete the bucket
 
 #### Scenario: State migration
 - **WHEN** the state bucket exists
-- **THEN** running `terraform init -migrate-state` moves local state to GCS
+- **THEN** running `tofu init -migrate-state` moves local state to GCS
 - **AND** subsequent applies use the remote backend
 
 ### Requirement: Fabric module versioning

@@ -1,31 +1,21 @@
-terramate {
-  config {
-    # Enable code generation
-    experiments = ["code-generation"]
-  }
-}
-
 # Global variables shared across all stacks
 globals {
-  # GCP Configuration - loaded from SOPS via direnv
-  billing_account = tm_getenv("GCP_BILLING_ID")
-  project_id      = tm_getenv("GCP_PROJECT_ID")
-  region          = "us-west1"
+  # GCP Configuration
+  project_id         = "mklv-infrastructure"
+  region             = "us-west1"
+  service_account_id = "tofu-ci@mklv-infrastructure.iam.gserviceaccount.com"
 
   # Fabric module version
   fabric_version = "v52.0.0"
   fabric_source  = "github.com/GoogleCloudPlatform/cloud-foundation-fabric//modules"
-
-  # State bucket configuration
-  state_bucket = "${global.project_id}-tfstate"
 }
 
 # Generate GCS backend configuration for each stack
+# Note: bucket is passed via -backend-config during terraform init
 generate_hcl "_backend.tf" {
   content {
     terraform {
       backend "gcs" {
-        bucket = global.state_bucket
         prefix = "tfstate/${terramate.stack.path.relative}"
       }
     }
@@ -41,23 +31,35 @@ generate_hcl "_providers.tf" {
       required_providers {
         google = {
           source  = "hashicorp/google"
-          version = "~> 5.0"
+          version = "~> 7.0"
         }
         google-beta = {
           source  = "hashicorp/google-beta"
-          version = "~> 5.0"
+          version = "~> 7.0"
+        }
+        sops = {
+          source  = "nobbs/sops"
+          version = "~> 0.3"
         }
       }
     }
 
+    locals {
+      gcp_region         = global.region
+      project_id         = global.project_id
+      service_account_id = global.service_account_id
+    }
+    
     provider "google" {
-      project = global.project_id
-      region  = global.region
+      impersonate_service_account = local.service_account_id
+      region                      = local.gcp_region
     }
 
     provider "google-beta" {
-      project = global.project_id
-      region  = global.region
+      impersonate_service_account = local.service_account_id
+      region                      = local.gcp_region
     }
+
+    provider "sops" {}
   }
 }
