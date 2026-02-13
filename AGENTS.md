@@ -28,15 +28,13 @@ Use prefixes to disambiguate providers/systems (e.g., `gcp_region`, `aws_region`
 
 ## IaC Tools
 
-- **GCP**: Terramate + OpenTofu (tofu CLI)
-- **DigitalOcean**: Terragrunt + OpenTofu
+- **Infrastructure**: Terramate + OpenTofu (tofu CLI)
 - **Secrets**: SOPS with Age encryption
 
 ## File Structure
 
 - `gcp/` - Terramate stacks for GCP infrastructure
-- `digitalocean/` - Terragrunt configs for DigitalOcean
-- `github/` - GitHub repository management
+- `github/` - Terramate stacks for GitHub repository management
 - `secrets/` - SOPS-encrypted secrets (`*.sops.json`)
 - `openspec/` - Change specifications and design docs
 
@@ -98,12 +96,11 @@ locals {
 
 Available SOPS files:
 
-| File                     | Contains               |
-| ------------------------ | ---------------------- |
-| `dmikalova.sops.json`    | Personal info (email)  |
-| `gcp.sops.json`          | GCP billing account ID |
-| `digitalocean.sops.json` | DigitalOcean tokens    |
-| `github.sops.json`       | GitHub tokens          |
+| File                  | Contains               |
+| --------------------- | ---------------------- |
+| `dmikalova.sops.json` | Personal info (email)  |
+| `gcp.sops.json`       | GCP billing account ID |
+| `github.sops.json`    | GitHub tokens          |
 
 **If a required value is missing from SOPS**, prompt the user to add it rather than hardcoding:
 
