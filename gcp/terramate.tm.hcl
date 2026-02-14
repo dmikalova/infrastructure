@@ -1,62 +1,48 @@
-# Global variables shared across all stacks
-globals {
-  # GCP Configuration
-  project_id         = "mklv-infrastructure"
-  region             = "us-west1"
-  service_account_id = "tofu-ci@mklv-infrastructure.iam.gserviceaccount.com"
+# GCP stacks - generate Terraform config using centralized provider versions
 
-  # Fabric module version
-  fabric_version = "v52.0.0"
-  fabric_source  = "github.com/GoogleCloudPlatform/cloud-foundation-fabric//modules"
-}
-
-# Generate GCS backend configuration for each stack
-# Note: bucket is passed via -backend-config during terraform init
-generate_hcl "_backend.tf" {
+generate_hcl "_terraform.tf" {
   content {
     terraform {
+      required_version = ">= 1.8"
+
       backend "gcs" {
+        bucket = global.state_bucket
         prefix = "tfstate/${terramate.stack.path.relative}"
       }
-    }
-  }
-}
-
-# Generate Google provider configuration for each stack
-generate_hcl "_providers.tf" {
-  content {
-    terraform {
-      required_version = ">= 1.0"
 
       required_providers {
         google = {
           source  = "hashicorp/google"
-          version = "~> 7.0"
+          version = global.provider_versions.google
         }
         google-beta = {
           source  = "hashicorp/google-beta"
-          version = "~> 7.0"
+          version = global.provider_versions.google-beta
         }
         sops = {
           source  = "nobbs/sops"
-          version = "~> 0.3"
+          version = global.provider_versions.sops
         }
       }
     }
 
     locals {
-      gcp_region         = global.region
-      project_id         = global.project_id
-      service_account_id = global.service_account_id
+      repo_root          = tm_replace(terramate.root.path.fs.absolute, "\\", "/")
+      modules_dir        = "${local.repo_root}/terraform/modules"
+      gcp_region         = global.gcp.region
+      project_id         = global.gcp.project_id
+      service_account_id = global.gcp.service_account_id
     }
-    
+
     provider "google" {
       impersonate_service_account = local.service_account_id
+      project                     = local.project_id
       region                      = local.gcp_region
     }
 
     provider "google-beta" {
       impersonate_service_account = local.service_account_id
+      project                     = local.project_id
       region                      = local.gcp_region
     }
 

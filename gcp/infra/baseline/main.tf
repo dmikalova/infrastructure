@@ -2,8 +2,8 @@
 # Creates: project, APIs, CI/CD service account, state bucket, budget alerts
 
 locals {
-  billing_account_id = provider::sops::file("${path.root}/../../../secrets/gcp.sops.json").data.BILLING_ACCOUNT_ID
-  owner_email        = provider::sops::file("${path.root}/../../../secrets/dmikalova.sops.json").data.email
+  billing_account_id = provider::sops::file("${local.repo_root}/secrets/gcp.sops.json").data.BILLING_ACCOUNT_ID
+  owner_email        = provider::sops::file("${local.repo_root}/secrets/dmikalova.sops.json").data.email
 }
 
 # GCP Project - import existing project with: tofu import google_project.main <project-id>
@@ -60,7 +60,7 @@ module "ci_service_account" {
       "roles/iam.serviceAccountAdmin",         # Manage service accounts
       "roles/resourcemanager.projectIamAdmin", # Manage project IAM
       "roles/run.admin",                       # Cloud Run Admin
-      "roles/secretmanager.secretAccessor",    # Secret Manager Accessor
+      "roles/secretmanager.admin",             # Secret Manager Admin
       "roles/serviceusage.serviceUsageAdmin",  # Enable/disable APIs
       "roles/storage.admin",                   # Manage GCS buckets
     ]
