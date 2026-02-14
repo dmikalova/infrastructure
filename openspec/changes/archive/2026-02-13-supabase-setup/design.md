@@ -37,11 +37,13 @@ Cloud Run is ephemeral and scales to zero, requiring:
 
 ```
 infrastructure/
+├── secrets/
+│   └── supabase.sops.json   # API token, org ID
 ├── supabase/
-│   ├── terramate.tm.hcl     # Supabase-specific config
+│   ├── terramate.tm.hcl     # Supabase-specific Terramate config
 │   └── dmikalova/
 │       ├── stack.tm.hcl
-│       └── main.tf          # Admin secrets only
+│       └── main.tf          # Project + admin secret
 ├── terraform/
 │   └── modules/
 │       └── app-database/    # Reusable schema isolation module
@@ -54,18 +56,42 @@ infrastructure/
             └── main.tf      # Uses app-database module
 ```
 
-**Rationale:** Clear separation - `supabase/` manages the platform, app stacks manage their own database needs using a shared module.
+**Rationale:** Clear separation - `supabase/` manages the platform via Terraform, app stacks manage their own database needs using a shared module.
 
 ### 2. Supabase Project Management
 
-**Decision:** Create Supabase project manually via dashboard, manage connection string as secret.
+**Decision:** Manage Supabase project via official `supabase/supabase` Terraform provider.
 
-**Alternatives considered:**
+```hcl
+# supabase/dmikalova/main.tf
+resource "random_password" "db_password" {
+  length  = 32
+  special = false
+}
 
-- Terraform Supabase provider: Provider exists but is community-maintained and limited
-- Pulumi Supabase provider: Same limitations
+resource "supabase_project" "main" {
+  name            = "dmikalova"
+  organization_id = local.supabase_org_id
+  database_password = random_password.db_password.result
+  region          = "us-west-1"
+}
 
-**Rationale:** Supabase projects are rarely created/destroyed. Manual setup via dashboard is simpler and more reliable. The connection string is the only integration point needed.
+resource "supabase_settings" "main" {
+  project_ref = supabase_project.main.id
+  
+  api = jsonencode({
+    db_pool_config = {
+      pool_mode = "transaction"
+    }
+  })
+}
+```
+
+**Credentials in SOPS:** `secrets/supabase.sops.json`
+- `SUPABASE_ACCESS_TOKEN` - Personal access token from dashboard
+- `organization_id` - From organization URL
+
+**Rationale:** Full IaC management. Project creation, settings, and teardown all controlled via Terraform. No manual dashboard steps required.
 
 ### 2. Connection Pooling
 
@@ -83,13 +109,22 @@ postgresql://postgres.[project-ref]:[password]@aws-0-us-west-1.pooler.supabase.c
 
 ### 3. Secret Storage (Two Levels)
 
-**Decision:** Admin credentials in `supabase/` stack, app-specific credentials created by app stacks.
+**Decision:** Admin credentials derived from Supabase project resource and stored in Secret Manager. App-specific credentials created by app stacks.
 
 ```hcl
-# supabase/dmikalova/main.tf - Admin connection (for schema management)
+# supabase/dmikalova/main.tf - Admin connection (derived from project)
+locals {
+  admin_url = "postgresql://postgres.${supabase_project.main.id}:${random_password.db_password.result}@aws-0-${supabase_project.main.region}.pooler.supabase.com:6543/postgres"
+}
+
 resource "google_secret_manager_secret" "supabase_admin_url" {
   secret_id = "supabase-admin-url"
   replication { auto {} }
+}
+
+resource "google_secret_manager_secret_version" "supabase_admin_url" {
+  secret      = google_secret_manager_secret.supabase_admin_url.id
+  secret_data = local.admin_url
 }
 
 # gcp/projects/email-unsubscribe/main.tf - App-specific connection
@@ -100,7 +135,7 @@ module "database" {
 }
 ```
 
-**Rationale:** Admin credentials have full access (needed for creating schemas/roles). App credentials are scoped to their schema only.
+**Rationale:** Admin credentials are derived from Terraform-managed project outputs - no manual copying. App credentials are scoped to their schema only.
 
 ### 4. Schema Isolation Module (Multi-Tenant Design)
 
@@ -233,9 +268,9 @@ export DATABASE_URL="postgresql://postgres:dev@localhost:5432/postgres"
 
 ### This Change (supabase-setup)
 
-1. **Create Supabase project** - Via dashboard, choose region near Cloud Run (us-west)
-2. **Configure project** - Enable connection pooling, note admin connection string
-3. **Create `supabase/` stack** - Store admin URL in Secret Manager
+1. **Add SOPS secrets** - Create `secrets/supabase.sops.json` with access token and org ID
+2. **Create `supabase/` stack** - Terramate config with Supabase, Google, and SOPS providers
+3. **Apply stack** - Creates Supabase project and stores admin URL in Secret Manager
 4. **Create `terraform/modules/app-database/`** - Reusable module for schema isolation
 
 ### Per-App (in gcp-github-wif change)

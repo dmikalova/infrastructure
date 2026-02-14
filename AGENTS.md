@@ -31,6 +31,25 @@ Use prefixes to disambiguate providers/systems (e.g., `gcp_region`, `aws_region`
 - **Infrastructure**: Terramate + OpenTofu (tofu CLI)
 - **Secrets**: SOPS with Age encryption
 
+## OpenTofu Commands
+
+Agents may freely run `init` and `plan` commands to validate changes:
+
+```bash
+# In a specific stack
+cd gcp/infra/baseline
+tofu init
+tofu plan
+
+# Across all stacks
+terramate run -- tofu init
+terramate run -- tofu plan
+```
+
+**Never run `tofu apply`** - do not execute it or ask to execute it. Instead, inform the user:
+
+> Run `tofu apply` in `path/to/stack` to apply these changes.
+
 ## File Structure
 
 - `gcp/` - Terramate stacks for GCP infrastructure
@@ -89,18 +108,19 @@ Instead, read all sensitive values from SOPS files using the SOPS provider:
 
 ```hcl
 locals {
-  billing_account_id = provider::sops::file("${path.root}/../../../secrets/gcp.sops.json").data.BILLING_ACCOUNT_ID
-  owner_email        = provider::sops::file("${path.root}/../../../secrets/dmikalova.sops.json").data.email
+  billing_account_id = provider::sops::file("${local.repo_root}/secrets/gcp.sops.json").data.BILLING_ACCOUNT_ID
+  owner_email        = provider::sops::file("${local.repo_root}/secrets/dmikalova.sops.json").data.email
 }
 ```
 
 Available SOPS files:
 
-| File                  | Contains               |
-| --------------------- | ---------------------- |
-| `dmikalova.sops.json` | Personal info (email)  |
-| `gcp.sops.json`       | GCP billing account ID |
-| `github.sops.json`    | GitHub tokens          |
+| File                  | Contains                         |
+| --------------------- | -------------------------------- |
+| `dmikalova.sops.json` | Personal info (email)            |
+| `gcp.sops.json`       | GCP billing account ID           |
+| `github.sops.json`    | GitHub tokens                    |
+| `supabase.sops.json`  | Supabase access token and org ID |
 
 **If a required value is missing from SOPS**, prompt the user to add it rather than hardcoding:
 

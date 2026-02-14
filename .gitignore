@@ -2,6 +2,9 @@
 crash.*.log
 crash.log
 
+# MacOS files
+.DS_Store
+
 # Override files
 *_override.tf
 *_override.tf.json
