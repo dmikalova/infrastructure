@@ -4,11 +4,11 @@
 # State is stored in GCS bucket mklv-infrastructure-tfstate.
 
 locals {
-  gpg_public_key = base64decode(provider::sops::file("${path.root}/../../secrets/gpg.sops.json").data.public_key_base64)
+  gpg_public_key = base64decode(provider::sops::file("${local.repo_root}/secrets/gpg.sops.json").data.public_key_base64)
 }
 
 module "repositories" {
-  source = "../../terraform/modules/github/repositories"
+  source = "${local.modules_dir}/github/repositories"
 
   owner = "dmikalova"
   repositories = {

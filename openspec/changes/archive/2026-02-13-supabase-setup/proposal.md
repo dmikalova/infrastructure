@@ -4,8 +4,9 @@ Multiple apps (email-unsubscribe, lists, recipes, todos) need PostgreSQL databas
 
 ## What Changes
 
-- Create single Supabase project (manual via dashboard)
-- Store admin connection string in GCP Secret Manager (`supabase/` stack)
+- Create Supabase project via Terraform using official `supabase/supabase` provider
+- Store Supabase API credentials in SOPS (`secrets/supabase.sops.json`)
+- Store derived admin connection string in GCP Secret Manager (`supabase/` stack)
 - Create reusable `terraform/modules/app-database/` module for per-app schema isolation
 - Module creates: schema, database role with restricted permissions, app-specific DATABASE_URL secret
 - Document pattern for adding new apps to the shared database
@@ -23,7 +24,8 @@ None - no existing specs.
 
 ## Impact
 
-- **External services**: New Supabase project (free tier, shared by all apps)
+- **External services**: Supabase project created and managed via Terraform (free tier, shared by all apps)
+- **SOPS secrets**: New `secrets/supabase.sops.json` with API token and org ID
 - **GCP resources**: Admin URL secret plus per-app DATABASE_URL secrets (created by app stacks)
 - **App deployment**: Each app's infra calls the module to set up its schema and credentials
 - **Development**: Local development can use same Supabase instance or local PostgreSQL

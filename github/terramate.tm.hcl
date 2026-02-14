@@ -1,39 +1,35 @@
-# Terramate configuration for GitHub repository management
-# Separate from GCP stacks - uses GCS for state but manages GitHub resources
+# GitHub stacks - generate Terraform config using centralized provider versions
 
-# Generate GCS backend configuration
-generate_hcl "_backend.tf" {
+generate_hcl "_terraform.tf" {
   content {
     terraform {
+      required_version = ">= 1.8"
+
       backend "gcs" {
-        bucket = "mklv-infrastructure-tfstate"
-        prefix = "tfstate/github/${terramate.stack.path.basename}"
+        bucket = global.state_bucket
+        prefix = "tfstate/${terramate.stack.path.relative}"
       }
-    }
-  }
-}
-
-# Generate GitHub and SOPS provider configuration
-generate_hcl "_providers.tf" {
-  content {
-    terraform {
-      required_version = ">= 1.0"
 
       required_providers {
         github = {
           source  = "integrations/github"
-          version = "~> 6.0"
+          version = global.provider_versions.github
         }
         sops = {
           source  = "nobbs/sops"
-          version = "~> 0.3"
+          version = global.provider_versions.sops
         }
       }
     }
 
+    locals {
+      repo_root   = tm_replace(terramate.root.path.fs.absolute, "\\", "/")
+      modules_dir = "${local.repo_root}/terraform/modules"
+    }
+
     provider "github" {
       owner = global.github_owner
-      token = provider::sops::file("${terramate.root.path.fs.absolute}/secrets/github.sops.json").data.GITHUB_TOKEN
+      token = provider::sops::file("${local.repo_root}/secrets/github.sops.json").data.GITHUB_TOKEN
     }
 
     provider "sops" {}
