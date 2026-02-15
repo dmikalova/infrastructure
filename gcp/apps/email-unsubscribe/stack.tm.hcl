@@ -6,6 +6,7 @@ stack {
 
   after = [
     "/gcp/infra/baseline",
+    "/gcp/infra/platform",
     "/gcp/infra/workload-identity-federation",
     "/supabase/mklv",
   ]
