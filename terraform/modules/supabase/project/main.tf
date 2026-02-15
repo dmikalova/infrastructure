@@ -34,7 +34,7 @@ resource "supabase_project" "main" {
   database_password = random_password.db_password.result
   name              = var.name
   organization_id   = var.organization_id
-  region            = var.region
+  region            = var.supabase_region
 }
 
 # Configure connection pooling
@@ -48,47 +48,24 @@ resource "supabase_settings" "main" {
   })
 }
 
-# Store admin connection URL in Secret Manager
-resource "google_secret_manager_secret" "admin_url" {
-  project   = var.gcp_project_id
-  secret_id = "supabase-${var.name}-admin-url"
+# Store all secrets in Secret Manager
+module "secrets" {
+  source = "${var.modules_dir}/gcp/secret-manager-secret"
 
-  replication {
-    auto {}
+  project_id = var.gcp_project_id
+  secrets = {
+    # Direct connection (for Terraform/admin operations)
+    "supabase-${var.name}-db-direct-host" = "db.${supabase_project.main.id}.supabase.co"
+    "supabase-${var.name}-db-direct-port" = "5432"
+    "supabase-${var.name}-db-direct-user" = "postgres"
+    # Pooler connection (for app runtime)
+    "supabase-${var.name}-admin-url"      = local.admin_url
+    "supabase-${var.name}-db-host"        = "aws-0-${supabase_project.main.region}.pooler.supabase.com"
+    "supabase-${var.name}-db-name"        = "postgres"
+    "supabase-${var.name}-db-password"    = random_password.db_password.result
+    "supabase-${var.name}-db-port"        = "6543"
+    "supabase-${var.name}-db-user"        = "postgres.${supabase_project.main.id}"
+    "supabase-${var.name}-project-ref"    = supabase_project.main.id
+    "supabase-${var.name}-region"         = supabase_project.main.region
   }
-}
-
-resource "google_secret_manager_secret_version" "admin_url" {
-  secret      = google_secret_manager_secret.admin_url.id
-  secret_data = local.admin_url
-}
-
-# Store project ref for app-database module
-resource "google_secret_manager_secret" "project_ref" {
-  project   = var.gcp_project_id
-  secret_id = "supabase-${var.name}-project-ref"
-
-  replication {
-    auto {}
-  }
-}
-
-resource "google_secret_manager_secret_version" "project_ref" {
-  secret      = google_secret_manager_secret.project_ref.id
-  secret_data = supabase_project.main.id
-}
-
-# Store region for app-database module
-resource "google_secret_manager_secret" "region" {
-  project   = var.gcp_project_id
-  secret_id = "supabase-${var.name}-region"
-
-  replication {
-    auto {}
-  }
-}
-
-resource "google_secret_manager_secret_version" "region" {
-  secret      = google_secret_manager_secret.region.id
-  secret_data = supabase_project.main.region
 }

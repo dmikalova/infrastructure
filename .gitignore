@@ -13,9 +13,8 @@ override.tf.json
 
 # Secrets - unencrypted files should never be committed
 # Encrypted *.sops.json files ARE safe to commit
-secrets/*.json
+secrets/*
 !secrets/*.sops.json
-secrets/.decrypted~*
 
 # OpenTofu/Terraform files
 *.tfplan

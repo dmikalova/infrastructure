@@ -32,6 +32,7 @@ globals {
     github      = "~> 6.0"
     google      = "~> 7.0"
     google-beta = "~> 7.0"
+    postgresql  = "~> 1.25"
     random      = "~> 3.0"
     sops        = "~> 0.3"
     supabase    = "~> 1.7"
