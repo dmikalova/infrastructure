@@ -25,22 +25,16 @@ locals {
   role_name   = "${var.app_name}-role"
 }
 
-# Read admin connection URL from Secret Manager
-data "google_secret_manager_secret_version" "admin_url" {
-  project = var.gcp_project_id
-  secret  = "supabase-${var.supabase_project_name}-admin-url"
-}
+# Read supabase secrets from Secret Manager
+module "supabase_secrets" {
+  source = "${var.modules_dir}/gcp/secret-manager-secret-data"
 
-# Read project ref from Secret Manager
-data "google_secret_manager_secret_version" "project_ref" {
-  project = var.gcp_project_id
-  secret  = "supabase-${var.supabase_project_name}-project-ref"
-}
-
-# Read region from Secret Manager
-data "google_secret_manager_secret_version" "region" {
-  project = var.gcp_project_id
-  secret  = "supabase-${var.supabase_project_name}-region"
+  project_id = var.gcp_project_id
+  secrets = {
+    admin_url   = "supabase-${var.supabase_project_name}-admin-url"
+    project_ref = "supabase-${var.supabase_project_name}-project-ref"
+    region      = "supabase-${var.supabase_project_name}-region"
+  }
 }
 
 # Generate password for this app's database role
@@ -85,16 +79,11 @@ resource "postgresql_grant" "tables" {
 }
 
 # Store app-specific connection string in Secret Manager
-resource "google_secret_manager_secret" "database_url" {
-  project   = var.gcp_project_id
-  secret_id = "${var.app_name}-database-url"
+module "secrets" {
+  source = "${var.modules_dir}/gcp/secret-manager-secret"
 
-  replication {
-    auto {}
+  project_id = var.gcp_project_id
+  secrets = {
+    "${var.app_name}-database-url" = "postgresql://${postgresql_role.app.name}.${module.supabase_secrets.secrets["project_ref"].secret_data}:${random_password.db_password.result}@aws-0-${module.supabase_secrets.secrets["region"].secret_data}.pooler.supabase.com:6543/postgres?options=-csearch_path%3D${local.schema_name}"
   }
-}
-
-resource "google_secret_manager_secret_version" "database_url" {
-  secret      = google_secret_manager_secret.database_url.id
-  secret_data = "postgresql://${postgresql_role.app.name}.${data.google_secret_manager_secret_version.project_ref.secret_data}:${random_password.db_password.result}@aws-0-${data.google_secret_manager_secret_version.region.secret_data}.pooler.supabase.com:6543/postgres?options=-csearch_path%3D${local.schema_name}"
 }

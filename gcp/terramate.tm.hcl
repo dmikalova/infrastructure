@@ -19,6 +19,14 @@ generate_hcl "_terraform.tf" {
           source  = "hashicorp/google-beta"
           version = global.provider_versions.google-beta
         }
+        postgresql = {
+          source  = "cyrilgdn/postgresql"
+          version = global.provider_versions.postgresql
+        }
+        random = {
+          source  = "hashicorp/random"
+          version = global.provider_versions.random
+        }
         sops = {
           source  = "nobbs/sops"
           version = global.provider_versions.sops

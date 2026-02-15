@@ -101,21 +101,36 @@ members = [
 
 ### 5. Deploy SA Binding Condition
 
-**Decision:** Explicit per-repo bindings for the deploy SA. Each app repo must be individually granted access.
+**Decision:** Use GitHub repository topics to indicate deploy access. The WIF stack filters repositories by topic presence (e.g., `mklv-deploy`) and creates per-repo bindings automatically.
 
 ```hcl
-members = [
-  "principalSet://iam.googleapis.com/${pool}/attribute.repository/dmikalova/email-unsubscribe",
-  # Add more app repos here as they're created
-]
+# In github stack:
+repositories = {
+  "email-unsubscribe" = {
+    topics = ["mklv-deploy"]  # This topic grants deploy SA access
+  }
+}
+
+# WIF stack filters by topic:
+locals {
+  deploy_repos = [
+    for name, repo in data.terraform_remote_state.github.outputs.repositories :
+    repo.full_name if contains(repo.topics, "mklv-deploy")
+  ]
+}
 ```
 
-**Rationale:** Explicit bindings prevent unauthorized repos from deploying. When a new app repo needs deploy access, it must be added to both:
+**Alternatives considered:**
 
-1. `github/dmikalova/` Terramate stack (creates the repo)
-2. WIF deploy SA bindings (grants GCP access)
+- Custom `deploy_access` boolean: Works but adds repo-module-specific parameter when GitHub already has native topics
+- Owner-level wildcards: Too permissive, violates least privilege
 
-This two-step process ensures intentional access grants.
+**Rationale:** GitHub topics are a native, extensible mechanism for categorizing repositories. Using `mklv-deploy` topic:
+
+- Leverages GitHub's built-in feature instead of custom parameters
+- Visible in GitHub UI for quick identification of deploy-enabled repos
+- Extensible - can add other topics for different access patterns in the future
+- Single source of truth: add topic to repo definition, WIF stack picks it up automatically
 
 ### 6. Cloud Run Service Stack Structure
 

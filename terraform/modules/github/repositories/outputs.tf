@@ -4,8 +4,9 @@ output "repositories" {
     for name, repo in github_repository.repos : name => {
       full_name = repo.full_name
       html_url  = repo.html_url
-      ssh_url   = repo.ssh_clone_url
       http_url  = repo.http_clone_url
+      ssh_url   = repo.ssh_clone_url
+      topics    = repo.topics
     }
   }
 }

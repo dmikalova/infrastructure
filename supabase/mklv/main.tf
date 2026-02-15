@@ -11,7 +11,8 @@ module "supabase_project" {
   source = "${local.modules_dir}/supabase/project"
 
   gcp_project_id  = local.project_id
+  modules_dir     = local.modules_dir
   name            = "mklv"
   organization_id = local.supabase_org_id
-  region          = "us-west-2"
+  supabase_region = "us-west-2"
 }

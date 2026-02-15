@@ -10,6 +10,11 @@ variable "gcp_project_id" {
   type        = string
 }
 
+variable "modules_dir" {
+  description = "Path to terraform modules directory"
+  type        = string
+}
+
 variable "supabase_project_name" {
   description = "Name of the Supabase project (used for secret naming)"
   type        = string

@@ -28,6 +28,7 @@ resource "google_project_service" "apis" {
     "billingbudgets.googleapis.com",   # Billing Budgets API
     "cloudbilling.googleapis.com",     # Cloud Billing (for budgets)
     "iam.googleapis.com",              # IAM
+    "iamcredentials.googleapis.com",   # IAM Credentials (for WIF)
     "run.googleapis.com",              # Cloud Run
     "secretmanager.googleapis.com",    # Secret Manager
   ])
@@ -58,6 +59,8 @@ module "ci_service_account" {
       "roles/artifactregistry.writer",         # Artifact Registry Writer
       "roles/billing.projectManager",          # Manage project billing
       "roles/iam.serviceAccountAdmin",         # Manage service accounts
+      "roles/iam.serviceAccountUser",          # Act as service accounts (for Cloud Run)
+      "roles/iam.workloadIdentityPoolAdmin",   # Manage WIF pools
       "roles/resourcemanager.projectIamAdmin", # Manage project IAM
       "roles/run.admin",                       # Cloud Run Admin
       "roles/secretmanager.admin",             # Secret Manager Admin
