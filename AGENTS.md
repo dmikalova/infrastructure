@@ -62,6 +62,42 @@ terramate run -- tofu plan
 - `secrets/` - SOPS-encrypted secrets (`*.sops.json`)
 - `openspec/` - Change specifications and design docs
 
+## Stack Dependencies
+
+When creating a new Terramate stack, always define `after` to declare dependencies on other stacks. This ensures correct ordering during `terramate run`:
+
+```hcl
+stack {
+  name = "My Stack"
+  id   = "my-stack"
+
+  after = [
+    "/gcp/infra/baseline",
+    "/gcp/infra/platform",
+  ]
+}
+```
+
+Common dependency patterns:
+
+- Most GCP stacks depend on `/gcp/infra/baseline` (APIs, project setup)
+- App stacks depend on `/gcp/infra/platform` (container registry)
+- App stacks depend on `/gcp/infra/workload-identity-federation` (CI/CD auth)
+
+## CI Service Account Permissions
+
+When adding new GCP resources, check if the CI service account (`tofu-ci`) in `gcp/infra/baseline/main.tf` has the required IAM roles. Add missing roles proactively if they're clearly needed for the new resource type. Don't add speculative permissions.
+
+Common resources and their required roles:
+
+| Resource Type       | Required Role                   |
+| ------------------- | ------------------------------- |
+| Artifact Registry   | `roles/artifactregistry.admin`  |
+| Cloud Run           | `roles/run.admin`               |
+| IAM Service Account | `roles/iam.serviceAccountAdmin` |
+| Secret Manager      | `roles/secretmanager.admin`     |
+| Storage Bucket      | `roles/storage.admin`           |
+
 ## Conventions
 
 - Keep lists, variables, and table entries in alphabetical order

@@ -56,7 +56,7 @@ module "ci_service_account" {
 
   iam_project_roles = {
     (google_project.main.project_id) = [
-      "roles/artifactregistry.writer",         # Artifact Registry Writer
+      "roles/artifactregistry.admin",          # Artifact Registry Admin
       "roles/billing.projectManager",          # Manage project billing
       "roles/iam.serviceAccountAdmin",         # Manage service accounts
       "roles/iam.serviceAccountUser",          # Act as service accounts (for Cloud Run)
