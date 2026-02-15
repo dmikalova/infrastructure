@@ -4,7 +4,8 @@
 # State is stored in GCS bucket mklv-infrastructure-tfstate.
 
 locals {
-  gpg_public_key = base64decode(provider::sops::file("${local.repo_root}/secrets/gpg.sops.json").data.public_key_base64)
+  github_secrets = provider::sops::file("${local.repo_root}/secrets/github.sops.json").data
+  gpg_secrets    = provider::sops::file("${local.repo_root}/secrets/gpg.sops.json").data
 }
 
 module "repositories" {
@@ -23,6 +24,7 @@ module "repositories" {
     }
     email-unsubscribe = {
       description = "Gmail inbox cleanup automation"
+      topics      = ["mklv-deploy"]
     }
     github-meta = {
       description = "reusable workflows, Dagger pipelines, and repo standards"
@@ -43,8 +45,11 @@ module "repositories" {
       description = "manage todos"
     }
   }
+  secrets = {
+    PKG_READ_TOKEN = local.github_secrets.PKG_READ_TOKEN
+  }
 }
 
 resource "github_user_gpg_key" "main" {
-  armored_public_key = local.gpg_public_key
+  armored_public_key = base64decode(local.gpg_secrets.public_key_base64)
 }

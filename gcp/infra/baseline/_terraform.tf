@@ -15,6 +15,14 @@ terraform {
       source  = "hashicorp/google-beta"
       version = "~> 7.0"
     }
+    postgresql = {
+      source  = "cyrilgdn/postgresql"
+      version = "~> 1.25"
+    }
+    random = {
+      source  = "hashicorp/random"
+      version = "~> 3.0"
+    }
     sops = {
       source  = "nobbs/sops"
       version = "~> 0.3"

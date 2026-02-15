@@ -1,6 +1,14 @@
 # This file is maintained automatically by "tofu init".
 # Manual edits may be lost in future updates.
 
+provider "registry.opentofu.org/cyrilgdn/postgresql" {
+  version     = "1.26.0"
+  constraints = "~> 1.25"
+  hashes = [
+    "h1:8bXFg6KkLzUAd44WUnqSxVY0pqXALT14h59OlYq3UTY=",
+  ]
+}
+
 provider "registry.opentofu.org/hashicorp/google" {
   version     = "7.19.0"
   constraints = "~> 7.0, >= 7.17.0, < 8.0.0"
@@ -32,6 +40,14 @@ provider "registry.opentofu.org/hashicorp/google-beta" {
     "zh:eef172996a59cad52171ccbfa099dc9c834f02af6d0d6af68b1dd25625e1ad08",
     "zh:f8457005f5ec820a93b92b20f787c0d83de564d5ffb9fd69dc78844daf4f5e38",
     "zh:fc87a7036ab83d5a30787b14bd87ab0966e6cdd1be68b9e1ecb43b1abd738a10",
+  ]
+}
+
+provider "registry.opentofu.org/hashicorp/random" {
+  version     = "3.8.1"
+  constraints = "~> 3.0"
+  hashes = [
+    "h1:LsYuJLZcYl1RiH7Hd3w90Ra5+k5cNqfdRUQXItkTI8Y=",
   ]
 }
 

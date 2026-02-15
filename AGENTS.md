@@ -21,10 +21,13 @@ Use prefixes to disambiguate providers/systems (e.g., `gcp_region`, `aws_region`
 | `_path`    | File or resource paths         | `config_path`                         |
 | `_pem`     | PEM-encoded certs/keys         | `private_key_pem`                     |
 | `_port`    | Port numbers                   | `service_port`                        |
+| `_region`  | Cloud regions (with prefix)    | `gcp_region`, `supabase_region`       |
 | `_secret`  | Secret values                  | `client_secret`                       |
 | `_token`   | Auth tokens                    | `access_token`                        |
 | `_url`     | URLs                           | `api_url`, `webhook_url`              |
 | `_yaml`    | YAML strings                   | `config_yaml`                         |
+
+**Region variables** must always include a service prefix to avoid ambiguity (e.g., `gcp_region`, `supabase_region`, `aws_region`). Never use a bare `region` variable.
 
 ## IaC Tools
 
@@ -50,6 +53,8 @@ terramate run -- tofu plan
 
 > Run `tofu apply` in `path/to/stack` to apply these changes.
 
+**Never use `-lock=false`** - if a state lock error occurs, inform the user and let them resolve it.
+
 ## File Structure
 
 - `gcp/` - Terramate stacks for GCP infrastructure
@@ -67,16 +72,19 @@ terramate run -- tofu plan
 
 ## Resource Block Ordering
 
-Within each resource/module block, order content as follows:
+Within each resource/data/module block, order content as follows:
 
-1. **Single-line arguments** at the top (alphabetized)
-2. **Nested blocks** in the middle (alphabetized by block type)
-3. **Meta-arguments** at the bottom: `depends_on`, `count`, `for_each`, `provider`, `lifecycle`
+1. **Instance arguments** at the top: `for_each`, `count`, `provider`, `source` (with blank line after)
+2. **Single-line arguments** (alphabetized)
+3. **Nested blocks** in the middle (alphabetized by block type)
+4. **Meta-arguments** at the bottom: `depends_on`, `lifecycle`
 
 Within nested blocks, also alphabetize arguments.
 
 ```hcl
 resource "google_example" "main" {
+  for_each = var.items
+
   name       = "example"
   project_id = local.project_id
 
@@ -104,12 +112,17 @@ resource "google_example" "main" {
 - API keys, tokens, or passwords
 - Project IDs that reveal organizational structure
 
-Instead, read all sensitive values from SOPS files using the SOPS provider:
+Instead, read all sensitive values from SOPS files using the SOPS provider. Declare secret files in top-level locals, then access individual secrets where needed:
 
 ```hcl
 locals {
-  billing_account_id = provider::sops::file("${local.repo_root}/secrets/gcp.sops.json").data.BILLING_ACCOUNT_ID
-  owner_email        = provider::sops::file("${local.repo_root}/secrets/dmikalova.sops.json").data.email
+  gcp_secrets    = provider::sops::file("${local.repo_root}/secrets/gcp.sops.json").data
+  github_secrets = provider::sops::file("${local.repo_root}/secrets/github.sops.json").data
+}
+
+resource "example" "main" {
+  billing_account_id = local.gcp_secrets.BILLING_ACCOUNT_ID
+  github_token       = local.github_secrets.PKG_READ_TOKEN
 }
 ```
 
