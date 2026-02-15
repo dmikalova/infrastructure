@@ -70,6 +70,26 @@ terramate run -- tofu plan
 - Secrets are read via SOPS provider (`data.sops_file`) directly in OpenTofu
 - Generated files are prefixed with `_` (e.g., `_providers.tf`, `_backend.tf`)
 
+## Comments
+
+Use simple `# Title` comments for sections. Do not use banner-style comments:
+
+```hcl
+# Good
+# Service Account
+
+# Bad
+# -----------------------------------------------------------------------------
+# Service Account
+# -----------------------------------------------------------------------------
+```
+
+If a file needs many sections, consider splitting it into multiple grouped `.tf` files instead.
+
+## Documenting Standards
+
+When the user asks to fix something "across the repo", add the fix as a documented standard in this file. This ensures the convention is captured for future work and prevents regression.
+
 ## Resource Block Ordering
 
 Within each resource/data/module block, order content as follows:
