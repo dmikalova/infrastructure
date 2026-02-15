@@ -4,7 +4,7 @@ terraform {
   required_version = ">= 1.8"
   backend "gcs" {
     bucket = "mklv-infrastructure-tfstate"
-    prefix = "tfstate/gcp/infra/baseline"
+    prefix = "tfstate/gcp/apps/email-unsubscribe"
   }
   required_providers {
     google = {
