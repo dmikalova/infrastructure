@@ -28,6 +28,7 @@ module "repositories" {
     }
     github-meta = {
       description = "reusable workflows, Dagger pipelines, and repo standards"
+      topics      = ["mklv-deploy"]
     }
     infrastructure = {
       description = "terramate infrastructure configuration"
