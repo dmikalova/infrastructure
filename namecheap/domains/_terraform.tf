@@ -18,7 +18,7 @@ terraform {
   }
 }
 locals {
-  modules_dir  = "${local.repo_root}/terraform/modules"
+  modules_dir  = abspath("${path.root}/${local.repo_root}/terraform/modules")
   repo_root    = "../.."
   state_bucket = "mklv-infrastructure-tfstate"
 }
