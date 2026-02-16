@@ -40,6 +40,21 @@ script "cicd" {
   }
 }
 
+script "lock" {
+  description = "Update provider lock files for all platforms"
+  lets {
+    provisioner = "tofu"
+  }
+  job {
+    name        = "lock"
+    description = "Run tofu providers lock for darwin and linux"
+    commands = [
+      [let.provisioner, "init"],
+      [let.provisioner, "providers", "lock", "-platform=darwin_arm64", "-platform=linux_amd64"],
+    ]
+  }
+}
+
 globals {
   # GCS state bucket shared by all stacks
   state_bucket = "mklv-infrastructure-tfstate"
