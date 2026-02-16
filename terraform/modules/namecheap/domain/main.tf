@@ -13,5 +13,5 @@ terraform {
 resource "namecheap_domain_records" "main" {
   domain      = var.domain
   mode        = "OVERWRITE"
-  nameservers = var.nameservers
+  nameservers = [for ns in var.nameservers : trimsuffix(ns, ".")]
 }

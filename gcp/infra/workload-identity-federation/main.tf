@@ -18,6 +18,11 @@ locals {
     for name, repo in try(data.terraform_remote_state.github_dmikalova.outputs.repositories, {}) :
     repo.full_name if contains(try(repo.topics, []), "mklv-deploy")
   ]
+  # Filter repos by infra-deploy topic
+  infra_repos = [
+    for name, repo in try(data.terraform_remote_state.github_dmikalova.outputs.repositories, {}) :
+    repo.full_name if contains(try(repo.topics, []), "infra-deploy")
+  ]
   state_bucket = "mklv-infrastructure-tfstate"
 }
 
@@ -78,14 +83,17 @@ resource "google_project_iam_member" "infra_sa_roles" {
   ])
 }
 
-# Allow infrastructure repo to impersonate infra SA via WIF
-resource "google_service_account_iam_member" "infra_sa_wif_binding" {
-  member             = "principalSet://iam.googleapis.com/${google_iam_workload_identity_pool.github.name}/attribute.repository/dmikalova/infrastructure"
+# Allow repos with infra-deploy topic to impersonate infra SA via WIF
+resource "google_service_account_iam_member" "infra_sa_wif_bindings" {
+  for_each = toset(local.infra_repos)
+
+  member             = "principalSet://iam.googleapis.com/${google_iam_workload_identity_pool.github.name}/attribute.repository/${each.value}"
   role               = "roles/iam.workloadIdentityUser"
   service_account_id = google_service_account.github_actions_infra.name
 }
 
 # Allow infra SA to impersonate tofu-ci SA (CI uses same provider config as local)
+# Uses additive binding to avoid conflicting with baseline's authoritative iam block
 resource "google_service_account_iam_member" "infra_sa_impersonate_tofu_ci" {
   member             = "serviceAccount:${google_service_account.github_actions_infra.email}"
   role               = "roles/iam.serviceAccountTokenCreator"
