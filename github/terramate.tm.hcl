@@ -23,7 +23,7 @@ generate_hcl "_terraform.tf" {
     }
 
     locals {
-      repo_root   = tm_replace(terramate.root.path.fs.absolute, "\\", "/")
+      repo_root   = terramate.stack.path.to_root
       modules_dir = "${local.repo_root}/terraform/modules"
     }
 

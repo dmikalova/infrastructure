@@ -25,7 +25,7 @@ locals {
   gcp_region  = "us-west1"
   modules_dir = "${local.repo_root}/terraform/modules"
   project_id  = "mklv-infrastructure"
-  repo_root   = "/Users/david.mikalova/Code/github.com/dmikalova/infrastructure"
+  repo_root   = "../.."
 }
 provider "google" {
   impersonate_service_account = "tofu-ci@mklv-infrastructure.iam.gserviceaccount.com"
