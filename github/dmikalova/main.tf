@@ -18,13 +18,14 @@ module "repositories" {
     }
     dmikalova = {
       description = "personal profile"
+      topics      = ["dmikalova-dev"]
     }
     dotfiles = {
       description = "personal dotfiles"
     }
     email-unsubscribe = {
       description = "Gmail inbox cleanup automation"
-      topics      = ["mklv-deploy"]
+      topics      = ["mklv-deploy", "mklv-tech"]
     }
     github-meta = {
       description = "reusable workflows, Dagger pipelines, and repo standards"

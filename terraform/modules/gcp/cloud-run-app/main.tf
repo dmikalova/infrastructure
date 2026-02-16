@@ -123,3 +123,39 @@ resource "google_service_account_iam_member" "deploy_can_act_as" {
   role               = "roles/iam.serviceAccountUser"
   service_account_id = google_service_account.cloud_run.name
 }
+
+# Custom Domain
+
+locals {
+  custom_domain = var.domain != "" ? "${var.app_name}.${var.domain}" : ""
+  dns_zone_name = var.domain != "" ? replace(var.domain, ".", "-") : ""
+}
+
+# Domain mapping for custom domain (conditional)
+resource "google_cloud_run_domain_mapping" "custom" {
+  count = local.custom_domain != "" ? 1 : 0
+
+  location = google_cloud_run_v2_service.app.location
+  name     = local.custom_domain
+  project  = var.gcp_project_id
+
+  metadata {
+    namespace = var.gcp_project_id
+  }
+
+  spec {
+    route_name = google_cloud_run_v2_service.app.name
+  }
+}
+
+# CNAME record pointing custom domain to Google hosted services (conditional)
+resource "google_dns_record_set" "custom_domain" {
+  count = local.custom_domain != "" ? 1 : 0
+
+  managed_zone = local.dns_zone_name
+  name         = "${local.custom_domain}."
+  project      = var.gcp_project_id
+  rrdatas      = ["ghs.googlehosted.com."]
+  ttl          = 300
+  type         = "CNAME"
+}

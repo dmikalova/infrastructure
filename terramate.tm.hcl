@@ -5,6 +5,22 @@ terramate {
   config {
     # Allow git to have unsaved changes when running plan/apply
     disable_safeguards = ["git"]
+    experiments = ["scripts"]
+  }
+}
+
+script "apply" {
+  description = "Tofu deployment"
+  lets {
+    provisioner = "tofu"
+  }
+  job {
+    name        = "apply"
+    description = "Run tofu apply"
+    commands = [
+      [let.provisioner, "init"],
+      [let.provisioner, "apply"],
+    ]
   }
 }
 
@@ -32,6 +48,7 @@ globals {
     github      = "~> 6.0"
     google      = "~> 7.0"
     google-beta = "~> 7.0"
+    namecheap   = "~> 2.0"
     postgresql  = "~> 1.25"
     random      = "~> 3.0"
     sops        = "~> 0.3"

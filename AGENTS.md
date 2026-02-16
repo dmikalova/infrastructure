@@ -106,6 +106,12 @@ Common resources and their required roles:
 - Secrets are read via SOPS provider (`data.sops_file`) directly in OpenTofu
 - Generated files are prefixed with `_` (e.g., `_providers.tf`, `_backend.tf`)
 
+## Module Design
+
+Prefer opinionated defaults derived from existing inputs over extra variables. If a value can be computed from inputs the module already has, compute it internally instead of requiring callers to pass it.
+
+For example, if a module has `app_name` and `domain`, derive the subdomain (`${app_name}.${domain}`) and DNS zone name (`replace(domain, ".", "-")`) internally rather than exposing `custom_domain` and `dns_zone_name` variables.
+
 ## Comments
 
 Use simple `# Title` comments for sections. Do not use banner-style comments:
