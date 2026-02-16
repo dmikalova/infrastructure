@@ -33,6 +33,7 @@ module "repositories" {
     }
     infrastructure = {
       description = "terramate infrastructure configuration"
+      topics      = ["infra-deploy"]
     }
     lists = {
       description = "manage lists"

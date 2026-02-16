@@ -50,10 +50,11 @@ module "ci_service_account" {
   name       = "tofu-ci"
   project_id = google_project.main.project_id
 
-  iam = {
-    "roles/iam.serviceAccountTokenCreator" = [
-      "user:${local.owner_email}",
-    ]
+  iam_bindings_additive = {
+    owner-token-creator = {
+      member = "user:${local.owner_email}"
+      role   = "roles/iam.serviceAccountTokenCreator"
+    }
   }
 
   iam_project_roles = {
