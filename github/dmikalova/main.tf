@@ -53,6 +53,10 @@ module "repositories" {
   }
 }
 
+data "github_user" "current" {
+  username = ""
+}
+
 resource "github_user_gpg_key" "main" {
   armored_public_key = base64decode(local.gpg_secrets.public_key_base64)
 }
