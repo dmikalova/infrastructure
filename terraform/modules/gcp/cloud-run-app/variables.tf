@@ -17,6 +17,12 @@ variable "database_secret_id" {
   type        = string
 }
 
+variable "domain" {
+  description = "Parent domain for the app. When set, creates a domain mapping at <app_name>.<domain> and a CNAME record."
+  type        = string
+  default     = ""
+}
+
 variable "gcp_project_id" {
   description = "GCP project ID"
   type        = string

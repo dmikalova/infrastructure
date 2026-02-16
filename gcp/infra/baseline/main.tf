@@ -27,6 +27,7 @@ resource "google_project_service" "apis" {
     "artifactregistry.googleapis.com", # Artifact Registry
     "billingbudgets.googleapis.com",   # Billing Budgets API
     "cloudbilling.googleapis.com",     # Cloud Billing (for budgets)
+    "dns.googleapis.com",              # Cloud DNS
     "iam.googleapis.com",              # IAM
     "iamcredentials.googleapis.com",   # IAM Credentials (for WIF)
     "run.googleapis.com",              # Cloud Run
@@ -58,6 +59,7 @@ module "ci_service_account" {
     (google_project.main.project_id) = [
       "roles/artifactregistry.admin",          # Artifact Registry Admin
       "roles/billing.projectManager",          # Manage project billing
+      "roles/dns.admin",                       # Cloud DNS Admin
       "roles/iam.serviceAccountAdmin",         # Manage service accounts
       "roles/iam.serviceAccountUser",          # Act as service accounts (for Cloud Run)
       "roles/iam.workloadIdentityPoolAdmin",   # Manage WIF pools
