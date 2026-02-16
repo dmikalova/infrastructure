@@ -6,16 +6,9 @@ on:
   schedule:
     - cron: "0 0 * * 0"
   workflow_dispatch:
-    inputs:
-      debug:
-        description: "Run only the debug stack"
-        type: boolean
-        default: true
 
 jobs:
   terramate:
     name: Terramate
     uses: dmikalova/github-meta/.github/workflows/terramate-apply-all.yaml@main
-    with:
-      debug: ${{ inputs.debug || false }}
     secrets: inherit
