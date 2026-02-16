@@ -4,10 +4,10 @@ on:
   push:
     branches: [main]
   schedule:
-    - cron: "0 0 * * 1" # Monday midnight UTC
-  workflow_dispatch:
+    - cron: "0 0 * * 0"
 
 jobs:
-  apply:
+  terramate:
+    name: Terramate
     uses: dmikalova/github-meta/.github/workflows/terramate-apply-all.yaml@main
     secrets: inherit
