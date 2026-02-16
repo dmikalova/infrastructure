@@ -85,6 +85,13 @@ resource "google_service_account_iam_member" "infra_sa_wif_binding" {
   service_account_id = google_service_account.github_actions_infra.name
 }
 
+# Allow infra SA to impersonate tofu-ci SA (CI uses same provider config as local)
+resource "google_service_account_iam_member" "infra_sa_impersonate_tofu_ci" {
+  member             = "serviceAccount:${google_service_account.github_actions_infra.email}"
+  role               = "roles/iam.serviceAccountTokenCreator"
+  service_account_id = "projects/${local.project_id}/serviceAccounts/tofu-ci@${local.project_id}.iam.gserviceaccount.com"
+}
+
 # Service account for app repos (minimal permissions)
 resource "google_service_account" "github_actions_deploy" {
   account_id   = "github-actions-deploy"

@@ -105,6 +105,7 @@ Common resources and their required roles:
 - Use Terramate globals for values shared across stacks
 - Secrets are read via SOPS provider (`data.sops_file`) directly in OpenTofu
 - Generated files are prefixed with `_` (e.g., `_providers.tf`, `_backend.tf`)
+- Always use existing modules from `terraform/modules/` when available instead of writing inline resources
 
 ## Module Design
 
