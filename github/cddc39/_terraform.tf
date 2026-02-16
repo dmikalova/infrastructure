@@ -19,7 +19,7 @@ terraform {
 }
 locals {
   modules_dir = "${local.repo_root}/terraform/modules"
-  repo_root   = "/Users/david.mikalova/Code/github.com/dmikalova/infrastructure"
+  repo_root   = "../.."
 }
 provider "github" {
   owner = "cddc39"
