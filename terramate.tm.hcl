@@ -18,6 +18,7 @@ script "apply" {
     name        = "apply"
     description = "Run tofu apply"
     commands = [
+      ["terramate", "generate"],
       [let.provisioner, "init"],
       [let.provisioner, "apply"],
     ]
