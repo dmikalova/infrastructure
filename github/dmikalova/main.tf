@@ -8,6 +8,19 @@ locals {
   gpg_secrets    = provider::sops::file("${local.repo_root}/secrets/gpg.sops.json").data
 }
 
+resource "terraform_data" "validate_secrets" {
+  lifecycle {
+    precondition {
+      condition     = local.github_secrets.GITHUB_TOKEN != ""
+      error_message = "SOPS decryption failed: GITHUB_TOKEN is empty. Ensure SOPS_AGE_KEY is set."
+    }
+    precondition {
+      condition     = local.github_secrets.PKG_READ_TOKEN != ""
+      error_message = "SOPS decryption failed: PKG_READ_TOKEN is empty. Ensure SOPS_AGE_KEY is set."
+    }
+  }
+}
+
 module "repositories" {
   source = "${local.modules_dir}/github/repositories"
 
