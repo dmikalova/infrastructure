@@ -2,6 +2,7 @@
 # Creates: project, APIs, CI/CD service account, state bucket, budget alerts
 
 locals {
+  age_secrets        = provider::sops::file("${local.repo_root}/secrets/age.sops.json").data
   billing_account_id = provider::sops::file("${local.repo_root}/secrets/gcp.sops.json").data.BILLING_ACCOUNT_ID
   owner_email        = provider::sops::file("${local.repo_root}/secrets/dmikalova.sops.json").data.email
 }
@@ -139,6 +140,16 @@ resource "google_billing_budget" "monthly" {
   # Workaround for https://github.com/hashicorp/terraform-provider-google/issues/8444
   lifecycle {
     ignore_changes = [all_updates_rule]
+  }
+}
+
+# SOPS Age key in Secret Manager for CI/CD SOPS decryption
+module "sops_age_key" {
+  source = "${local.modules_dir}/gcp/secret-manager-secret"
+
+  project_id = google_project.main.project_id
+  secrets = {
+    "sops-age-key" = base64decode(local.age_secrets.keys_file_base64)
   }
 }
 
