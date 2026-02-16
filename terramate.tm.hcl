@@ -24,6 +24,22 @@ script "apply" {
   }
 }
 
+script "cicd" {
+  description = "Non-interactive tofu deployment for CI/CD"
+  lets {
+    provisioner = "tofu"
+  }
+  job {
+    name        = "cicd"
+    description = "Run tofu apply with auto-approve"
+    commands = [
+      [let.provisioner, "init"],
+      [let.provisioner, "validate"],
+      [let.provisioner, "apply", "-auto-approve"],
+    ]
+  }
+}
+
 globals {
   # GCS state bucket shared by all stacks
   state_bucket = "mklv-infrastructure-tfstate"
