@@ -6,7 +6,8 @@ locals {
   app_name              = "email-unsubscribe"
   supabase_project_name = "mklv"
 
-  gcp_secrets = provider::sops::file("${local.repo_root}/secrets/gcp.sops.json").data
+  gcp_secrets      = provider::sops::file("${local.repo_root}/secrets/gcp.sops.json").data
+  supabase_secrets = provider::sops::file("${local.repo_root}/secrets/supabase.sops.json").data
 }
 
 # Database Setup
@@ -97,6 +98,10 @@ module "cloud_run" {
     "email-unsubscribe-oauth-redirect-uri" = {
       env_name = "GOOGLE_REDIRECT_URI"
       value    = local.gcp_secrets.EMAIL_UNSUBSCRIBE_OAUTH_REDIRECT_URI
+    }
+    "email-unsubscribe-supabase-jwt-key" = {
+      env_name = "SUPABASE_JWT_KEY"
+      value    = local.supabase_secrets.SUPABASE_MKLV_JWT_KEY
     }
   }
 }
