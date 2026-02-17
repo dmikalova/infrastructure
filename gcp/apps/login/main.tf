@@ -6,6 +6,7 @@ locals {
   app_name              = "login"
   supabase_project_name = "mklv"
 
+  gcp_secrets      = provider::sops::file("${local.repo_root}/secrets/gcp.sops.json").data
   supabase_secrets = provider::sops::file("${local.repo_root}/secrets/supabase.sops.json").data
 
   # Domains this login service handles
@@ -71,22 +72,21 @@ module "cloud_run" {
     "supabase-mklv-publishable-key" = {
       env_name = "SUPABASE_PUBLISHABLE_KEY"
     }
+    "supabase-mklv-url" = {
+      env_name = "SUPABASE_URL"
+    }
   }
 
   secrets = {
+    "login-google-client-id" = {
+      env_name = "GOOGLE_CLIENT_ID"
+      value    = local.gcp_secrets.LOGIN_GOOGLE_CLIENT_ID
+    }
     "login-supabase-jwt-key" = {
       env_name = "SUPABASE_JWT_KEY"
       value    = local.supabase_secrets.SUPABASE_MKLV_JWT_KEY
     }
   }
-}
-
-# Grant access to Supabase URL secret
-resource "google_secret_manager_secret_iam_member" "supabase_url" {
-  member    = "serviceAccount:${module.cloud_run.service_account_email}"
-  project   = local.project_id
-  role      = "roles/secretmanager.secretAccessor"
-  secret_id = "supabase-${local.supabase_project_name}-url"
 }
 
 # Additional Domain Mappings
