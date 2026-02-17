@@ -1,20 +1,40 @@
-schema: spec-driven
+schema: spec-driven-review
 
-# Project context (optional)
-# This is shown to AI when creating artifacts.
-# Add your tech stack, conventions, style guides, domain knowledge, etc.
-# Example:
-#   context: |
-#     Tech stack: TypeScript, React, Node.js
-#     We use conventional commits
-#     Domain: e-commerce platform
+# Project context
+context: |
+  # Tech Stack
+  - IaC: Terramate + OpenTofu (tofu CLI)
+  - Secrets: SOPS with Age encryption
+  - Cloud: GCP (Cloud Run, Secret Manager, Cloud DNS, Artifact Registry)
+  - Database: Supabase (PostgreSQL with pooler)
+  - CI/CD: GitHub Actions with Workload Identity Federation
 
-# Per-artifact rules (optional)
-# Add custom rules for specific artifacts.
-# Example:
-#   rules:
-#     proposal:
-#       - Keep proposals under 500 words
-#       - Always include a "Non-goals" section
-#     tasks:
-#       - Break tasks into chunks of max 2 hours
+  # Conventions
+  - See AGENTS.md for detailed conventions and variable naming
+  - Never run `tofu apply` - only `tofu init` and `tofu plan`
+  - Secrets in secrets/*.sops.json, accessed via SOPS provider
+  - Alphabetize lists, variables, and resource arguments
+  - Use modules from terraform/modules/ when available
+
+  # File Structure
+  - gcp/ - Terramate stacks for GCP infrastructure
+  - github/ - Terramate stacks for GitHub repository management
+  - supabase/ - Terramate stacks for Supabase projects
+  - terraform/modules/ - Reusable OpenTofu modules
+  - secrets/ - SOPS-encrypted secrets
+
+  # Stack Dependencies
+  - Most GCP stacks depend on /gcp/infra/baseline (APIs, project setup)
+  - App stacks depend on /gcp/infra/platform (container registry)
+  - App stacks depend on /gcp/infra/workload-identity-federation (CI/CD auth)
+
+# Per-artifact rules
+rules:
+  spec:
+    - Focus on infrastructure patterns and module reuse
+    - Consider security: least privilege, secrets handling
+    - Include stack dependencies in designs
+  tasks:
+    - Never include `tofu apply` as a task - note it as manual step
+    - Include `tofu plan` to validate changes
+    - Check CI service account permissions for new resources

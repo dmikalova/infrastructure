@@ -38,6 +38,10 @@ module "repositories" {
     lists = {
       description = "manage lists"
     }
+    login = {
+      description = "centralized login portal for multi-domain authentication"
+      topics      = ["mklv-deploy", "mklv-tech"]
+    }
     recipes = {
       description = "manage recipes"
     }

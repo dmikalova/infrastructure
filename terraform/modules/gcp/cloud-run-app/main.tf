@@ -2,7 +2,8 @@
 
 # Extract non-sensitive keys for iteration
 locals {
-  secret_names = toset(keys(var.secrets))
+  existing_secret_names = toset(keys(var.existing_secrets))
+  secret_names          = toset(keys(var.secrets))
 }
 
 # Create secrets in Secret Manager
@@ -45,6 +46,16 @@ resource "google_secret_manager_secret_iam_member" "secrets" {
   secret_id = each.value.id
 }
 
+# Grant service account access to existing secrets
+resource "google_secret_manager_secret_iam_member" "existing_secrets" {
+  for_each = nonsensitive(local.existing_secret_names)
+
+  member    = "serviceAccount:${google_service_account.cloud_run.email}"
+  project   = var.gcp_project_id
+  role      = "roles/secretmanager.secretAccessor"
+  secret_id = each.value
+}
+
 # Cloud Run Service
 
 # Cloud Run service (placeholder image, deployed via CI/CD)
@@ -77,6 +88,19 @@ resource "google_cloud_run_v2_service" "app" {
           value_source {
             secret_key_ref {
               secret  = module.secrets.secrets[env.value].secret_id
+              version = "latest"
+            }
+          }
+        }
+      }
+
+      dynamic "env" {
+        for_each = nonsensitive(local.existing_secret_names)
+        content {
+          name = var.existing_secrets[env.value].env_name
+          value_source {
+            secret_key_ref {
+              secret  = env.value
               version = "latest"
             }
           }
@@ -125,6 +149,18 @@ resource "google_service_account_iam_member" "deploy_can_act_as" {
 }
 
 # Custom Domain
+#
+# PREREQUISITE: The Terraform service account must be a verified owner of the domain
+# in Google Search Console. Without this, domain mapping creation will fail with:
+# "Caller is not authorized to administer the domain"
+#
+# To fix:
+# 1. Go to https://search.google.com/search-console
+# 2. Select the domain property (e.g., example.com)
+# 3. Settings → Users and permissions → Add user
+# 4. Add the service account email as Owner
+#
+# This is a one-time manual setup per domain.
 
 locals {
   custom_domain = var.domain != "" ? "${var.app_name}.${var.domain}" : ""

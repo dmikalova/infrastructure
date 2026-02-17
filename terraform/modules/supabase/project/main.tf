@@ -48,24 +48,35 @@ resource "supabase_settings" "main" {
   })
 }
 
+# Fetch API keys from Supabase
+data "supabase_apikeys" "main" {
+  project_ref = supabase_project.main.id
+}
+
 # Store all secrets in Secret Manager
 module "secrets" {
   source = "${var.modules_dir}/gcp/secret-manager-secret"
 
   project_id = var.gcp_project_id
   secrets = {
-    # Direct connection (for Terraform/admin operations)
+    # API keys (using non-deprecated publishable_key)
+    "supabase-${var.name}-publishable-key" = data.supabase_apikeys.main.publishable_key
+    # Direct connection (IPv6 only, for local admin operations)
     "supabase-${var.name}-db-direct-host" = "db.${supabase_project.main.id}.supabase.co"
     "supabase-${var.name}-db-direct-port" = "5432"
     "supabase-${var.name}-db-direct-user" = "postgres"
-    # Pooler connection (for app runtime)
-    "supabase-${var.name}-admin-url"      = local.admin_url
-    "supabase-${var.name}-db-host"        = "aws-0-${supabase_project.main.region}.pooler.supabase.com"
-    "supabase-${var.name}-db-name"        = "postgres"
-    "supabase-${var.name}-db-password"    = random_password.db_password.result
-    "supabase-${var.name}-db-port"        = "6543"
-    "supabase-${var.name}-db-user"        = "postgres.${supabase_project.main.id}"
-    "supabase-${var.name}-project-ref"    = supabase_project.main.id
-    "supabase-${var.name}-region"         = supabase_project.main.region
+    # Session pooler (IPv4, supports prepared statements - use for Terraform DDL in CI/CD)
+    "supabase-${var.name}-db-session-host" = "aws-0-${supabase_project.main.region}.pooler.supabase.com"
+    "supabase-${var.name}-db-session-port" = "5432"
+    # Transaction pooler (IPv4, no prepared statements - use for app runtime)
+    "supabase-${var.name}-admin-url"   = local.admin_url
+    "supabase-${var.name}-db-host"     = "aws-0-${supabase_project.main.region}.pooler.supabase.com"
+    "supabase-${var.name}-db-name"     = "postgres"
+    "supabase-${var.name}-db-password" = random_password.db_password.result
+    "supabase-${var.name}-db-port"     = "6543"
+    "supabase-${var.name}-db-user"     = "postgres.${supabase_project.main.id}"
+    "supabase-${var.name}-project-ref" = supabase_project.main.id
+    "supabase-${var.name}-region"      = supabase_project.main.region
+    "supabase-${var.name}-url"         = "https://${supabase_project.main.id}.supabase.co"
   }
 }
