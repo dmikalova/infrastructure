@@ -17,24 +17,24 @@ module "db_secrets" {
 
   project_id = local.project_id
   secrets = {
-    db_direct_host = "supabase-${local.supabase_project_name}-db-direct-host"
-    db_direct_port = "supabase-${local.supabase_project_name}-db-direct-port"
-    db_direct_user = "supabase-${local.supabase_project_name}-db-direct-user"
-    db_name        = "supabase-${local.supabase_project_name}-db-name"
-    db_password    = "supabase-${local.supabase_project_name}-db-password"
+    db_host     = "supabase-${local.supabase_project_name}-db-host"
+    db_name     = "supabase-${local.supabase_project_name}-db-name"
+    db_password = "supabase-${local.supabase_project_name}-db-password"
+    db_port     = "supabase-${local.supabase_project_name}-db-port"
+    db_user     = "supabase-${local.supabase_project_name}-db-user"
   }
 }
 
-# Configure postgresql provider with direct connection (not pooler)
+# Configure postgresql provider with pooler connection (IPv4-compatible)
 provider "postgresql" {
   connect_timeout = 15
   database        = module.db_secrets.secrets["db_name"].secret_data
-  host            = module.db_secrets.secrets["db_direct_host"].secret_data
+  host            = module.db_secrets.secrets["db_host"].secret_data
   password        = module.db_secrets.secrets["db_password"].secret_data
-  port            = tonumber(module.db_secrets.secrets["db_direct_port"].secret_data)
+  port            = tonumber(module.db_secrets.secrets["db_port"].secret_data)
   scheme          = "postgres"
   superuser       = false
-  username        = module.db_secrets.secrets["db_direct_user"].secret_data
+  username        = module.db_secrets.secrets["db_user"].secret_data
 }
 
 # Create app-specific database with credentials stored in Secret Manager
