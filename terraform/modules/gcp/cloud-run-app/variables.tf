@@ -46,3 +46,11 @@ variable "secrets" {
   }))
   default = {}
 }
+
+variable "existing_secrets" {
+  description = "Existing secrets to expose as env vars (grants access, does not create). Key is the secret ID in Secret Manager."
+  type = map(object({
+    env_name = string # Environment variable name in Cloud Run
+  }))
+  default = {}
+}
