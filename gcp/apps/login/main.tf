@@ -89,6 +89,16 @@ module "cloud_run" {
   }
 }
 
+# CI/CD Migrations Access
+
+# Grant GitHub Actions deploy SA access to database secret for migrations
+resource "google_secret_manager_secret_iam_member" "deploy_database_access" {
+  member    = "serviceAccount:github-actions-deploy@${local.project_id}.iam.gserviceaccount.com"
+  project   = local.project_id
+  role      = "roles/secretmanager.secretAccessor"
+  secret_id = module.app_database.secret_id
+}
+
 # Additional Domain Mappings
 
 # Domain mappings for additional domains
