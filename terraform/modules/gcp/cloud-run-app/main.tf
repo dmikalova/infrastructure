@@ -148,6 +148,34 @@ resource "google_service_account_iam_member" "deploy_can_act_as" {
   service_account_id = google_service_account.cloud_run.name
 }
 
+# Grant deploy SA access to database secret (required for Cloud Run deployment validation)
+resource "google_secret_manager_secret_iam_member" "deploy_database_url" {
+  member    = "serviceAccount:github-actions-deploy@${var.gcp_project_id}.iam.gserviceaccount.com"
+  project   = var.gcp_project_id
+  role      = "roles/secretmanager.secretAccessor"
+  secret_id = var.database_secret_id
+}
+
+# Grant deploy SA access to app secrets (required for Cloud Run deployment validation)
+resource "google_secret_manager_secret_iam_member" "deploy_secrets" {
+  for_each = module.secrets.secrets
+
+  member    = "serviceAccount:github-actions-deploy@${var.gcp_project_id}.iam.gserviceaccount.com"
+  project   = var.gcp_project_id
+  role      = "roles/secretmanager.secretAccessor"
+  secret_id = each.value.id
+}
+
+# Grant deploy SA access to existing secrets (required for Cloud Run deployment validation)
+resource "google_secret_manager_secret_iam_member" "deploy_existing_secrets" {
+  for_each = nonsensitive(local.existing_secret_names)
+
+  member    = "serviceAccount:github-actions-deploy@${var.gcp_project_id}.iam.gserviceaccount.com"
+  project   = var.gcp_project_id
+  role      = "roles/secretmanager.secretAccessor"
+  secret_id = each.value
+}
+
 # Custom Domain
 #
 # PREREQUISITE: The Terraform service account must be a verified owner of the domain

@@ -18,21 +18,23 @@ module "db_secrets" {
 
   project_id = local.project_id
   secrets = {
-    db_host     = "supabase-${local.supabase_project_name}-db-host"
-    db_name     = "supabase-${local.supabase_project_name}-db-name"
-    db_password = "supabase-${local.supabase_project_name}-db-password"
-    db_port     = "supabase-${local.supabase_project_name}-db-port"
-    db_user     = "supabase-${local.supabase_project_name}-db-user"
+    db_name         = "supabase-${local.supabase_project_name}-db-name"
+    db_password     = "supabase-${local.supabase_project_name}-db-password"
+    db_session_host = "supabase-${local.supabase_project_name}-db-session-host"
+    db_session_port = "supabase-${local.supabase_project_name}-db-session-port"
+    db_user         = "supabase-${local.supabase_project_name}-db-user"
   }
 }
 
-# Configure postgresql provider with pooler connection (IPv4-compatible)
+# Configure postgresql provider with session pooler
+# Session pooler (port 5432): IPv4 + prepared statements - required for Terraform DDL
+# Transaction pooler (port 6543): IPv4, no prepared statements - used for app runtime
 provider "postgresql" {
   connect_timeout = 15
   database        = module.db_secrets.secrets["db_name"].secret_data
-  host            = module.db_secrets.secrets["db_host"].secret_data
+  host            = module.db_secrets.secrets["db_session_host"].secret_data
   password        = module.db_secrets.secrets["db_password"].secret_data
-  port            = tonumber(module.db_secrets.secrets["db_port"].secret_data)
+  port            = tonumber(module.db_secrets.secrets["db_session_port"].secret_data)
   scheme          = "postgres"
   superuser       = false
   username        = module.db_secrets.secrets["db_user"].secret_data
@@ -82,6 +84,13 @@ module "cloud_run" {
   gcp_project_id     = local.project_id
   gcp_region         = local.gcp_region
   modules_dir        = local.modules_dir
+
+  existing_secrets = {
+    "supabase-mklv-url" = {
+      env_name = "SUPABASE_URL"
+    }
+  }
+
   secrets = {
     "email-unsubscribe-encryption-key" = {
       env_name = "ENCRYPTION_KEY"
