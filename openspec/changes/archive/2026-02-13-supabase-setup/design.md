@@ -1,4 +1,4 @@
-## Context
+# Context
 
 The email-unsubscribe app requires PostgreSQL for:
 
@@ -33,7 +33,8 @@ Cloud Run is ephemeral and scales to zero, requiring:
 
 ### 1. Repository Structure
 
-**Decision:** Supabase base setup at `supabase/`, app-specific schemas created by app deploy stacks.
+**Decision:** Supabase base setup at `supabase/`, app-specific schemas created
+by app deploy stacks.
 
 ```
 infrastructure/
@@ -56,11 +57,13 @@ infrastructure/
             └── main.tf      # Uses app-database module
 ```
 
-**Rationale:** Clear separation - `supabase/` manages the platform via Terraform, app stacks manage their own database needs using a shared module.
+**Rationale:** Clear separation - `supabase/` manages the platform via
+Terraform, app stacks manage their own database needs using a shared module.
 
 ### 2. Supabase Project Management
 
-**Decision:** Manage Supabase project via official `supabase/supabase` Terraform provider.
+**Decision:** Manage Supabase project via official `supabase/supabase` Terraform
+provider.
 
 ```hcl
 # supabase/dmikalova/main.tf
@@ -88,10 +91,12 @@ resource "supabase_settings" "main" {
 ```
 
 **Credentials in SOPS:** `secrets/supabase.sops.json`
+
 - `SUPABASE_ACCESS_TOKEN` - Personal access token from dashboard
 - `organization_id` - From organization URL
 
-**Rationale:** Full IaC management. Project creation, settings, and teardown all controlled via Terraform. No manual dashboard steps required.
+**Rationale:** Full IaC management. Project creation, settings, and teardown all
+controlled via Terraform. No manual dashboard steps required.
 
 ### 2. Connection Pooling
 
@@ -105,11 +110,13 @@ postgresql://postgres:[password]@db.[project-ref].supabase.co:5432/postgres
 postgresql://postgres.[project-ref]:[password]@aws-0-us-west-1.pooler.supabase.com:6543/postgres?pgbouncer=true
 ```
 
-**Rationale:** Cloud Run creates new connections frequently. Transaction pooling handles this efficiently. Supabase's pooler is included free.
+**Rationale:** Cloud Run creates new connections frequently. Transaction pooling
+handles this efficiently. Supabase's pooler is included free.
 
 ### 3. Secret Storage (Two Levels)
 
-**Decision:** Admin credentials derived from Supabase project resource and stored in Secret Manager. App-specific credentials created by app stacks.
+**Decision:** Admin credentials derived from Supabase project resource and
+stored in Secret Manager. App-specific credentials created by app stacks.
 
 ```hcl
 # supabase/dmikalova/main.tf - Admin connection (derived from project)
@@ -135,11 +142,13 @@ module "database" {
 }
 ```
 
-**Rationale:** Admin credentials are derived from Terraform-managed project outputs - no manual copying. App credentials are scoped to their schema only.
+**Rationale:** Admin credentials are derived from Terraform-managed project
+outputs - no manual copying. App credentials are scoped to their schema only.
 
 ### 4. Schema Isolation Module (Multi-Tenant Design)
 
-**Decision:** Reusable `terraform/modules/app-database/` module creates schema, role, and credentials per app.
+**Decision:** Reusable `terraform/modules/app-database/` module creates schema,
+role, and credentials per app.
 
 ```hcl
 # terraform/modules/app-database/main.tf
@@ -219,8 +228,10 @@ resource "google_cloud_run_v2_service" "app" {
 
 **Alternatives considered:**
 
-- Shared admin credentials with search_path: No true isolation, app could access other schemas
-- Separate databases per app: More isolation but higher cost and management overhead
+- Shared admin credentials with search_path: No true isolation, app could access
+  other schemas
+- Separate databases per app: More isolation but higher cost and management
+  overhead
 
 **Rationale:** True database-level isolation via roles/permissions:
 
@@ -238,7 +249,9 @@ resource "google_cloud_run_v2_service" "app" {
 deno task db:migrate
 ```
 
-**Rationale:** Migrations are app-specific and change with app code. Running from app repo keeps them versioned together. Infrastructure only provides the database, not its schema.
+**Rationale:** Migrations are app-specific and change with app code. Running
+from app repo keeps them versioned together. Infrastructure only provides the
+database, not its schema.
 
 ### 6. Local Development
 
@@ -253,7 +266,8 @@ docker run -d --name postgres -e POSTGRES_PASSWORD=dev -p 5432:5432 postgres:16
 export DATABASE_URL="postgresql://postgres:dev@localhost:5432/postgres"
 ```
 
-**Rationale:** Remote is simpler for quick testing. Local is better for offline work or schema experiments. App code should work with either.
+**Rationale:** Remote is simpler for quick testing. Local is better for offline
+work or schema experiments. App code should work with either.
 
 ## Risks / Trade-offs
 
@@ -268,16 +282,21 @@ export DATABASE_URL="postgresql://postgres:dev@localhost:5432/postgres"
 
 ### This Change (supabase-setup)
 
-1. **Add SOPS secrets** - Create `secrets/supabase.sops.json` with access token and org ID
-2. **Create `supabase/` stack** - Terramate config with Supabase, Google, and SOPS providers
-3. **Apply stack** - Creates Supabase project and stores admin URL in Secret Manager
-4. **Create `terraform/modules/app-database/`** - Reusable module for schema isolation
+1. **Add SOPS secrets** - Create `secrets/supabase.sops.json` with access token
+   and org ID
+2. **Create `supabase/` stack** - Terramate config with Supabase, Google, and
+   SOPS providers
+3. **Apply stack** - Creates Supabase project and stores admin URL in Secret
+   Manager
+4. **Create `terraform/modules/app-database/`** - Reusable module for schema
+   isolation
 
 ### Per-App (in gcp-github-wif change)
 
-5. **App stacks use module** - `gcp/projects/<app>/` calls `app-database` module
-6. **Module creates schema, role, credentials** - Automatically during app infra deploy
-7. **Cloud Run references app secret** - App gets isolated database access
+1. **App stacks use module** - `gcp/projects/<app>/` calls `app-database` module
+2. **Module creates schema, role, credentials** - Automatically during app infra
+   deploy
+3. **Cloud Run references app secret** - App gets isolated database access
 
 ## Open Questions
 

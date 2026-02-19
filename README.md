@@ -1,6 +1,9 @@
 # Infrastructure
 
-This repo contains [Terramate](https://terramate.io/) stacks with [OpenTofu](https://opentofu.org/) for managing personal infrastructure. Secrets are encrypted with [SOPS](https://github.com/mozilla/sops) and [Age](https://github.com/FiloSottile/age).
+This repo contains [Terramate](https://terramate.io/) stacks with
+[OpenTofu](https://opentofu.org/) for managing personal infrastructure. Secrets
+are encrypted with [SOPS](https://github.com/mozilla/sops) and
+[Age](https://github.com/FiloSottile/age).
 
 ## Structure
 

@@ -1,0 +1,10 @@
+{
+  "remotes": [
+    {
+      "configs": ["lefthook.jsonc"],
+      "git_url": "https://github.com/dmikalova/github-meta",
+      "ref": "main",
+      "refetch": true
+    }
+  ]
+}
