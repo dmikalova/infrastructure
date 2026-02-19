@@ -8,7 +8,7 @@ on:
   workflow_dispatch:
 
 jobs:
-  terramate:
-    name: Terramate
+  cicd:
+    name: CI/CD
     uses: dmikalova/github-meta/.github/workflows/terramate-apply-all.yaml@main
     secrets: inherit
