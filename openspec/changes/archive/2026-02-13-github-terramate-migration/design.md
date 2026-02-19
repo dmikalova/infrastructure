@@ -1,6 +1,7 @@
-## Context
+# Context
 
-GitHub repository management currently lives in `github/*/terragrunt.hcl` files, using:
+GitHub repository management currently lives in `github/*/terragrunt.hcl` files,
+using:
 
 - Terragrunt for orchestration
 - DigitalOcean Spaces (S3 compatible) for state storage
@@ -10,8 +11,10 @@ GitHub repository management currently lives in `github/*/terragrunt.hcl` files,
 
 Current repos managed:
 
-- `dmikalova`: brocket, dmikalova, dotfiles, infrastructure, synths (5 repos) → **keep as-is**
-- `e91e63`: 8 terraform-\* repos → **delete all** (github-repos module merged into infra)
+- `dmikalova`: brocket, dmikalova, dotfiles, infrastructure, synths (5 repos) →
+  **keep as-is**
+- `e91e63`: 8 terraform-\* repos → **delete all** (github-repos module merged
+  into infra)
 - `cddc39`: lists, recipes, todos (3 repos) → **migrate to dmikalova**
 - `screeptorio`: 3 repos (organization) → **delete org and repos**
 
@@ -36,7 +39,8 @@ Current repos managed:
 
 ### 1. Stack Structure
 
-**Decision:** Terramate stacks stay at `github/` root. After consolidation, only `github/dmikalova/` remains.
+**Decision:** Terramate stacks stay at `github/` root. After consolidation, only
+`github/dmikalova/` remains.
 
 ```
 github/
@@ -51,7 +55,8 @@ github/
 - Move to `gcp/github/`: Would imply it's GCP resources, but it's GitHub
 - Keep multiple owner stacks: Unnecessary after consolidation
 
-**Rationale:** GitHub management is not GCP infrastructure - it just uses GCS for state. Keeping at `github/` maintains logical separation.
+**Rationale:** GitHub management is not GCP infrastructure - it just uses GCS
+for state. Keeping at `github/` maintains logical separation.
 
 ### 2. State Migration Strategy
 
@@ -73,7 +78,8 @@ tofu plan  # Should show no changes for existing repos
 - Fresh import: Loses state history, risk of address mismatch
 - Keep DO Spaces: Creates dependency on DigitalOcean
 
-**Rationale:** State pull/push preserves resource addresses exactly. Terraform sees the same state, just in a new backend.
+**Rationale:** State pull/push preserves resource addresses exactly. Terraform
+sees the same state, just in a new backend.
 
 ### 3. GitHub Provider Configuration
 
@@ -117,11 +123,13 @@ generate_hcl "_providers.tf" {
 }
 ```
 
-**Rationale:** Separate terramate.tm.hcl for GitHub keeps config isolated from GCP stacks. Uses same SOPS pattern for secrets.
+**Rationale:** Separate terramate.tm.hcl for GitHub keeps config isolated from
+GCP stacks. Uses same SOPS pattern for secrets.
 
 ### 4. Resource Definition Approach
 
-**Decision:** Define repos using a local module at `terraform/modules/github/repositories`.
+**Decision:** Define repos using a local module at
+`terraform/modules/github/repositories`.
 
 ```hcl
 # github/dmikalova/main.tf
@@ -146,10 +154,13 @@ module "repositories" {
 
 **Alternatives considered:**
 
-- Keep using `e91e63/terraform-github-repositories` external module: Being deleted
+- Keep using `e91e63/terraform-github-repositories` external module: Being
+  deleted
 - Define repos inline without module: Less reusable
 
-**Rationale:** Local module replaces external `e91e63/terraform-github-repositories`. Keeps module code in this repo for maintainability.
+**Rationale:** Local module replaces external
+`e91e63/terraform-github-repositories`. Keeps module code in this repo for
+maintainability.
 
 ### 5. cddc39 Repo Migration
 
@@ -163,22 +174,26 @@ gh repo transfer cddc39/todos dmikalova
 
 Then add to dmikalova's Terraform config. Old cddc39 state can be discarded.
 
-**Rationale:** GitHub's repo transfer preserves issues, PRs, stars. Cleaner than recreating.
+**Rationale:** GitHub's repo transfer preserves issues, PRs, stars. Cleaner than
+recreating.
 
 ### 6. Deletion of screeptorio and e91e63
 
 **Decision:** Delete via GitHub UI/CLI before removing from Terraform.
 
 - **screeptorio**: Delete repos first, then org. Archive state for reference.
-- **e91e63**: Delete all terraform-\* repos (module code merged into infra). Keep user account.
+- **e91e63**: Delete all terraform-\* repos (module code merged into infra).
+  Keep user account.
 
-**Rationale:** Manual deletion via GitHub is safer than `terraform destroy` for permanent deletions.
+**Rationale:** Manual deletion via GitHub is safer than `terraform destroy` for
+permanent deletions.
 
 ### 7. GPG/SSH Key Removal
 
 **Decision:** Remove GPG and SSH key management entirely.
 
-**Rationale:** Keys were for Tekton CI which is being replaced. WIF doesn't need deploy keys.
+**Rationale:** Keys were for Tekton CI which is being replaced. WIF doesn't need
+deploy keys.
 
 ## Risks / Trade-offs
 
@@ -199,21 +214,21 @@ Then add to dmikalova's Terraform config. Old cddc39 state can be discarded.
 
 ### Phase 2: Repo Consolidation (via GitHub UI/CLI)
 
-4. **Transfer cddc39 repos to dmikalova** - Using `gh repo transfer`
-5. **Delete screeptorio repos and org** - Via GitHub UI
-6. **Delete e91e63 repos** - Via GitHub UI (keep user account)
+1. **Transfer cddc39 repos to dmikalova** - Using `gh repo transfer`
+2. **Delete screeptorio repos and org** - Via GitHub UI
+3. **Delete e91e63 repos** - Via GitHub UI (keep user account)
 
 ### Phase 3: Terramate Migration
 
-7. **Create dmikalova stack** - `github/dmikalova/` with new config
-8. **Push state to GCS** - `tofu state push` from backup
-9. **Verify with plan** - Should show only `email-unsubscribe` as new
-10. **Apply** - Creates new repo
+1. **Create dmikalova stack** - `github/dmikalova/` with new config
+2. **Push state to GCS** - `tofu state push` from backup
+3. **Verify with plan** - Should show only `email-unsubscribe` as new
+4. **Apply** - Creates new repo
 
 ### Phase 4: Cleanup
 
-11. **Delete old Terragrunt files** - Remove `github/*/terragrunt.hcl`
-12. **Archive DO Spaces state** - Document location for reference
+1. **Delete old Terragrunt files** - Remove `github/*/terragrunt.hcl`
+2. **Archive DO Spaces state** - Document location for reference
 
 Rollback: State backups allow reverting to Terragrunt if needed.
 

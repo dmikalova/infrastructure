@@ -1,6 +1,7 @@
-## 1. SOPS Secrets Setup
+# 1. SOPS Secrets Setup
 
-- [x] 1.1 Create secrets/supabase.sops.json with SUPABASE_ACCESS_TOKEN and organization_id
+- [x] 1.1 Create secrets/supabase.sops.json with SUPABASE_ACCESS_TOKEN and
+      organization_id
 - [x] 1.2 Update AGENTS.md SOPS table to include supabase.sops.json
 
 ## 2. Supabase Terramate Configuration
@@ -22,11 +23,13 @@
 ## 4. App Database Module
 
 - [x] 4.1 Create terraform/modules/app-database/variables.tf with app_name input
-- [x] 4.2 Create terraform/modules/app-database/main.tf with admin URL data source
+- [x] 4.2 Create terraform/modules/app-database/main.tf with admin URL data
+      source
 - [x] 4.3 Add postgresql_schema resource with underscore naming
 - [x] 4.4 Add postgresql_role resource with random password
 - [x] 4.5 Add postgresql_grant for schema permissions (CREATE, USAGE)
-- [x] 4.6 Add postgresql_grant for table permissions (SELECT, INSERT, UPDATE, DELETE)
+- [x] 4.6 Add postgresql_grant for table permissions (SELECT, INSERT, UPDATE,
+      DELETE)
 - [x] 4.7 Add google_secret_manager_secret for app-specific DATABASE_URL
 - [x] 4.8 Add google_secret_manager_secret_version with pooled connection string
 - [x] 4.9 Create terraform/modules/app-database/outputs.tf with secret_id output

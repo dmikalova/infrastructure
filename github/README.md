@@ -4,7 +4,8 @@ Terramate stacks for managing GitHub repositories with OpenTofu.
 
 ## Stacks
 
-- **cddc39/** - Repositories under the cddc39 GitHub organization (currently empty)
+- **cddc39/** - Repositories under the cddc39 GitHub organization (currently
+  empty)
 - **dmikalova/** - Repositories under the dmikalova GitHub account
 
 ## Features

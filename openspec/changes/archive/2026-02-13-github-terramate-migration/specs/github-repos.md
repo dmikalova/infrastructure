@@ -4,7 +4,8 @@ Changes from this migration:
 
 ## New Capability
 
-This is a new capability - no prior spec exists. See [spec.md](../../../specs/github-repos/spec.md) for full documentation.
+This is a new capability - no prior spec exists. See
+[spec.md](../../../specs/github-repos/spec.md) for full documentation.
 
 ## Key Differences from Previous Setup
 

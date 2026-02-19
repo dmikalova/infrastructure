@@ -160,7 +160,8 @@ tofu plan
 
 Expected output:
 
-- **No changes** for existing repos (brocket, dmikalova, dotfiles, infrastructure, synths)
+- **No changes** for existing repos (brocket, dmikalova, dotfiles,
+  infrastructure, synths)
 - **Create** for new repos (email-unsubscribe, github-meta)
 - **No changes** for transferred repos IF state addresses match
 
@@ -197,7 +198,8 @@ Remove old Terragrunt configuration:
 - `github/cddc39/` directory
 - `github/e91e63/` directory
 - `github/screeptorio/` directory
-- `github/digitalocean.hcl`, `github/helm.hcl`, `github/kubectl.hcl`, `github/kubernetes.hcl` (if GitHub-specific)
+- `github/digitalocean.hcl`, `github/helm.hcl`, `github/kubectl.hcl`,
+  `github/kubernetes.hcl` (if GitHub-specific)
 
 Keep:
 
@@ -221,7 +223,8 @@ Update `github/README.md` to document:
 
 **Owner:** User
 
-Document or archive the old DigitalOcean Spaces state location for reference. The state is no longer needed but may be useful for historical reference.
+Document or archive the old DigitalOcean Spaces state location for reference.
+The state is no longer needed but may be useful for historical reference.
 
 ---
 

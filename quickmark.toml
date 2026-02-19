@@ -1,0 +1,10 @@
+# Quickmark configuration
+# https://github.com/ekropotin/quickmark
+
+[linters.severity]
+blanks-around-fences = "off" # Allow fenced code blocks without blank lines around them
+blanks-around-lists = "off" # Disable blanks-around-lists - too strict for loose lists with spacing
+emphasis-style = "off" # Disable emphasis style consistency - allow both * and _
+fenced-code-language = "off" # Don't require language specifier in fenced code blocks
+line-length = "off" # Disable line length - let editors handle wrapping
+no-inline-html = "off" # Allow inline HTML (common in GitHub READMEs, badges)

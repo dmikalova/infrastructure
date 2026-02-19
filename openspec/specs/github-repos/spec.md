@@ -4,7 +4,9 @@ GitHub repository management via Terramate with state in GCS.
 
 ## Overview
 
-Manages GitHub repositories for dmikalova owner using OpenTofu with Terramate orchestration. State stored in Google Cloud Storage alongside GCP infrastructure state.
+Manages GitHub repositories for dmikalova owner using OpenTofu with Terramate
+orchestration. State stored in Google Cloud Storage alongside GCP infrastructure
+state.
 
 ## Structure
 
@@ -35,11 +37,13 @@ github/
 
 - **GitHub Provider**: Uses token from `secrets/github.sops.json`
 - **SOPS Provider**: Decrypts secrets at plan/apply time
-- **Backend**: GCS bucket `mklv-infrastructure-tfstate` with prefix `tfstate/github/`
+- **Backend**: GCS bucket `mklv-infrastructure-tfstate` with prefix
+  `tfstate/github/`
 
 ## Local Module
 
-Repository definitions use `terraform/modules/github/repositories` local module, which wraps `github_repository` resources with standard defaults:
+Repository definitions use `terraform/modules/github/repositories` local module,
+which wraps `github_repository` resources with standard defaults:
 
 - Visibility: public (default)
 - Features: issues, projects disabled by default

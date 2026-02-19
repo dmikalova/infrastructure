@@ -1,4 +1,4 @@
-## 1. Prerequisites
+# 1. Prerequisites
 
 - [x] 1.1 Install Terramate CLI (`brew install terramate` or equivalent)
 - [x] 1.2 Create GCP project via Console (manual one-time step)
@@ -7,9 +7,11 @@
 
 ## 2. Terramate Root Configuration
 
-- [x] 2.1 Create `gcp/` directory structure (`gcp/infra/baseline/`, `gcp/project/`)
+- [x] 2.1 Create `gcp/` directory structure (`gcp/infra/baseline/`,
+      `gcp/project/`)
 - [x] 2.2 Create `gcp/terramate.tm.hcl` with root configuration
-- [x] 2.3 Define globals: `project_id`, `region`, `fabric_version`, `billing_account_id`
+- [x] 2.3 Define globals: `project_id`, `region`, `fabric_version`,
+      `billing_account_id`
 - [x] 2.4 Add code generation block for GCS backend (`_backend.tf`)
 - [x] 2.5 Add code generation block for Google provider (`_providers.tf`)
 
@@ -17,10 +19,12 @@
 
 - [x] 3.1 Create `gcp/infra/baseline/stack.tm.hcl` with stack configuration
 - [x] 3.2 Create `gcp/infra/baseline/main.tf` with Fabric `project` module
-- [x] 3.3 Configure required APIs (Cloud Run, Artifact Registry, Secret Manager, IAM, Cloud Billing)
+- [x] 3.3 Configure required APIs (Cloud Run, Artifact Registry, Secret Manager,
+      IAM, Cloud Billing)
 - [x] 3.4 Disable default Compute Engine service account in project module
 - [x] 3.5 Add Fabric `iam-service-account` module for CI/CD service account
-- [x] 3.6 Configure service account roles (Cloud Run Admin, Artifact Registry Writer, Secret Manager Accessor)
+- [x] 3.6 Configure service account roles (Cloud Run Admin, Artifact Registry
+      Writer, Secret Manager Accessor)
 
 ## 4. State Bucket and Budget
 
@@ -47,11 +51,13 @@
 
 ## 7. Service Account Authentication
 
-_Changed approach: Using service account impersonation instead of JSON keys for better security._
+_Changed approach: Using service account impersonation instead of JSON keys for
+better security._
 
 - [x] 7.1 Configure `impersonate_service_account` in Google provider
 - [x] 7.2 Grant `roles/iam.serviceAccountTokenCreator` to owner via SOPS email
-- [x] 7.3 Grant `roles/billing.costsManager` at billing account level for budget management
+- [x] 7.3 Grant `roles/billing.costsManager` at billing account level for budget
+      management
 - [x] 7.4 Verify impersonation works with `tofu plan`
 
 ## 8. Validation

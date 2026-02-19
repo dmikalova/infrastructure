@@ -1,8 +1,13 @@
-## Context
+# Context
 
-The infrastructure repo uses Terramate + OpenTofu to manage GCP resources. Currently, CI runs via a manually-created service account (`tofu-ci`) with broad permissions. App repos (like `email-unsubscribe`) need to deploy containers to Cloud Run but shouldn't have infrastructure-level access.
+The infrastructure repo uses Terramate + OpenTofu to manage GCP resources.
+Currently, CI runs via a manually-created service account (`tofu-ci`) with broad
+permissions. App repos (like `email-unsubscribe`) need to deploy containers to
+Cloud Run but shouldn't have infrastructure-level access.
 
-GitHub Actions supports OIDC tokens that GCP can trust via Workload Identity Federation, eliminating the need for service account keys stored in GitHub secrets.
+GitHub Actions supports OIDC tokens that GCP can trust via Workload Identity
+Federation, eliminating the need for service account keys stored in GitHub
+secrets.
 
 Current state:
 
@@ -16,10 +21,14 @@ Current state:
 **Goals:**
 
 - Enable keyless GitHub Actions → GCP authentication via WIF
-- Separate permissions: infra repo gets broad access, app repos get deploy-only access
-- Define a repeatable pattern for Cloud Run services that app repos can deploy to
-- Store app secrets in Secret Manager, accessible to both Cloud Run runtime and GHA deploys
-- Support local development: all workflows runnable with `gcloud auth application-default login`
+- Separate permissions: infra repo gets broad access, app repos get deploy-only
+  access
+- Define a repeatable pattern for Cloud Run services that app repos can deploy
+  to
+- Store app secrets in Secret Manager, accessible to both Cloud Run runtime and
+  GHA deploys
+- Support local development: all workflows runnable with
+  `gcloud auth application-default login`
 
 **Non-Goals:**
 
@@ -32,14 +41,20 @@ Current state:
 
 ### 1. WIF Pool and Provider Structure
 
-**Decision:** Single pool "github" with single provider "github-oidc". Service account bindings are per-repo, not per-owner.
+**Decision:** Single pool "github" with single provider "github-oidc". Service
+account bindings are per-repo, not per-owner.
 
 **Alternatives considered:**
 
-- Owner-level binding (`repository_owner == 'dmikalova'`): Simpler but would grant access to any new repo automatically, and theoretically could allow fork-based attacks if GitHub's OIDC token structure changes
-- Separate pools per repo: Unnecessary complexity - the pool/provider is shared, only bindings differ
+- Owner-level binding (`repository_owner == 'dmikalova'`): Simpler but would
+  grant access to any new repo automatically, and theoretically could allow
+  fork-based attacks if GitHub's OIDC token structure changes
+- Separate pools per repo: Unnecessary complexity - the pool/provider is shared,
+  only bindings differ
 
-**Rationale:** Per-repo bindings provide explicit control over which repos can authenticate. The list of authorized repos is derived from repos defined in `github/` Terramate stacks, ensuring infrastructure code is the source of truth.
+**Rationale:** Per-repo bindings provide explicit control over which repos can
+authenticate. The list of authorized repos is derived from repos defined in
+`github/` Terramate stacks, ensuring infrastructure code is the source of truth.
 
 ```hcl
 # Example: explicit repo bindings on deploy SA
@@ -61,19 +76,25 @@ members = [
 
 **Alternatives considered:**
 
-- Single shared SA: Simpler but violates least privilege - a compromised app repo could modify infrastructure
+- Single shared SA: Simpler but violates least privilege - a compromised app
+  repo could modify infrastructure
 - Per-app SA: More isolated but creates management overhead as app count grows
-- `run.admin` for deploy SA: Would allow modifying service config and IAM - too permissive
+- `run.admin` for deploy SA: Would allow modifying service config and IAM - too
+  permissive
 
-**Rationale:** Two SAs provide meaningful security boundary. The deploy SA has minimal permissions:
+**Rationale:** Two SAs provide meaningful security boundary. The deploy SA has
+minimal permissions:
 
-- `run.developer`: Can deploy new revisions and manage traffic, but cannot modify service configuration, IAM, or delete services
-- No `secretmanager.secretAccessor`: Secrets are injected by Cloud Run at runtime (configured by Terraform), not read by GHA
+- `run.developer`: Can deploy new revisions and manage traffic, but cannot
+  modify service configuration, IAM, or delete services
+- No `secretmanager.secretAccessor`: Secrets are injected by Cloud Run at
+  runtime (configured by Terraform), not read by GHA
 - All service/IAM changes must go through Terraform in the infra repo
 
 ### 3. WIF Attribute Mapping
 
-**Decision:** Map `repository`, `repository_owner`, `ref`, and `actor` from GitHub's OIDC token.
+**Decision:** Map `repository`, `repository_owner`, `ref`, and `actor` from
+GitHub's OIDC token.
 
 ```hcl
 attribute_mapping = {
@@ -85,11 +106,15 @@ attribute_mapping = {
 }
 ```
 
-**Rationale:** These attributes enable per-repo IAM conditions. The `repository` attribute is essential for explicit repo bindings. The `ref` attribute could restrict prod deploys to main branch only (not implementing now but preserving option).
+**Rationale:** These attributes enable per-repo IAM conditions. The `repository`
+attribute is essential for explicit repo bindings. The `ref` attribute could
+restrict prod deploys to main branch only (not implementing now but preserving
+option).
 
 ### 4. Infra SA Binding Condition
 
-**Decision:** Restrict `github-actions-infra` to exactly `dmikalova/infrastructure` repo.
+**Decision:** Restrict `github-actions-infra` to exactly
+`dmikalova/infrastructure` repo.
 
 ```hcl
 members = [
@@ -97,11 +122,14 @@ members = [
 ]
 ```
 
-**Rationale:** The infra SA has powerful permissions. Binding to the exact repo prevents other repos from impersonating it.
+**Rationale:** The infra SA has powerful permissions. Binding to the exact repo
+prevents other repos from impersonating it.
 
 ### 5. Deploy SA Binding Condition
 
-**Decision:** Use GitHub repository topics to indicate deploy access. The WIF stack filters repositories by topic presence (e.g., `mklv-deploy`) and creates per-repo bindings automatically.
+**Decision:** Use GitHub repository topics to indicate deploy access. The WIF
+stack filters repositories by topic presence (e.g., `mklv-deploy`) and creates
+per-repo bindings automatically.
 
 ```hcl
 # In github stack:
@@ -122,30 +150,37 @@ locals {
 
 **Alternatives considered:**
 
-- Custom `deploy_access` boolean: Works but adds repo-module-specific parameter when GitHub already has native topics
+- Custom `deploy_access` boolean: Works but adds repo-module-specific parameter
+  when GitHub already has native topics
 - Owner-level wildcards: Too permissive, violates least privilege
 
-**Rationale:** GitHub topics are a native, extensible mechanism for categorizing repositories. Using `mklv-deploy` topic:
+**Rationale:** GitHub topics are a native, extensible mechanism for categorizing
+repositories. Using `mklv-deploy` topic:
 
 - Leverages GitHub's built-in feature instead of custom parameters
 - Visible in GitHub UI for quick identification of deploy-enabled repos
 - Extensible - can add other topics for different access patterns in the future
-- Single source of truth: add topic to repo definition, WIF stack picks it up automatically
+- Single source of truth: add topic to repo definition, WIF stack picks it up
+  automatically
 
 ### 6. Cloud Run Service Stack Structure
 
-**Decision:** Create a new Terramate stack per Cloud Run service at `gcp/infra/apps/<app-name>/`.
+**Decision:** Create a new Terramate stack per Cloud Run service at
+`gcp/infra/apps/<app-name>/`.
 
 **Alternatives considered:**
 
 - Single stack for all apps: Simpler but couples unrelated services
 - Separate repo for app infra: Too much separation for current scale
 
-**Rationale:** Per-app stacks allow independent deployment and clear ownership. The stack manages service definition, secrets, and IAM but NOT the container image version.
+**Rationale:** Per-app stacks allow independent deployment and clear ownership.
+The stack manages service definition, secrets, and IAM but NOT the container
+image version.
 
 ### 7. Container Image Management
 
-**Decision:** Terraform defines a placeholder image; GHA deploys actual versions. Use `ignore_changes` on image.
+**Decision:** Terraform defines a placeholder image; GHA deploys actual
+versions. Use `ignore_changes` on image.
 
 ```hcl
 resource "google_cloud_run_v2_service" "app" {
@@ -166,14 +201,18 @@ resource "google_cloud_run_v2_service" "app" {
 
 **Alternatives considered:**
 
-- Terraform manages image version: Creates tight coupling, requires infra PR for every deploy
+- Terraform manages image version: Creates tight coupling, requires infra PR for
+  every deploy
 - No placeholder: `tofu apply` would fail before first GHA deploy
 
-**Rationale:** The `ignore_changes` pattern cleanly separates concerns: Terraform owns service shape, GHA owns versions. The placeholder allows `tofu apply` to succeed before any container exists.
+**Rationale:** The `ignore_changes` pattern cleanly separates concerns:
+Terraform owns service shape, GHA owns versions. The placeholder allows
+`tofu apply` to succeed before any container exists.
 
 ### 8. Secret Manager Integration
 
-**Decision:** Terraform creates secrets (empty), values populated manually or by separate process. Cloud Run references via `secret_key_ref`.
+**Decision:** Terraform creates secrets (empty), values populated manually or by
+separate process. Cloud Run references via `secret_key_ref`.
 
 ```hcl
 resource "google_secret_manager_secret" "database_url" {
@@ -193,11 +232,14 @@ env {
 }
 ```
 
-**Rationale:** Terraform manages secret existence and IAM, but not values. Values come from SOPS files or manual entry. Using `latest` version simplifies rotation - update secret, redeploy picks it up.
+**Rationale:** Terraform manages secret existence and IAM, but not values.
+Values come from SOPS files or manual entry. Using `latest` version simplifies
+rotation - update secret, redeploy picks it up.
 
 ### 9. Local Development Auth
 
-**Decision:** All deployment commands must work with both WIF (in GHA) and Application Default Credentials (locally).
+**Decision:** All deployment commands must work with both WIF (in GHA) and
+Application Default Credentials (locally).
 
 **Implementation:**
 
@@ -206,7 +248,10 @@ env {
 - Deploy scripts/commands use standard gcloud/tofu auth chain (checks ADC first)
 - No WIF-specific code paths in actual deploy logic
 
-**Rationale:** Developers need to test deployments locally before pushing. The auth mechanism should be transparent to the deployment commands - whether credentials come from WIF or ADC, `gcloud run deploy` and `tofu apply` work identically.
+**Rationale:** Developers need to test deployments locally before pushing. The
+auth mechanism should be transparent to the deployment commands - whether
+credentials come from WIF or ADC, `gcloud run deploy` and `tofu apply` work
+identically.
 
 ## Risks / Trade-offs
 
@@ -221,10 +266,13 @@ env {
 
 ## Migration Plan
 
-**Prerequisites:** Complete `github-terramate-migration` and `supabase-setup` changes first.
+**Prerequisites:** Complete `github-terramate-migration` and `supabase-setup`
+changes first.
 
-1. **Apply WIF resources** - Pool, provider, service accounts with explicit repo bindings
-2. **Create Secret Manager secrets** - Secrets for DATABASE_URL (from supabase-setup), OAuth credentials, encryption key
+1. **Apply WIF resources** - Pool, provider, service accounts with explicit repo
+   bindings
+2. **Create Secret Manager secrets** - Secrets for DATABASE_URL (from
+   supabase-setup), OAuth credentials, encryption key
 3. **Create Cloud Run service** - `email-unsubscribe` with placeholder image
 4. **Update app repo GHA** - Add WIF auth, deploy to created service
 5. **Verify end-to-end** - Push to app repo, confirm deployment works

@@ -1,4 +1,4 @@
-## 1. GitHub Stack Output Updates
+# 1. GitHub Stack Output Updates
 
 - [x] 1.1 Add `deploy_access` variable to github/repositories module
 - [x] 1.2 Add outputs.tf to github/repositories module with repo metadata map
@@ -13,12 +13,15 @@
 ## 3. WIF Pool and Provider
 
 - [x] 3.1 Create google_iam_workload_identity_pool "github"
-- [x] 3.2 Create google_iam_workload_identity_pool_provider "github-oidc" with attribute mapping
+- [x] 3.2 Create google_iam_workload_identity_pool_provider "github-oidc" with
+      attribute mapping
 
 ## 4. Service Accounts
 
-- [x] 4.1 Create google_service_account "github-actions-infra" with broad permissions
-- [x] 4.2 Create google_service_account "github-actions-deploy" with run.developer role
+- [x] 4.1 Create google_service_account "github-actions-infra" with broad
+      permissions
+- [x] 4.2 Create google_service_account "github-actions-deploy" with
+      run.developer role
 - [x] 4.3 Add IAM binding for infra SA restricted to dmikalova/infrastructure
 - [x] 4.4 Add dynamic IAM bindings for deploy SA based on GitHub stack outputs
 
@@ -30,7 +33,8 @@
 - [x] 5.4 Create google_cloud_run_v2_service with placeholder image
 - [x] 5.5 Configure ignore_changes lifecycle for image and revision
 - [x] 5.6 Add DATABASE_URL secret reference to Cloud Run env vars
-- [x] 5.7 Grant Cloud Run service account secretmanager.secretAccessor on app secrets
+- [x] 5.7 Grant Cloud Run service account secretmanager.secretAccessor on app
+      secrets
 
 ## 6. Verification
 

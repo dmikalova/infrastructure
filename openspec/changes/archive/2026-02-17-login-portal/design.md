@@ -1,8 +1,9 @@
-## Architecture
+# Architecture
 
-### Multi-Domain Single Service with Supabase Auth
+## Multi-Domain Single Service with Supabase Auth
 
-One Cloud Run service handles authentication for multiple domain families, using Supabase Auth for OAuth and session management:
+One Cloud Run service handles authentication for multiple domain families, using
+Supabase Auth for OAuth and session management:
 
 ```
                     ┌─────────────────────────────────────┐
@@ -24,7 +25,9 @@ login.keyforge.cards┼──▶  Host: login.keyforge.cards     │
                     └─────────────────────────────────────┘
 ```
 
-The app inspects the `Host` header to determine which domain family the request is for, then issues domain-scoped cookies. Browser security enforces cookie isolation.
+The app inspects the `Host` header to determine which domain family the request
+is for, then issues domain-scoped cookies. Browser security enforces cookie
+isolation.
 
 **Supabase Auth provides:**
 
@@ -90,12 +93,14 @@ The app inspects the `Host` header to determine which domain family the request 
 Google One Tap provides automatic sign-in for returning users:
 
 1. Login page loads Google Identity Services script
-2. If user has a Google session, One Tap automatically signs in (no click required)
+2. If user has a Google session, One Tap automatically signs in (no click
+   required)
 3. Credential sent to Supabase via `signInWithIdToken`
 4. Supabase creates/updates user, returns JWT
 5. User redirected to original page
 
-For first-time users or when One Tap isn't available, falls back to standard OAuth redirect flow.
+For first-time users or when One Tap isn't available, falls back to standard
+OAuth redirect flow.
 
 **Configuration:**
 
@@ -110,7 +115,8 @@ google.accounts.id.initialize({
 google.accounts.id.prompt(); // Show One Tap UI
 ```
 
-The `auto_select: true` setting enables FedCM (Federated Credential Management) automatic sign-in when:
+The `auto_select: true` setting enables FedCM (Federated Credential Management)
+automatic sign-in when:
 
 - User has exactly one Google session in the browser
 - User hasn't opted out of auto sign-in
@@ -144,7 +150,8 @@ Supabase issues JWTs with this structure:
 
 ### Custom Claims for Domain
 
-The login portal adds a domain claim via Supabase's `app_metadata` or by wrapping the Supabase JWT:
+The login portal adds a domain claim via Supabase's `app_metadata` or by
+wrapping the Supabase JWT:
 
 **Option 1: Custom wrapper JWT** (simpler verification)
 
@@ -160,11 +167,14 @@ The login portal adds a domain claim via Supabase's `app_metadata` or by wrappin
 }
 ```
 
-**Option 2: Pass Supabase JWT directly, verify domain at app level**
+#### Option 2: Pass Supabase JWT directly, verify domain at app level
 
-Apps check the request origin matches their expected domain, relying on cookie scoping for isolation.
+Apps check the request origin matches their expected domain, relying on cookie
+scoping for isolation.
 
-**Decision: Option 2** — Keep it simple. Supabase JWT passed directly, cookie scoping provides domain isolation. Apps don't need to verify a domain claim since the cookie is only sent to the correct domain family.
+**Decision: Option 2** — Keep it simple. Supabase JWT passed directly, cookie
+scoping provides domain isolation. Apps don't need to verify a domain claim
+since the cookie is only sent to the correct domain family.
 
 ### Verification
 
@@ -192,11 +202,14 @@ SameSite=Lax           (sent on navigation, blocked for cross-site POST)
 Max-Age=604800         (7 days)
 ```
 
-**Why SameSite=Lax**: Allows top-level navigation redirects (login → app) while blocking cross-site POST for CSRF protection. `Strict` would break the redirect flow.
+**Why SameSite=Lax**: Allows top-level navigation redirects (login → app) while
+blocking cross-site POST for CSRF protection. `Strict` would break the redirect
+flow.
 
 ## Database Schema
 
-Supabase Auth manages users in `auth.users`. For per-domain audit tracking, the login service maintains a separate table in its app schema:
+Supabase Auth manages users in `auth.users`. For per-domain audit tracking, the
+login service maintains a separate table in its app schema:
 
 ```sql
 -- Per-domain login records (audit trail + multi-tenant)
@@ -233,7 +246,8 @@ Configure in Supabase Dashboard → Authentication → Providers → Google:
 
 - **Client ID**: From Google Cloud Console
 - **Client Secret**: From Google Cloud Console
-- **Authorized redirect URI**: `https://<project-ref>.supabase.co/auth/v1/callback`
+- **Authorized redirect URI**:
+  `https://<project-ref>.supabase.co/auth/v1/callback`
 
 ### Google One Tap
 
@@ -279,7 +293,9 @@ Redirect URLs:
 | `supabase-mklv-jwt-secret` | JWT verification secret    | login service + apps |
 | `login-database-url`       | Supabase connection string | login service        |
 
-**Note**: The Supabase JWT secret is already stored from the Supabase project setup. No custom OAuth credentials needed — Supabase handles the Google OAuth integration.
+**Note**: The Supabase JWT secret is already stored from the Supabase project
+setup. No custom OAuth credentials needed — Supabase handles the Google OAuth
+integration.
 
 ### Supabase Database
 
@@ -343,7 +359,8 @@ async function validateSession(token: string): Promise<SessionData | null> {
 **Out of scope for this change**, but the design anticipates:
 
 - `SKIP_AUTH=true` environment variable already exists in email-unsubscribe
-- Login service can run locally on `localhost:8000` with Supabase local dev or cloud project
+- Login service can run locally on `localhost:8000` with Supabase local dev or
+  cloud project
 - Apps can mock session by setting a fake JWT cookie in dev mode
 
 Follow-up proposal should formalize the local dev auth story.
@@ -390,7 +407,8 @@ This avoids showing the login page to already-authenticated users.
 
 ### Error Handling
 
-Authentication errors display user-friendly messages without revealing technical details:
+Authentication errors display user-friendly messages without revealing technical
+details:
 
 | Error Type             | User Message                                                |
 | ---------------------- | ----------------------------------------------------------- |
@@ -404,7 +422,8 @@ All errors allow retry via a "Try Again" button that returns to the login UI.
 
 ## Security Design
 
-Security is paramount for authentication. This section documents how the design addresses each security tenet.
+Security is paramount for authentication. This section documents how the design
+addresses each security tenet.
 
 ### No Secrets Exposed
 
