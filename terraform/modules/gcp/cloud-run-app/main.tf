@@ -122,6 +122,12 @@ resource "google_cloud_run_v2_service" "app" {
     }
   }
 
+  depends_on = [
+    google_secret_manager_secret_iam_member.database_url,
+    google_secret_manager_secret_iam_member.existing_secrets,
+    google_secret_manager_secret_iam_member.secrets,
+  ]
+
   lifecycle {
     ignore_changes = [
       client,
