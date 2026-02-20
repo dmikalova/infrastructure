@@ -92,9 +92,9 @@ module "cloud_run" {
   }
 
   secrets = {
-    "email-unsubscribe-encryption-key" = {
-      env_name = "ENCRYPTION_KEY"
-      value    = local.gcp_secrets.EMAIL_UNSUBSCRIBE_ENCRYPTION_KEY
+    "email-unsubscribe-encryption-key-base64" = {
+      env_name = "ENCRYPTION_KEY_BASE64"
+      value    = local.gcp_secrets.EMAIL_UNSUBSCRIBE_ENCRYPTION_KEY_BASE64
     }
     "email-unsubscribe-oauth-client-id" = {
       env_name = "GOOGLE_CLIENT_ID"
