@@ -78,12 +78,15 @@ resource "postgresql_grant" "tables" {
   depends_on = [postgresql_schema.app]
 }
 
-# Store app-specific connection string in Secret Manager
+# Store app-specific connection strings in Secret Manager
+# Transaction pooler (port 6543): Better for app runtime (connection pooling, IPv4)
+# Session pooler (port 5432): Required for migrations (prepared statements support)
 module "secrets" {
   source = "${var.modules_dir}/gcp/secret-manager-secret"
 
   project_id = var.gcp_project_id
   secrets = {
-    "${var.app_name}-database-url" = "postgresql://${postgresql_role.app.name}.${module.supabase_secrets.secrets["project_ref"].secret_data}:${random_password.db_password.result}@aws-0-${module.supabase_secrets.secrets["region"].secret_data}.pooler.supabase.com:6543/postgres?options=-csearch_path%3D${local.schema_name}"
+    "${var.app_name}-database-url-session"     = "postgresql://${postgresql_role.app.name}.${module.supabase_secrets.secrets["project_ref"].secret_data}:${random_password.db_password.result}@aws-0-${module.supabase_secrets.secrets["region"].secret_data}.pooler.supabase.com:5432/postgres?options=-csearch_path%3D${local.schema_name}"
+    "${var.app_name}-database-url-transaction" = "postgresql://${postgresql_role.app.name}.${module.supabase_secrets.secrets["project_ref"].secret_data}:${random_password.db_password.result}@aws-0-${module.supabase_secrets.secrets["region"].secret_data}.pooler.supabase.com:6543/postgres?options=-csearch_path%3D${local.schema_name}"
   }
 }
