@@ -79,7 +79,7 @@ module "cloud_run" {
   source = "${local.modules_dir}/gcp/cloud-run-app"
 
   app_name           = local.app_name
-  database_secret_id = module.app_database.secret_id
+  database_secret_id = module.app_database.secret_id_transaction
   domain             = "mklv.tech"
   gcp_project_id     = local.project_id
   gcp_region         = local.gcp_region

@@ -72,7 +72,7 @@ resource "google_cloud_run_v2_service" "app" {
       image = "us-docker.pkg.dev/cloudrun/container/hello"
 
       env {
-        name = "DATABASE_URL"
+        name = "DATABASE_URL_TRANSACTION"
         value_source {
           secret_key_ref {
             secret  = var.database_secret_id
