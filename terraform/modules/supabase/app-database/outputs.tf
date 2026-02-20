@@ -10,12 +10,12 @@ output "schema_name" {
   value       = local.schema_name
 }
 
-output "secret_id_session" {
+output "database_url_session_secret_id" {
   description = "Secret Manager secret ID for DATABASE_URL_SESSION (session pooler, port 5432)"
   value       = module.secrets.secrets["${var.app_name}-database-url-session"].secret_id
 }
 
-output "secret_id_transaction" {
+output "database_url_transaction_secret_id" {
   description = "Secret Manager secret ID for DATABASE_URL_TRANSACTION (transaction pooler, port 6543)"
   value       = module.secrets.secrets["${var.app_name}-database-url-transaction"].secret_id
 }

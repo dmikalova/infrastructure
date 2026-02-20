@@ -12,8 +12,14 @@ variable "app_name" {
   type        = string
 }
 
-variable "database_secret_id" {
-  description = "Secret Manager secret ID containing DATABASE_URL"
+variable "database_url_session_secret_id" {
+  description = "Secret Manager secret ID for DATABASE_URL_SESSION (session pooler, for CI migrations)"
+  type        = string
+  default     = ""
+}
+
+variable "database_url_transaction_secret_id" {
+  description = "Secret Manager secret ID for DATABASE_URL_TRANSACTION (transaction pooler)"
   type        = string
 }
 

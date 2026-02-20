@@ -61,12 +61,13 @@ module "app_database" {
 module "cloud_run" {
   source = "${local.modules_dir}/gcp/cloud-run-app"
 
-  app_name           = local.app_name
-  database_secret_id = module.app_database.secret_id_transaction
-  domain             = local.primary_domain
-  gcp_project_id     = local.project_id
-  gcp_region         = local.gcp_region
-  modules_dir        = local.modules_dir
+  app_name                           = local.app_name
+  database_url_session_secret_id     = module.app_database.database_url_session_secret_id
+  database_url_transaction_secret_id = module.app_database.database_url_transaction_secret_id
+  domain                             = local.primary_domain
+  gcp_project_id                     = local.project_id
+  gcp_region                         = local.gcp_region
+  modules_dir                        = local.modules_dir
 
   existing_secrets = {
     "supabase-mklv-publishable-key" = {
@@ -87,16 +88,6 @@ module "cloud_run" {
       value    = local.supabase_secrets.SUPABASE_MKLV_JWT_KEY
     }
   }
-}
-
-# CI/CD Migrations Access
-
-# Grant GitHub Actions deploy SA access to database secret for migrations
-resource "google_secret_manager_secret_iam_member" "deploy_database_access" {
-  member    = "serviceAccount:github-actions-deploy@${local.project_id}.iam.gserviceaccount.com"
-  project   = local.project_id
-  role      = "roles/secretmanager.secretAccessor"
-  secret_id = module.app_database.secret_id_session
 }
 
 # Additional Domain Mappings

@@ -29,11 +29,11 @@ resource "google_service_account" "cloud_run" {
 }
 
 # Grant service account access to database secret
-resource "google_secret_manager_secret_iam_member" "database_url" {
+resource "google_secret_manager_secret_iam_member" "database_url_transaction" {
   member    = "serviceAccount:${google_service_account.cloud_run.email}"
   project   = var.gcp_project_id
   role      = "roles/secretmanager.secretAccessor"
-  secret_id = var.database_secret_id
+  secret_id = var.database_url_transaction_secret_id
 }
 
 # Grant service account access to app secrets
@@ -75,7 +75,7 @@ resource "google_cloud_run_v2_service" "app" {
         name = "DATABASE_URL_TRANSACTION"
         value_source {
           secret_key_ref {
-            secret  = var.database_secret_id
+            secret  = var.database_url_transaction_secret_id
             version = "latest"
           }
         }
@@ -123,7 +123,7 @@ resource "google_cloud_run_v2_service" "app" {
   }
 
   depends_on = [
-    google_secret_manager_secret_iam_member.database_url,
+    google_secret_manager_secret_iam_member.database_url_transaction,
     google_secret_manager_secret_iam_member.existing_secrets,
     google_secret_manager_secret_iam_member.secrets,
   ]
@@ -155,11 +155,21 @@ resource "google_service_account_iam_member" "deploy_can_act_as" {
 }
 
 # Grant deploy SA access to database secret (required for Cloud Run deployment validation)
-resource "google_secret_manager_secret_iam_member" "deploy_database_url" {
+resource "google_secret_manager_secret_iam_member" "deploy_database_url_transaction" {
   member    = "serviceAccount:github-actions-deploy@${var.gcp_project_id}.iam.gserviceaccount.com"
   project   = var.gcp_project_id
   role      = "roles/secretmanager.secretAccessor"
-  secret_id = var.database_secret_id
+  secret_id = var.database_url_transaction_secret_id
+}
+
+# Grant deploy SA access to session database secret (required for CI migrations)
+resource "google_secret_manager_secret_iam_member" "deploy_database_url_session" {
+  count = var.database_url_session_secret_id != "" ? 1 : 0
+
+  member    = "serviceAccount:github-actions-deploy@${var.gcp_project_id}.iam.gserviceaccount.com"
+  project   = var.gcp_project_id
+  role      = "roles/secretmanager.secretAccessor"
+  secret_id = var.database_url_session_secret_id
 }
 
 # Grant deploy SA access to app secrets (required for Cloud Run deployment validation)
