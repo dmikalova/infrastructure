@@ -5,8 +5,8 @@
 
 locals {
   domains = [
-    # "cddc39.tech",
-    # "dmikalova.dev",
+    "cddc39.tech",
+    "dmikalova.dev",
     "keyforge.cards",
     "mklv.tech",
   ]
