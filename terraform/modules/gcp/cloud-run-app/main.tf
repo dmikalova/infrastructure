@@ -56,6 +56,119 @@ resource "google_secret_manager_secret_iam_member" "existing_secrets" {
   secret_id = each.value
 }
 
+# Private Storage Bucket (for app-specific data, not publicly accessible)
+
+resource "google_storage_bucket" "private" {
+  count = var.private_bucket ? 1 : 0
+
+  force_destroy               = false
+  location                    = var.gcp_region
+  name                        = "mklv-${var.app_name}-private"
+  project                     = var.gcp_project_id
+  public_access_prevention    = "enforced"
+  uniform_bucket_level_access = true
+
+  dynamic "lifecycle_rule" {
+    for_each = var.private_bucket_lifecycle_rules
+    content {
+      action {
+        type = "Delete"
+      }
+      condition {
+        age            = lifecycle_rule.value.age_days
+        matches_prefix = [lifecycle_rule.value.prefix]
+        with_state     = "ANY"
+      }
+    }
+  }
+}
+
+resource "google_storage_bucket_iam_member" "private_storage" {
+  count = var.private_bucket ? 1 : 0
+
+  bucket = google_storage_bucket.private[0].name
+  member = "serviceAccount:${google_service_account.cloud_run.email}"
+  role   = "roles/storage.objectAdmin"
+}
+
+# Public Storage Bucket (for static frontend assets, publicly accessible)
+
+resource "google_storage_bucket" "public" {
+  count = var.public_bucket ? 1 : 0
+
+  force_destroy               = false
+  location                    = var.gcp_region
+  name                        = "mklv-${var.app_name}-public"
+  project                     = var.gcp_project_id
+  uniform_bucket_level_access = true
+
+  versioning {
+    enabled = true
+  }
+
+  lifecycle_rule {
+    action {
+      type = "Delete"
+    }
+    condition {
+      num_newer_versions = 4
+      with_state         = "ARCHIVED"
+    }
+  }
+
+  lifecycle_rule {
+    action {
+      type = "Delete"
+    }
+    condition {
+      age        = 90
+      with_state = "ARCHIVED"
+    }
+  }
+
+  website {
+    main_page_suffix = "index.html"
+    not_found_page   = "index.html"
+  }
+
+  cors {
+    origin          = ["*"]
+    method          = ["GET", "HEAD"]
+    response_header = ["*"]
+    max_age_seconds = 3600
+  }
+}
+
+# Public bucket IAM: allUsers can read
+
+resource "google_storage_bucket_iam_member" "public_all_users" {
+  count = var.public_bucket ? 1 : 0
+
+  bucket = google_storage_bucket.public[0].name
+  member = "allUsers"
+  role   = "roles/storage.objectViewer"
+}
+
+# Public bucket IAM: Cloud Run service account can write (for app-managed uploads)
+
+resource "google_storage_bucket_iam_member" "public_app_write" {
+  count = var.public_bucket ? 1 : 0
+
+  bucket = google_storage_bucket.public[0].name
+  member = "serviceAccount:${google_service_account.cloud_run.email}"
+  role   = "roles/storage.objectAdmin"
+}
+
+# Public bucket IAM: CI service account can write (for deploying frontend assets)
+
+resource "google_storage_bucket_iam_member" "public_ci_write" {
+  count = var.public_bucket && var.ci_service_account != "" ? 1 : 0
+
+  bucket = google_storage_bucket.public[0].name
+  member = "serviceAccount:${var.ci_service_account}"
+  role   = "roles/storage.objectAdmin"
+}
+
 # Cloud Run Service
 
 # Cloud Run service (placeholder image, deployed via CI/CD)
@@ -107,11 +220,71 @@ resource "google_cloud_run_v2_service" "app" {
         }
       }
 
+      dynamic "env" {
+        for_each = var.private_bucket ? [1] : []
+        content {
+          name  = "PRIVATE_BUCKET_NAME"
+          value = google_storage_bucket.private[0].name
+        }
+      }
+
+      dynamic "env" {
+        for_each = var.public_bucket ? [1] : []
+        content {
+          name  = "PUBLIC_BUCKET_NAME"
+          value = google_storage_bucket.public[0].name
+        }
+      }
+
+      dynamic "env" {
+        for_each = var.public_bucket ? [1] : []
+        content {
+          name  = "PUBLIC_BUCKET_URL"
+          value = "https://storage.googleapis.com/${google_storage_bucket.public[0].name}"
+        }
+      }
+
+      dynamic "env" {
+        for_each = var.env_vars
+        content {
+          name  = env.key
+          value = env.value
+        }
+      }
+
       resources {
         cpu_idle = true
         limits = {
           cpu    = "1"
           memory = "512Mi"
+        }
+      }
+    }
+
+    # Sidecar containers
+    dynamic "containers" {
+      for_each = var.sidecars
+      content {
+        name    = containers.value.name
+        image   = containers.value.image
+        command = containers.value.command
+        args    = containers.value.args
+
+
+        dynamic "env" {
+          for_each = containers.value.env
+          content {
+            name  = env.key
+            value = env.value
+          }
+        }
+
+        resources {
+          cpu_idle = true
+          limits = {
+            cpu    = containers.value.cpu
+            memory = containers.value.memory
+          }
         }
       }
     }
@@ -238,4 +411,55 @@ resource "google_dns_record_set" "custom_domain" {
   rrdatas      = ["ghs.googlehosted.com."]
   ttl          = 300
   type         = "CNAME"
+}
+
+# Scheduled Jobs
+
+resource "google_service_account" "scheduler" {
+  count = length(var.scheduled_jobs) > 0 ? 1 : 0
+
+  account_id   = "${var.app_name}-scheduler"
+  description  = "Cloud Scheduler invoker for ${var.app_name}"
+  display_name = "${var.app_name} Scheduler"
+  project      = var.gcp_project_id
+}
+
+resource "google_cloud_run_v2_service_iam_member" "scheduler_invoker" {
+  count = length(var.scheduled_jobs) > 0 ? 1 : 0
+
+  location = google_cloud_run_v2_service.app.location
+  member   = "serviceAccount:${google_service_account.scheduler[0].email}"
+  name     = google_cloud_run_v2_service.app.name
+  project  = var.gcp_project_id
+  role     = "roles/run.invoker"
+}
+
+resource "google_cloud_scheduler_job" "jobs" {
+  for_each = { for job in var.scheduled_jobs : job.name => job }
+
+  attempt_deadline = "320s"
+  name             = "${var.app_name}-${each.value.name}"
+  project          = var.gcp_project_id
+  region           = var.gcp_region
+  schedule         = each.value.schedule
+  time_zone        = each.value.timezone
+
+  http_target {
+    body        = base64encode(each.value.body)
+    http_method = each.value.method
+    uri         = "${google_cloud_run_v2_service.app.uri}${each.value.path}"
+
+    oidc_token {
+      audience              = google_cloud_run_v2_service.app.uri
+      service_account_email = google_service_account.scheduler[0].email
+    }
+  }
+
+  retry_config {
+    max_backoff_duration = "3600s"
+    max_doublings        = 5
+    max_retry_duration   = "0s"
+    min_backoff_duration = "5s"
+    retry_count          = 0
+  }
 }

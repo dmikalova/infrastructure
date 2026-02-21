@@ -44,8 +44,38 @@ resource "google_artifact_registry_repository_iam_member" "ghcr_deploy" {
   role       = "roles/artifactregistry.reader"
 }
 
-# Output the GHCR proxy URL for use in workflows
-output "ghcr_proxy_url" {
-  description = "Artifact Registry URL that proxies GHCR (use in Cloud Run deployments)"
-  value       = "${local.gcp_region}-docker.pkg.dev/${local.project_id}/${google_artifact_registry_repository.ghcr.repository_id}"
+# Artifact Registry - remote repository proxying Microsoft Container Registry
+# Allows Cloud Run to pull images like Playwright from MCR
+resource "google_artifact_registry_repository" "mcr" {
+  description   = "Remote repository proxying Microsoft Container Registry"
+  format        = "DOCKER"
+  location      = local.gcp_region
+  mode          = "REMOTE_REPOSITORY"
+  project       = local.project_id
+  repository_id = "mcr"
+
+  remote_repository_config {
+    docker_repository {
+      custom_repository {
+        uri = "https://mcr.microsoft.com"
+      }
+    }
+  }
+}
+
+resource "google_artifact_registry_repository_iam_member" "mcr_cloudrun" {
+  location   = google_artifact_registry_repository.mcr.location
+  member     = "serviceAccount:service-${data.google_project.main.number}@serverless-robot-prod.iam.gserviceaccount.com"
+  project    = local.project_id
+  repository = google_artifact_registry_repository.mcr.name
+  role       = "roles/artifactregistry.reader"
+}
+
+# Grant GitHub Actions deploy SA access to pull MCR images for deployment
+resource "google_artifact_registry_repository_iam_member" "mcr_deploy" {
+  location   = google_artifact_registry_repository.mcr.location
+  member     = "serviceAccount:github-actions-deploy@${local.project_id}.iam.gserviceaccount.com"
+  project    = local.project_id
+  repository = google_artifact_registry_repository.mcr.name
+  role       = "roles/artifactregistry.reader"
 }

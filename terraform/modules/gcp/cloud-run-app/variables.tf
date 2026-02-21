@@ -60,3 +60,69 @@ variable "existing_secrets" {
   }))
   default = {}
 }
+
+variable "env_vars" {
+  description = "Non-sensitive environment variables for Cloud Run container"
+  type        = map(string)
+  default     = {}
+}
+
+# Storage Buckets
+
+variable "private_bucket" {
+  description = "Create app-specific private GCS bucket for file storage"
+  type        = bool
+  default     = false
+}
+
+variable "private_bucket_lifecycle_rules" {
+  description = "Lifecycle rules for private GCS bucket. Each rule applies to objects with the specified prefix."
+  type = list(object({
+    prefix   = string # Object name prefix (e.g., 'traces/')
+    age_days = number # Delete objects older than this many days
+  }))
+  default = []
+}
+
+variable "public_bucket" {
+  description = "Create app-specific public GCS bucket for static frontend assets"
+  type        = bool
+  default     = false
+}
+
+variable "ci_service_account" {
+  description = "CI service account email for deploying frontend assets to public bucket"
+  type        = string
+  default     = ""
+}
+
+# Sidecars
+
+variable "sidecars" {
+  description = "Sidecar containers to run alongside the main app container. Sidecars communicate via localhost, not exposed ports."
+  type = list(object({
+    name    = string                    # Container name
+    image   = string                    # Container image
+    cpu     = optional(string, "1")     # CPU limit
+    memory  = optional(string, "512Mi") # Memory limit
+    command = optional(list(string))    # Container entrypoint
+    args    = optional(list(string))    # Container arguments
+    env     = optional(map(string), {}) # Environment variables
+  }))
+  default = []
+}
+
+# Scheduled Jobs
+
+variable "scheduled_jobs" {
+  description = "Cloud Scheduler jobs to invoke the Cloud Run service"
+  type = list(object({
+    name     = string                    # Job name
+    schedule = string                    # Cron expression
+    path     = string                    # HTTP path to invoke
+    method   = optional(string, "POST")  # HTTP method
+    body     = optional(string, "")      # Request body
+    timezone = optional(string, "UTC")   # Timezone for schedule
+  }))
+  default = []
+}
