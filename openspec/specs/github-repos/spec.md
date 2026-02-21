@@ -20,18 +20,18 @@ github/
 
 ## Repositories Managed
 
-| Repository        | Description                                              |
-| ----------------- | -------------------------------------------------------- |
-| brocket           | run-or-raise script                                      |
-| dmikalova         | personal profile                                         |
-| dotfiles          | personal dotfiles                                        |
-| email-unsubscribe | Gmail inbox cleanup automation                           |
-| github-meta       | reusable workflows, Dagger pipelines, and repo standards |
-| infrastructure    | terramate infrastructure configuration                   |
-| lists             | manage lists                                             |
-| recipes           | manage recipes                                           |
-| synths            | personal synth notes                                     |
-| todos             | manage todos                                             |
+| Repository        | Description                            |
+| ----------------- | -------------------------------------- |
+| brocket           | run-or-raise script                    |
+| dmikalova         | personal profile                       |
+| dotfiles          | personal dotfiles                      |
+| email-unsubscribe | Gmail inbox cleanup automation         |
+| github-meta       | reusable workflows and repo standards  |
+| infrastructure    | terramate infrastructure configuration |
+| lists             | manage lists                           |
+| recipes           | manage recipes                         |
+| synths            | personal synth notes                   |
+| todos             | manage todos                           |
 
 ## Provider Configuration
 

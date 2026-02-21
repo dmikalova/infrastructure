@@ -2,6 +2,14 @@
 #
 # App-specific configuration using the cloud-run-app module.
 
+data "terraform_remote_state" "platform" {
+  backend = "gcs"
+  config = {
+    bucket = "mklv-infrastructure-tfstate"
+    prefix = "tfstate/gcp/infra/platform"
+  }
+}
+
 locals {
   app_name              = "email-unsubscribe"
   supabase_project_name = "mklv"
@@ -85,6 +93,45 @@ module "cloud_run" {
   gcp_project_id                     = local.project_id
   gcp_region                         = local.gcp_region
   modules_dir                        = local.modules_dir
+
+  # GCS private storage for Playwright traces
+  private_bucket = true
+  private_bucket_lifecycle_rules = [
+    {
+      prefix   = "traces/"
+      age_days = 90
+    }
+  ]
+
+  # GCS public storage for static frontend assets
+  public_bucket      = true
+  ci_service_account = "tofu-ci@mklv-infrastructure.iam.gserviceaccount.com"
+
+  # Playwright sidecar for browser automation (communicates via ws://localhost:3000)
+  sidecars = [
+    {
+      name    = "playwright"
+      image   = "${data.terraform_remote_state.platform.outputs.mcr_proxy_url}/playwright:v1.58.2-noble"
+      cpu     = "1"
+      memory  = "1Gi"
+      command = ["npx", "playwright", "run-server", "--port", "3000"]
+    }
+  ]
+
+  # Weekly scan job (Sunday 6am UTC / Saturday 10pm PST)
+  scheduled_jobs = [
+    {
+      name     = "weekly-scan"
+      schedule = "0 6 * * 0"
+      path     = "/api/scan"
+      method   = "POST"
+      timezone = "UTC"
+    }
+  ]
+
+  env_vars = {
+    PLAYWRIGHT_WS_ENDPOINT = "ws://localhost:3000"
+  }
 
   existing_secrets = {
     "supabase-mklv-url" = {
