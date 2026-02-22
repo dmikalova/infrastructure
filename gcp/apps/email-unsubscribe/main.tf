@@ -94,18 +94,13 @@ module "cloud_run" {
   gcp_region                         = local.gcp_region
   modules_dir                        = local.modules_dir
 
-  # GCS private storage for Playwright traces
-  private_bucket = true
-  private_bucket_lifecycle_rules = [
+  # GCS storage for Playwright traces
+  bucket_lifecycle_rules = [
     {
       prefix   = "traces/"
       age_days = 90
     }
   ]
-
-  # GCS public storage for static frontend assets
-  public_bucket      = true
-  ci_service_account = "tofu-ci@mklv-infrastructure.iam.gserviceaccount.com"
 
   # Playwright sidecar for browser automation (communicates via ws://localhost:3000)
   sidecars = [

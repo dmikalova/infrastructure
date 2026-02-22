@@ -73,6 +73,6 @@ resource "github_actions_secret" "deploy_secrets" {
   for_each = local.repo_secret_keys
 
   plaintext_value = var.secrets[each.value.name]
-  repository      = each.value.repo
+  repository      = github_repository.repos[each.value.repo].name
   secret_name     = each.value.name
 }
