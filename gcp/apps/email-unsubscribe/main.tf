@@ -118,7 +118,7 @@ module "cloud_run" {
     {
       name     = "weekly-scan"
       schedule = "0 6 * * 0"
-      path     = "/api/scan"
+      path     = "/api/scan-all"
       method   = "POST"
       timezone = "UTC"
     }
