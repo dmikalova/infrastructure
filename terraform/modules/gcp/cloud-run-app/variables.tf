@@ -28,9 +28,15 @@ variable "database_url_transaction_secret_id" {
 }
 
 variable "domain" {
-  description = "Parent domain for the app. When set, creates a domain mapping at <app_name>.<domain> and a CNAME record."
+  description = "Parent domain for the app. When set, creates a domain mapping and DNS record. Use subdomain to customize the prefix, or set subdomain=\"\" for apex domain."
   type        = string
   default     = ""
+}
+
+variable "subdomain" {
+  description = "Subdomain prefix for domain mapping. Defaults to app_name. Set to empty string for apex domain (e.g., mklv.tech instead of app.mklv.tech)."
+  type        = string
+  default     = null
 }
 
 variable "gcp_project_id" {
