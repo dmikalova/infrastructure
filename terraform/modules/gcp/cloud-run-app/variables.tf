@@ -6,6 +6,9 @@
 # - Optional extra environment secrets (created by module)
 # - Public access
 # - GitHub Actions deploy permission
+# - GCS bucket for app storage
+# - startup_cpu_boost for faster cold starts
+# - warm label for centralized warming
 
 variable "app_name" {
   description = "Application name (used for service and service account naming)"
@@ -21,6 +24,7 @@ variable "database_url_session_secret_id" {
 variable "database_url_transaction_secret_id" {
   description = "Secret Manager secret ID for DATABASE_URL_TRANSACTION (transaction pooler)"
   type        = string
+  default     = ""
 }
 
 variable "domain" {
@@ -67,16 +71,10 @@ variable "env_vars" {
   default     = {}
 }
 
-# Storage Buckets
+# Storage Bucket
 
-variable "private_bucket" {
-  description = "Create app-specific private GCS bucket for file storage"
-  type        = bool
-  default     = false
-}
-
-variable "private_bucket_lifecycle_rules" {
-  description = "Lifecycle rules for private GCS bucket. Each rule applies to objects with the specified prefix."
+variable "bucket_lifecycle_rules" {
+  description = "Lifecycle rules for GCS bucket. Each rule applies to objects with the specified prefix."
   type = list(object({
     prefix   = string # Object name prefix (e.g., 'traces/')
     age_days = number # Delete objects older than this many days
@@ -84,16 +82,12 @@ variable "private_bucket_lifecycle_rules" {
   default = []
 }
 
-variable "public_bucket" {
-  description = "Create app-specific public GCS bucket for static frontend assets"
-  type        = bool
-  default     = false
-}
+# Warming
 
-variable "ci_service_account" {
-  description = "CI service account email for deploying frontend assets to public bucket"
-  type        = string
-  default     = ""
+variable "warm" {
+  description = "Whether to include this service in centralized warming (adds warm=true label)"
+  type        = bool
+  default     = true
 }
 
 # Sidecars
@@ -117,12 +111,12 @@ variable "sidecars" {
 variable "scheduled_jobs" {
   description = "Cloud Scheduler jobs to invoke the Cloud Run service"
   type = list(object({
-    name     = string                    # Job name
-    schedule = string                    # Cron expression
-    path     = string                    # HTTP path to invoke
-    method   = optional(string, "POST")  # HTTP method
-    body     = optional(string, "")      # Request body
-    timezone = optional(string, "UTC")   # Timezone for schedule
+    name     = string                   # Job name
+    schedule = string                   # Cron expression
+    path     = string                   # HTTP path to invoke
+    method   = optional(string, "POST") # HTTP method
+    body     = optional(string, "")     # Request body
+    timezone = optional(string, "UTC")  # Timezone for schedule
   }))
   default = []
 }

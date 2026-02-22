@@ -42,6 +42,10 @@ module "repositories" {
       description = "centralized login portal for multi-domain authentication"
       topics      = ["mklv-deploy", "mklv-tech"]
     }
+    "mklv.tech" = {
+      description = "warming service and landing page for mklv.tech"
+      topics      = ["mklv-deploy", "mklv-tech"]
+    }
     recipes = {
       description = "manage recipes"
     }
@@ -50,6 +54,7 @@ module "repositories" {
     }
     todos = {
       description = "manage todos"
+      topics      = ["mklv-deploy", "mklv-tech"]
     }
   }
   secrets = {

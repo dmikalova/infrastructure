@@ -30,6 +30,8 @@ resource "google_service_account" "cloud_run" {
 
 # Grant service account access to database secret
 resource "google_secret_manager_secret_iam_member" "database_url_transaction" {
+  count = var.database_url_transaction_secret_id != "" ? 1 : 0
+
   member    = "serviceAccount:${google_service_account.cloud_run.email}"
   project   = var.gcp_project_id
   role      = "roles/secretmanager.secretAccessor"
@@ -56,20 +58,18 @@ resource "google_secret_manager_secret_iam_member" "existing_secrets" {
   secret_id = each.value
 }
 
-# Private Storage Bucket (for app-specific data, not publicly accessible)
+# Storage Bucket (for app-specific data, not publicly accessible)
 
-resource "google_storage_bucket" "private" {
-  count = var.private_bucket ? 1 : 0
-
+resource "google_storage_bucket" "bucket" {
   force_destroy               = false
   location                    = var.gcp_region
-  name                        = "mklv-${var.app_name}-private"
+  name                        = "mklv-${var.app_name}"
   project                     = var.gcp_project_id
   public_access_prevention    = "enforced"
   uniform_bucket_level_access = true
 
   dynamic "lifecycle_rule" {
-    for_each = var.private_bucket_lifecycle_rules
+    for_each = var.bucket_lifecycle_rules
     content {
       action {
         type = "Delete"
@@ -83,89 +83,9 @@ resource "google_storage_bucket" "private" {
   }
 }
 
-resource "google_storage_bucket_iam_member" "private_storage" {
-  count = var.private_bucket ? 1 : 0
-
-  bucket = google_storage_bucket.private[0].name
+resource "google_storage_bucket_iam_member" "bucket_storage" {
+  bucket = google_storage_bucket.bucket.name
   member = "serviceAccount:${google_service_account.cloud_run.email}"
-  role   = "roles/storage.objectAdmin"
-}
-
-# Public Storage Bucket (for static frontend assets, publicly accessible)
-
-resource "google_storage_bucket" "public" {
-  count = var.public_bucket ? 1 : 0
-
-  force_destroy               = false
-  location                    = var.gcp_region
-  name                        = "mklv-${var.app_name}-public"
-  project                     = var.gcp_project_id
-  uniform_bucket_level_access = true
-
-  versioning {
-    enabled = true
-  }
-
-  lifecycle_rule {
-    action {
-      type = "Delete"
-    }
-    condition {
-      num_newer_versions = 4
-      with_state         = "ARCHIVED"
-    }
-  }
-
-  lifecycle_rule {
-    action {
-      type = "Delete"
-    }
-    condition {
-      age        = 90
-      with_state = "ARCHIVED"
-    }
-  }
-
-  website {
-    main_page_suffix = "index.html"
-    not_found_page   = "index.html"
-  }
-
-  cors {
-    origin          = ["*"]
-    method          = ["GET", "HEAD"]
-    response_header = ["*"]
-    max_age_seconds = 3600
-  }
-}
-
-# Public bucket IAM: allUsers can read
-
-resource "google_storage_bucket_iam_member" "public_all_users" {
-  count = var.public_bucket ? 1 : 0
-
-  bucket = google_storage_bucket.public[0].name
-  member = "allUsers"
-  role   = "roles/storage.objectViewer"
-}
-
-# Public bucket IAM: Cloud Run service account can write (for app-managed uploads)
-
-resource "google_storage_bucket_iam_member" "public_app_write" {
-  count = var.public_bucket ? 1 : 0
-
-  bucket = google_storage_bucket.public[0].name
-  member = "serviceAccount:${google_service_account.cloud_run.email}"
-  role   = "roles/storage.objectAdmin"
-}
-
-# Public bucket IAM: CI service account can write (for deploying frontend assets)
-
-resource "google_storage_bucket_iam_member" "public_ci_write" {
-  count = var.public_bucket && var.ci_service_account != "" ? 1 : 0
-
-  bucket = google_storage_bucket.public[0].name
-  member = "serviceAccount:${var.ci_service_account}"
   role   = "roles/storage.objectAdmin"
 }
 
@@ -178,18 +98,25 @@ resource "google_cloud_run_v2_service" "app" {
   name     = var.app_name
   project  = var.gcp_project_id
 
+  labels = {
+    warm = tostring(var.warm)
+  }
+
   template {
     service_account = google_service_account.cloud_run.email
 
     containers {
       image = "us-docker.pkg.dev/cloudrun/container/hello"
 
-      env {
-        name = "DATABASE_URL_TRANSACTION"
-        value_source {
-          secret_key_ref {
-            secret  = var.database_url_transaction_secret_id
-            version = "latest"
+      dynamic "env" {
+        for_each = var.database_url_transaction_secret_id != "" ? [1] : []
+        content {
+          name = "DATABASE_URL_TRANSACTION"
+          value_source {
+            secret_key_ref {
+              secret  = var.database_url_transaction_secret_id
+              version = "latest"
+            }
           }
         }
       }
@@ -220,28 +147,9 @@ resource "google_cloud_run_v2_service" "app" {
         }
       }
 
-      dynamic "env" {
-        for_each = var.private_bucket ? [1] : []
-        content {
-          name  = "PRIVATE_BUCKET_NAME"
-          value = google_storage_bucket.private[0].name
-        }
-      }
-
-      dynamic "env" {
-        for_each = var.public_bucket ? [1] : []
-        content {
-          name  = "PUBLIC_BUCKET_NAME"
-          value = google_storage_bucket.public[0].name
-        }
-      }
-
-      dynamic "env" {
-        for_each = var.public_bucket ? [1] : []
-        content {
-          name  = "PUBLIC_BUCKET_URL"
-          value = "https://storage.googleapis.com/${google_storage_bucket.public[0].name}"
-        }
+      env {
+        name  = "BUCKET_NAME"
+        value = google_storage_bucket.bucket.name
       }
 
       dynamic "env" {
@@ -253,7 +161,8 @@ resource "google_cloud_run_v2_service" "app" {
       }
 
       resources {
-        cpu_idle = true
+        cpu_idle          = true
+        startup_cpu_boost = true
         limits = {
           cpu    = "1"
           memory = "512Mi"
@@ -280,7 +189,8 @@ resource "google_cloud_run_v2_service" "app" {
         }
 
         resources {
-          cpu_idle = true
+          cpu_idle          = true
+          startup_cpu_boost = true
           limits = {
             cpu    = containers.value.cpu
             memory = containers.value.memory
@@ -329,6 +239,8 @@ resource "google_service_account_iam_member" "deploy_can_act_as" {
 
 # Grant deploy SA access to database secret (required for Cloud Run deployment validation)
 resource "google_secret_manager_secret_iam_member" "deploy_database_url_transaction" {
+  count = var.database_url_transaction_secret_id != "" ? 1 : 0
+
   member    = "serviceAccount:github-actions-deploy@${var.gcp_project_id}.iam.gserviceaccount.com"
   project   = var.gcp_project_id
   role      = "roles/secretmanager.secretAccessor"
