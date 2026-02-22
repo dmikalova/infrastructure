@@ -292,8 +292,12 @@ resource "google_secret_manager_secret_iam_member" "deploy_existing_secrets" {
 # This is a one-time manual setup per domain.
 
 locals {
-  custom_domain = var.domain != "" ? "${var.app_name}.${var.domain}" : ""
-  dns_zone_name = var.domain != "" ? replace(var.domain, ".", "-") : ""
+  # subdomain defaults to app_name, set to "" for apex domain
+  subdomain_prefix = var.subdomain != null ? var.subdomain : var.app_name
+  custom_domain    = var.domain != "" ? (local.subdomain_prefix != "" ? "${local.subdomain_prefix}.${var.domain}" : var.domain) : ""
+  dns_zone_name    = var.domain != "" ? replace(var.domain, ".", "-") : ""
+  # Apex domains need A records, subdomains use CNAME
+  is_apex_domain = local.subdomain_prefix == "" && var.domain != ""
 }
 
 # Domain mapping for custom domain (conditional)
@@ -313,9 +317,9 @@ resource "google_cloud_run_domain_mapping" "custom" {
   }
 }
 
-# CNAME record pointing custom domain to Google hosted services (conditional)
+# CNAME record for subdomain (conditional)
 resource "google_dns_record_set" "custom_domain" {
-  count = local.custom_domain != "" ? 1 : 0
+  count = local.custom_domain != "" && !local.is_apex_domain ? 1 : 0
 
   managed_zone = local.dns_zone_name
   name         = "${local.custom_domain}."
@@ -323,6 +327,32 @@ resource "google_dns_record_set" "custom_domain" {
   rrdatas      = ["ghs.googlehosted.com."]
   ttl          = 300
   type         = "CNAME"
+}
+
+# A records for apex domain (Cloud Run IPs)
+resource "google_dns_record_set" "apex_domain" {
+  count = local.is_apex_domain ? 1 : 0
+
+  managed_zone = local.dns_zone_name
+  name         = "${local.custom_domain}."
+  project      = var.gcp_project_id
+  # Cloud Run apex domain IPs (documented at https://cloud.google.com/run/docs/mapping-custom-domains#dns_update)
+  rrdatas = ["216.239.32.21", "216.239.34.21", "216.239.36.21", "216.239.38.21"]
+  ttl     = 300
+  type    = "A"
+}
+
+# AAAA records for apex domain (Cloud Run IPv6)
+resource "google_dns_record_set" "apex_domain_ipv6" {
+  count = local.is_apex_domain ? 1 : 0
+
+  managed_zone = local.dns_zone_name
+  name         = "${local.custom_domain}."
+  project      = var.gcp_project_id
+  # Cloud Run apex domain IPv6 IPs
+  rrdatas = ["2001:4860:4802:32::15", "2001:4860:4802:34::15", "2001:4860:4802:36::15", "2001:4860:4802:38::15"]
+  ttl     = 300
+  type    = "AAAA"
 }
 
 # Scheduled Jobs
