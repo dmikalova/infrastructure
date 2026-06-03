@@ -5,8 +5,20 @@ provider "registry.opentofu.org/namecheap/namecheap" {
   version     = "2.2.0"
   constraints = "~> 2.0"
   hashes = [
+    "h1:+6ormW8CsOFlCqb76z2oYQu1fvO9HFGClX7N1bIRpRA=",
+    "h1:+JlBYvRCmSO8GCSsA7pizKiSdBbC/jvaHjhZGRnDo8M=",
+    "h1:8bhMiVB6tPPz+lS0E3odnr9PHhXV5rLVAJgYV5mq1TQ=",
+    "h1:A/nWflOzClC2/Rh8MqiV1PsqquzCpbvLP1LRBboB4fU=",
+    "h1:ArYwsu2+T4fIbVpG2W942mwUcGZ8+p9IhrielQyQtAg=",
+    "h1:KmvpmwEmtQkBnG/RkdLz1KDKyETUnWTmArIBBb09jfo=",
     "h1:WAoYF2thh6PhrJe1/AxCKGJVfw3aoUmZ3OLIh6hMKBY=",
     "h1:WNWIfriLO2rmzcdQCTnAu7bBeQiFvHC5J5mFJMiqQrk=",
+    "h1:WaS5Ij7pX7EuJD85DO1reQ8VH5244KZ4lkKCpj2bbnw=",
+    "h1:eYXN9AGT5O9/S793wf94MeqXBbQcFOk4aY81tro4GxY=",
+    "h1:jOGrQospUTy/QGXsgEZOFpjMGaGpzNb8BRBvH7fPN3Y=",
+    "h1:npKtOEmeMz9858S7Tv/XagAdnTR5XjoVWyeHX96kLYY=",
+    "h1:u6YpVaVb5370zEuNdsHGLVIaK6lcpOr7rQExVHskBK8=",
+    "h1:wfnn+8AOBXIaXe/aNhSpGq3i+5Gs8Jbjrxbxwe7ddgM=",
     "zh:0f62f2188e5ca3c9ac5bd8f5133614dc2dfa792ec1c33a86323934a76b781695",
     "zh:2032008962ed89d6d1b2276796acab7a6ba9fef28753520d3e7203ce92b2226d",
     "zh:29bb261da0a194dc5b81163d15b6cd53ed46e7ac9db73ed0b5270e661bd56807",
@@ -28,8 +40,20 @@ provider "registry.opentofu.org/nobbs/sops" {
   version     = "0.3.1"
   constraints = "~> 0.3"
   hashes = [
+    "h1:1/Y+fDqU8qmU5mTMUwH1Z527uNHi1/vHRSOGipFeAc8=",
+    "h1:57qij2XE2YcPfrJaKsqtB4LQv1Ij7PBPvUnt9qOdZvg=",
+    "h1:6n94TheJQMrlZhMQ3c6NBmmJctFfoi9Emkv2/7Ut8Hg=",
+    "h1:7q5MqQfYXlWc982RyLh3dYXOMkcT5x4C7Z9bzrVy8F0=",
+    "h1:M3JF96iA6xvfgN6NixqvjbhSc4crHEc0RN5WTb11wJ0=",
+    "h1:S2tiyF6P+oXfSIQiIzVwzpHox0eyDOt5WZDuXfS7Kyo=",
+    "h1:SR8zK9mSsEqW1GAA8mNyx9Nc71p1n9cjEIren0RPSx8=",
+    "h1:TpTkvJvTs+cGoliDdqhFuDtIA+Bu97KGoid+a5SKoiw=",
     "h1:a2iU8vVpePzY4LfiS7OsgY+MmVwop44ozGjy/FZbZ/g=",
+    "h1:bDJdseeWTMiefu3KfJjQCALlNrhoziGndUbm8l0EwfQ=",
+    "h1:bFGwb4fqvyKFEKhF5rAaAjcb8mqX6mI0bXPGa5YLGLc=",
     "h1:ezi2lTiqJ8k33HkGfp2DCH/29rOjGHQPTjUBkUoRCNo=",
+    "h1:l3YOBRuoJ+skStDsLD1iCU/qzb3HxAOdeqHmdD+zrJM=",
+    "h1:mNVGBfB8tqHL8tJBvVy3giTPFxuasjXihtlq4/x8aFo=",
     "zh:07abc28b63fae5621a57ee247a326b00466232bc1f08135dd9dadab6be659b3b",
     "zh:0b4c8c298dcae1e75632856045b6435a502c79e820ae6e11ee302ab274257a9e",
     "zh:116162ecb8e98feeecac920e68dcde865d7f2eaa5166c2016325a470c8ffe293",

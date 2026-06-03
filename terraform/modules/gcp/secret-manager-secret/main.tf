@@ -25,6 +25,7 @@ resource "google_secret_manager_secret" "main" {
 resource "google_secret_manager_secret_version" "main" {
   for_each = var.secrets
 
-  secret      = google_secret_manager_secret.main[each.key].id
-  secret_data = sensitive(each.value)
+  secret          = google_secret_manager_secret.main[each.key].id
+  secret_data     = sensitive(each.value)
+  deletion_policy = "DISABLE"
 }
