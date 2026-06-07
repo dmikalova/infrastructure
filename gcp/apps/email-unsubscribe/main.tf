@@ -126,10 +126,3 @@ module "cloud_run" {
     SUPABASE_URL             = module.supabase_config.values.url
   }
 }
-
-# Outputs
-
-output "service_url" {
-  description = "Cloud Run service URL"
-  value       = module.cloud_run.service_url
-}
