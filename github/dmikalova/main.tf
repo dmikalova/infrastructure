@@ -52,8 +52,8 @@ module "repositories" {
     synths = {
       description = "personal notes and resources on eurorack synths"
     }
-    todos = {
-      description = "manage todos"
+    tasks = {
+      description = "manage tasks"
       topics      = ["mklv-deploy", "mklv-tech"]
     }
   }

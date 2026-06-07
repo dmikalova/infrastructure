@@ -45,10 +45,10 @@
 - [x] 5.4 Rename `private_bucket_lifecycle_rules` to `bucket_lifecycle_rules`
 - [x] 5.5 Run `tofu plan` in gcp/apps/email-unsubscribe to verify
 
-## 6. Update login and todos Stacks
+## 6. Update login and tasks Stacks
 
 - [x] 6.1 Run `tofu plan` in gcp/apps/login (should get new bucket + labels)
-- [x] 6.2 Run `tofu plan` in gcp/apps/todos (should get new bucket + labels)
+- [x] 6.2 Run `tofu plan` in gcp/apps/tasks (should get new bucket + labels)
 - [x] 6.3 Verify plans show bucket creation and warm label addition
 
 ## 7. Validate All Stacks
@@ -75,7 +75,7 @@ After PR is merged:
    gcloud storage rm -r gs://mklv-email-unsubscribe-public
    ```
 7. `tofu apply` in gcp/apps/login (creates bucket, adds labels)
-8. `tofu apply` in gcp/apps/todos (creates bucket, adds labels)
+8. `tofu apply` in gcp/apps/tasks (creates bucket, adds labels)
 
 ## 9. Follow-up PRs (App Repos)
 
@@ -86,5 +86,5 @@ After PR is merged:
 - [x] 9.3 Warming endpoint: 5s timeout per service, no retries, log failures
 - [x] 9.4 Update email-unsubscribe: remove Vite, rename api/ → src/
 - [x] 9.5 Update login: remove Vite, rename api/ → src/
-- [x] 9.6 Update todos: remove Vite, merge api/ + src/ → src/
+- [x] 9.6 Update tasks: remove Vite, merge api/ + src/ → src/
 - [x] 9.7 Update github-meta: remove Vue compilation from GHA workflow

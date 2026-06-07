@@ -63,7 +63,7 @@ Transfer repos using GitHub CLI:
 ```bash
 gh repo transfer cddc39/lists dmikalova
 gh repo transfer cddc39/recipes dmikalova
-gh repo transfer cddc39/todos dmikalova
+gh repo transfer cddc39/tasks dmikalova
 ```
 
 Wait for each transfer to complete before proceeding.
@@ -115,7 +115,7 @@ Include all existing dmikalova repos plus:
 
 - `email-unsubscribe` (new)
 - `github-meta` (new)
-- `lists`, `recipes`, `todos` (transferred from cddc39)
+- `lists`, `recipes`, `tasks` (transferred from cddc39)
 
 ---
 
@@ -235,7 +235,7 @@ After completion, verify:
 - [ ] All dmikalova repos accessible and unchanged
 - [ ] `email-unsubscribe` repo created
 - [ ] `github-actions` repo created
-- [ ] `lists`, `recipes`, `todos` owned by dmikalova
+- [ ] `lists`, `recipes`, `tasks` owned by dmikalova
 - [ ] screeptorio org deleted
 - [ ] e91e63 terraform-\* repos deleted
 - [ ] `tofu plan` shows no changes

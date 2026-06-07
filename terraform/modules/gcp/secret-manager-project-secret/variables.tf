@@ -10,6 +10,6 @@ variable "project_id" {
 }
 
 variable "secret_id" {
-  description = "Secret Manager secret ID (e.g., 'todos-config', 'supabase-mklv')"
+  description = "Secret Manager secret ID (e.g., 'tasks-config', 'supabase-mklv')"
   type        = string
 }

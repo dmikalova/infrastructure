@@ -1,7 +1,7 @@
 stack {
-  name        = "todos Cloud Run"
-  description = "Cloud Run service and database for todos app"
-  id          = "gcp-apps-todos"
+  name        = "tasks Cloud Run"
+  description = "Cloud Run service and database for tasks app"
+  id          = "gcp-apps-tasks"
   tags        = ["google", "google-beta", "sops"]
 
   after = [

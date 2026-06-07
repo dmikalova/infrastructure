@@ -11,7 +11,7 @@ Current state:
 - `email-unsubscribe`: Uses public_bucket for Vue frontend, private_bucket for
   Playwright traces, Vite compilation in CI
 - `login`: No buckets, Vue compiled in CI, served from container
-- `todos`: No buckets, Vue compiled in CI, served from container
+- `tasks`: No buckets, Vue compiled in CI, served from container
 
 All apps would benefit from simplified architecture: serve Vue directly
 from Hono (browser compilation), eliminate Vite build step.
@@ -157,7 +157,7 @@ More frequent warming increases cost.
 1. Deploy mklv.tech app code (landing page + warming endpoint)
 2. Update email-unsubscribe: remove Vite build, rename api/ → src/
 3. Update login: remove Vite build, rename api/ → src/
-4. Update todos: remove Vite build, merge api/ + src/ into src/
+4. Update tasks: remove Vite build, merge api/ + src/ into src/
 5. Update github-meta: remove Vue compilation from workflow
 
 ### Rollback

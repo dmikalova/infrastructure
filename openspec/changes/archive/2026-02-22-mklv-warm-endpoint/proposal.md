@@ -36,14 +36,14 @@ buckets that should be consolidated into server-rendered apps.
 - **email-unsubscribe**: Remove `public_bucket = true`, `private_bucket = true`
   (bucket created automatically now)
 - **login**: Remove any public bucket config, use server-rendered
-- **todos**: Remove any public bucket config, use server-rendered
+- **tasks**: Remove any public bucket config, use server-rendered
 
 ### App Code Changes (separate PRs)
 
 - **email-unsubscribe**: Remove Vite build, keep Vue (browser compiles), rename
   api/ → src/
 - **login**: Remove Vite build, keep Vue, rename api/ → src/
-- **todos**: Remove Vite build, keep Vue, merge api/ and src/ into src/
+- **tasks**: Remove Vite build, keep Vue, merge api/ and src/ into src/
 - **github-meta**: Update GHA workflow to remove Vue compilation step
 
 ## Capabilities
@@ -67,7 +67,7 @@ buckets that should be consolidated into server-rendered apps.
 - `terraform/modules/gcp/cloud-run-app/` - module changes
 - `gcp/apps/email-unsubscribe/` - remove bucket options (auto-created now)
 - `gcp/apps/login/` - no changes (bucket auto-created now)
-- `gcp/apps/todos/` - no changes (bucket auto-created now)
+- `gcp/apps/tasks/` - no changes (bucket auto-created now)
 - `github/dmikalova/` - add mklv.tech repo
 - New stack: `gcp/apps/mklv/` - Cloud Run service + scheduler
 
@@ -96,6 +96,6 @@ gcloud storage rm -r gs://mklv-email-unsubscribe-public
   templates directly (browser compilation)
 - `login`: Remove Vite build step, rename api/ → src/, serve Vue templates
   directly
-- `todos`: Remove Vite build step, merge api/ and src/ into single src/, serve
+- `tasks`: Remove Vite build step, merge api/ and src/ into single src/, serve
   Vue templates directly
 - `github-meta`: Update GHA workflow to remove Vue compilation step

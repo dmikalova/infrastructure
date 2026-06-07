@@ -1,8 +1,8 @@
-# Todos Infra: Design
+# Tasks Infra: Design
 
 ## Context
 
-The todos app is a single-user personal task manager built with Deno + Hono +
+The tasks app is a single-user personal task manager built with Deno + Hono +
 Vue.js. It uses Supabase as the database backend with Realtime for live updates.
 Authentication is delegated to the login portal at login.mklv.tech.
 
@@ -13,7 +13,7 @@ and login apps.
 
 **Goals:**
 
-- Deploy todos app to Cloud Run with todos.mklv.tech domain
+- Deploy tasks app to Cloud Run with tasks.mklv.tech domain
 - Configure CI/CD via GitHub Actions
 
 **Non-Goals:**
@@ -30,7 +30,7 @@ and login apps.
 The module handles everything including Supabase database setup via the
 `app-database` submodule.
 
-**Rationale**: Todos app is simpler than email-unsubscribe - no sidecars, no
+**Rationale**: Tasks app is simpler than email-unsubscribe - no sidecars, no
 scheduled jobs, no public bucket. Standard module covers all needs.
 
 **Alternatives**:

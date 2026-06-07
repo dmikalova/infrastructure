@@ -15,7 +15,7 @@ Current repos managed:
   **keep as-is**
 - `e91e63`: 8 terraform-\* repos → **delete all** (github-repos module merged
   into infra)
-- `cddc39`: lists, recipes, todos (3 repos) → **migrate to dmikalova**
+- `cddc39`: lists, recipes, tasks (3 repos) → **migrate to dmikalova**
 - `screeptorio`: 3 repos (organization) → **delete org and repos**
 
 ## Goals / Non-Goals
@@ -147,7 +147,7 @@ module "repositories" {
     lists             = { description = "manage lists" }        # migrated from cddc39
     recipes           = { description = "manage recipes" }      # migrated from cddc39
     synths            = { description = "personal synth notes" }
-    todos             = { description = "manage todos" }        # migrated from cddc39
+    tasks             = { description = "manage tasks" }        # migrated from cddc39
   }
 }
 ```
@@ -169,7 +169,7 @@ maintainability.
 ```bash
 gh repo transfer cddc39/lists dmikalova
 gh repo transfer cddc39/recipes dmikalova
-gh repo transfer cddc39/todos dmikalova
+gh repo transfer cddc39/tasks dmikalova
 ```
 
 Then add to dmikalova's Terraform config. Old cddc39 state can be discarded.

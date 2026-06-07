@@ -31,7 +31,7 @@ github/
 | lists             | manage lists                           |
 | recipes           | manage recipes                         |
 | synths            | personal synth notes                   |
-| todos             | manage todos                           |
+| tasks             | manage tasks                           |
 
 ## Provider Configuration
 
