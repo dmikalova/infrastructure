@@ -2,6 +2,36 @@
 #
 # Shared infrastructure for apps: container registry, domains, etc.
 
+# Artifact Registry cleanup: keep images from last 3 months OR last 50 (whichever is more)
+locals {
+  artifact_cleanup_policies = [
+    {
+      id     = "keep-recent-3-months"
+      action = "KEEP"
+      condition = {
+        newer_than = "7776000s" # 90 days
+      }
+      most_recent_versions = null
+    },
+    {
+      id     = "keep-last-50"
+      action = "KEEP"
+      condition = null
+      most_recent_versions = {
+        keep_count = 50
+      }
+    },
+    {
+      id     = "delete-old"
+      action = "DELETE"
+      condition = {
+        older_than = "7776000s" # 90 days
+      }
+      most_recent_versions = null
+    },
+  ]
+}
+
 # Artifact Registry - remote repository proxying GitHub Container Registry
 # Allows Cloud Run to pull images from GHCR through Artifact Registry
 resource "google_artifact_registry_repository" "ghcr" {
@@ -16,6 +46,29 @@ resource "google_artifact_registry_repository" "ghcr" {
     docker_repository {
       custom_repository {
         uri = "https://ghcr.io"
+      }
+    }
+  }
+
+  dynamic "cleanup_policies" {
+    for_each = local.artifact_cleanup_policies
+    content {
+      id     = cleanup_policies.value.id
+      action = cleanup_policies.value.action
+
+      dynamic "condition" {
+        for_each = cleanup_policies.value.condition != null ? [cleanup_policies.value.condition] : []
+        content {
+          newer_than = try(condition.value.newer_than, null)
+          older_than = try(condition.value.older_than, null)
+        }
+      }
+
+      dynamic "most_recent_versions" {
+        for_each = cleanup_policies.value.most_recent_versions != null ? [cleanup_policies.value.most_recent_versions] : []
+        content {
+          keep_count = most_recent_versions.value.keep_count
+        }
       }
     }
   }
@@ -58,6 +111,29 @@ resource "google_artifact_registry_repository" "mcr" {
     docker_repository {
       custom_repository {
         uri = "https://mcr.microsoft.com"
+      }
+    }
+  }
+
+  dynamic "cleanup_policies" {
+    for_each = local.artifact_cleanup_policies
+    content {
+      id     = cleanup_policies.value.id
+      action = cleanup_policies.value.action
+
+      dynamic "condition" {
+        for_each = cleanup_policies.value.condition != null ? [cleanup_policies.value.condition] : []
+        content {
+          newer_than = try(condition.value.newer_than, null)
+          older_than = try(condition.value.older_than, null)
+        }
+      }
+
+      dynamic "most_recent_versions" {
+        for_each = cleanup_policies.value.most_recent_versions != null ? [cleanup_policies.value.most_recent_versions] : []
+        content {
+          keep_count = most_recent_versions.value.keep_count
+        }
       }
     }
   }
