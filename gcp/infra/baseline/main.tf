@@ -27,7 +27,7 @@ resource "google_project_service" "apis" {
   for_each = toset([
     "artifactregistry.googleapis.com", # Artifact Registry
     "billingbudgets.googleapis.com",   # Billing Budgets API
-    "cloudbilling.googleapis.com",     # Cloud Billing (for budgets)
+    "cloudbilling.googleapis.com",     # Cloud Billing
     "cloudscheduler.googleapis.com",   # Cloud Scheduler
     "dns.googleapis.com",              # Cloud DNS
     "iam.googleapis.com",              # IAM
@@ -155,6 +155,7 @@ module "sops_age_key" {
     "sops-age-key" = base64decode(local.age_secrets.keys_file_base64)
   }
 }
+
 
 # Prevent destruction of state bucket
 resource "terraform_data" "prevent_state_bucket_destroy" {

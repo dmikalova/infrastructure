@@ -18,7 +18,6 @@ module "cloud_run" {
   subdomain      = "" # Deploy to apex domain (mklv.tech, not mklv.mklv.tech)
   gcp_project_id = local.project_id
   gcp_region     = local.gcp_region
-  modules_dir    = local.modules_dir
 
   # Don't warm ourselves (avoid self-warming loop)
   warm = false

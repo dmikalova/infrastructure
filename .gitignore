@@ -19,7 +19,7 @@ secrets/*
 # OpenTofu/Terraform files
 *.tfplan
 *.tfstate
-*.tfstate.*
+*.tfstate*
 .terraform/
 .opentofu/
 

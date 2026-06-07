@@ -11,27 +11,18 @@ data "terraform_remote_state" "platform" {
 }
 
 locals {
-  app_name              = "email-unsubscribe"
-  supabase_project_name = "mklv"
-
+  app_name         = "email-unsubscribe"
   gcp_secrets      = provider::sops::file("${local.repo_root}/secrets/gcp.sops.json").data
   supabase_secrets = provider::sops::file("${local.repo_root}/secrets/supabase.sops.json").data
 }
 
-# Database Setup
+# Database
 
-# Lookup Supabase database connection secrets
-module "db_secrets" {
-  source = "${local.modules_dir}/gcp/secret-manager-secret-data"
+module "supabase_config" {
+  source = "${local.modules_dir}/supabase/config"
 
-  project_id = local.project_id
-  secrets = {
-    db_name         = "supabase-${local.supabase_project_name}-db-name"
-    db_password     = "supabase-${local.supabase_project_name}-db-password"
-    db_session_host = "supabase-${local.supabase_project_name}-db-session-host"
-    db_session_port = "supabase-${local.supabase_project_name}-db-session-port"
-    db_user         = "supabase-${local.supabase_project_name}-db-user"
-  }
+  project_id  = local.project_id
+  secret_name = "supabase-mklv"
 }
 
 # Configure postgresql provider with session pooler
@@ -39,26 +30,25 @@ module "db_secrets" {
 # Transaction pooler (port 6543): IPv4, no prepared statements - used for app runtime
 provider "postgresql" {
   connect_timeout = 15
-  database        = module.db_secrets.secrets["db_name"].secret_data
-  host            = module.db_secrets.secrets["db_session_host"].secret_data
-  password        = module.db_secrets.secrets["db_password"].secret_data
-  port            = tonumber(module.db_secrets.secrets["db_session_port"].secret_data)
+  database        = module.supabase_config.values.db_name
+  host            = module.supabase_config.values.db_session_host
+  password        = module.supabase_config.values.db_password
+  port            = tonumber(module.supabase_config.values.db_session_port)
   scheme          = "postgres"
   superuser       = false
-  username        = module.db_secrets.secrets["db_user"].secret_data
+  username        = module.supabase_config.values.db_user
 }
 
 # Create app-specific database with credentials stored in Secret Manager
 module "app_database" {
   source = "${local.modules_dir}/supabase/app-database"
 
-  app_name              = local.app_name
-  gcp_project_id        = local.project_id
-  modules_dir           = local.modules_dir
-  supabase_project_name = local.supabase_project_name
+  app_name             = local.app_name
+  supabase_project_ref = module.supabase_config.values.project_ref
+  supabase_region      = module.supabase_config.values.region
 }
 
-# Cloud Run Service
+# Cloud Run
 
 # OAuth Setup Instructions
 # OAuth consent screen and credentials cannot be fully automated via Terraform.
@@ -86,13 +76,10 @@ resource "google_project_service" "gmail" {
 module "cloud_run" {
   source = "${local.modules_dir}/gcp/cloud-run-app"
 
-  app_name                           = local.app_name
-  database_url_session_secret_id     = module.app_database.database_url_session_secret_id
-  database_url_transaction_secret_id = module.app_database.database_url_transaction_secret_id
-  domain                             = "mklv.tech"
-  gcp_project_id                     = local.project_id
-  gcp_region                         = local.gcp_region
-  modules_dir                        = local.modules_dir
+  app_name       = local.app_name
+  domain         = "mklv.tech"
+  gcp_project_id = local.project_id
+  gcp_region     = local.gcp_region
 
   # GCS storage for Playwright traces
   bucket_lifecycle_rules = [
@@ -128,33 +115,15 @@ module "cloud_run" {
     PLAYWRIGHT_WS_ENDPOINT = "ws://localhost:3000"
   }
 
-  existing_secrets = {
-    "supabase-mklv-url" = {
-      env_name = "SUPABASE_URL"
-    }
-  }
-
   secrets = {
-    "email-unsubscribe-encryption-key-base64" = {
-      env_name = "ENCRYPTION_KEY_BASE64"
-      value    = local.gcp_secrets.EMAIL_UNSUBSCRIBE_ENCRYPTION_KEY_BASE64
-    }
-    "email-unsubscribe-oauth-client-id" = {
-      env_name = "GOOGLE_CLIENT_ID"
-      value    = local.gcp_secrets.EMAIL_UNSUBSCRIBE_OAUTH_CLIENT_ID
-    }
-    "email-unsubscribe-oauth-client-secret" = {
-      env_name = "GOOGLE_CLIENT_SECRET"
-      value    = local.gcp_secrets.EMAIL_UNSUBSCRIBE_OAUTH_CLIENT_SECRET
-    }
-    "email-unsubscribe-oauth-redirect-uri" = {
-      env_name = "GOOGLE_REDIRECT_URI"
-      value    = local.gcp_secrets.EMAIL_UNSUBSCRIBE_OAUTH_REDIRECT_URI
-    }
-    "email-unsubscribe-supabase-jwt-key" = {
-      env_name = "SUPABASE_JWT_KEY"
-      value    = local.supabase_secrets.SUPABASE_MKLV_JWT_KEY
-    }
+    DATABASE_URL_SESSION     = module.app_database.database_url_session
+    DATABASE_URL_TRANSACTION = module.app_database.database_url_transaction
+    ENCRYPTION_KEY_BASE64    = local.gcp_secrets.EMAIL_UNSUBSCRIBE_ENCRYPTION_KEY_BASE64
+    GOOGLE_CLIENT_ID         = local.gcp_secrets.EMAIL_UNSUBSCRIBE_OAUTH_CLIENT_ID
+    GOOGLE_CLIENT_SECRET     = local.gcp_secrets.EMAIL_UNSUBSCRIBE_OAUTH_CLIENT_SECRET
+    GOOGLE_REDIRECT_URI      = local.gcp_secrets.EMAIL_UNSUBSCRIBE_OAUTH_REDIRECT_URI
+    SUPABASE_JWT_KEY         = local.supabase_secrets.SUPABASE_MKLV_JWT_KEY
+    SUPABASE_URL             = module.supabase_config.values.url
   }
 }
 

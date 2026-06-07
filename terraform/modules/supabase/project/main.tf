@@ -1,6 +1,6 @@
 # Supabase project module
 #
-# Creates a Supabase project and stores connection details in GCP Secret Manager.
+# Creates a Supabase project and stores connection details in Secret Manager.
 
 terraform {
   required_providers {
@@ -53,30 +53,38 @@ data "supabase_apikeys" "main" {
   project_ref = supabase_project.main.id
 }
 
-# Store all secrets in Secret Manager
-module "secrets" {
-  source = "${var.modules_dir}/gcp/secret-manager-secret"
+# Store connection details in Secret Manager
+resource "google_secret_manager_secret" "config" {
+  project   = var.gcp_project_id
+  secret_id = "supabase-${var.name}"
 
-  project_id = var.gcp_project_id
-  secrets = {
-    # API keys (using non-deprecated publishable_key)
-    "supabase-${var.name}-publishable-key" = data.supabase_apikeys.main.publishable_key
-    # Direct connection (IPv6 only, for local admin operations)
-    "supabase-${var.name}-db-direct-host" = "db.${supabase_project.main.id}.supabase.co"
-    "supabase-${var.name}-db-direct-port" = "5432"
-    "supabase-${var.name}-db-direct-user" = "postgres"
-    # Session pooler (IPv4, supports prepared statements - use for Terraform DDL in CI/CD)
-    "supabase-${var.name}-db-session-host" = "aws-0-${supabase_project.main.region}.pooler.supabase.com"
-    "supabase-${var.name}-db-session-port" = "5432"
-    # Transaction pooler (IPv4, no prepared statements - use for app runtime)
-    "supabase-${var.name}-admin-url"   = local.admin_url
-    "supabase-${var.name}-db-host"     = "aws-0-${supabase_project.main.region}.pooler.supabase.com"
-    "supabase-${var.name}-db-name"     = "postgres"
-    "supabase-${var.name}-db-password" = random_password.db_password.result
-    "supabase-${var.name}-db-port"     = "6543"
-    "supabase-${var.name}-db-user"     = "postgres.${supabase_project.main.id}"
-    "supabase-${var.name}-project-ref" = supabase_project.main.id
-    "supabase-${var.name}-region"      = supabase_project.main.region
-    "supabase-${var.name}-url"         = "https://${supabase_project.main.id}.supabase.co"
+  replication {
+    auto {}
   }
+}
+
+resource "google_secret_manager_secret_version" "config" {
+  secret      = google_secret_manager_secret.config.id
+  secret_data = jsonencode({
+    # API keys
+    publishable_key = data.supabase_apikeys.main.publishable_key
+    # Direct connection (IPv6 only, for local admin operations)
+    admin_url      = local.admin_url
+    db_direct_host = "db.${supabase_project.main.id}.supabase.co"
+    db_direct_port = "5432"
+    db_direct_user = "postgres"
+    # Session pooler (IPv4, prepared statements - for Terraform DDL in CI/CD)
+    db_session_host = "aws-0-${supabase_project.main.region}.pooler.supabase.com"
+    db_session_port = "5432"
+    # Transaction pooler (IPv4, no prepared statements - for app runtime)
+    db_host     = "aws-0-${supabase_project.main.region}.pooler.supabase.com"
+    db_name     = "postgres"
+    db_password = random_password.db_password.result
+    db_port     = "6543"
+    db_user     = "postgres.${supabase_project.main.id}"
+    # Project metadata
+    project_ref = supabase_project.main.id
+    region      = supabase_project.main.region
+    url         = "https://${supabase_project.main.id}.supabase.co"
+  })
 }
