@@ -95,18 +95,3 @@ resource "google_dns_record_set" "additional" {
   ttl          = 300
   type         = "CNAME"
 }
-
-# Outputs
-
-output "service_url" {
-  description = "Cloud Run service URL"
-  value       = module.cloud_run.service_url
-}
-
-output "domain_urls" {
-  description = "Custom domain URLs"
-  value = concat(
-    ["https://${local.app_name}.${local.primary_domain}"],
-    [for d in local.additional_domains : "https://${local.app_name}.${d}"]
-  )
-}

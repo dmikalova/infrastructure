@@ -1,6 +1,6 @@
-output "service_url" {
-  description = "Cloud Run service URL"
-  value       = google_cloud_run_v2_service.app.uri
+output "bucket_name" {
+  description = "GCS bucket name for app storage"
+  value       = google_storage_bucket.bucket.name
 }
 
 output "service_account_email" {
@@ -13,7 +13,7 @@ output "service_name" {
   value       = google_cloud_run_v2_service.app.name
 }
 
-output "bucket_name" {
-  description = "GCS bucket name for app storage"
-  value       = google_storage_bucket.bucket.name
+output "service_url" {
+  description = "Cloud Run service URL"
+  value       = google_cloud_run_v2_service.app.uri
 }
