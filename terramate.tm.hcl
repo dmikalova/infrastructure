@@ -41,6 +41,20 @@ script "cicd" {
   }
 }
 
+script "init" {
+  description = "Run init for each stack"
+  lets {
+    provisioner = "tofu"
+  }
+  job {
+    name        = "init"
+    description = "Run tofu init for each stack"
+    commands = [
+      [let.provisioner, "init"],
+    ]
+  }
+}
+
 script "lock" {
   description = "Update provider lock files for all platforms"
   lets {
@@ -51,7 +65,20 @@ script "lock" {
     description = "Run tofu providers lock for darwin and linux"
     commands = [
       [let.provisioner, "init"],
-      [let.provisioner, "providers", "lock", "-platform=darwin_arm64", "-platform=linux_amd64"],
+    ]
+  }
+}
+
+script "upgrade" {
+  description = "Run init for each stack"
+  lets {
+    provisioner = "tofu"
+  }
+  job {
+    name        = "upgrade"
+    description = "Run tofu upgrade for each stack"
+    commands = [
+      [let.provisioner, "init", "-upgrade"],
     ]
   }
 }

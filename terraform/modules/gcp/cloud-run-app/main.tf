@@ -1,26 +1,25 @@
 # Secrets
 
-# Extract non-sensitive keys for iteration
-locals {
-  existing_secret_names = toset(keys(var.existing_secrets))
-  secret_names          = toset(keys(var.secrets))
+resource "google_secret_manager_secret" "app_config" {
+  count = length(var.secrets) > 0 ? 1 : 0
+
+  project   = var.gcp_project_id
+  secret_id = "${var.app_name}-config"
+
+  replication {
+    auto {}
+  }
 }
 
-# Create secrets in Secret Manager
-# Key is the secret name, value.value is the secret data
-module "secrets" {
-  source = "${var.modules_dir}/gcp/secret-manager-secret"
+resource "google_secret_manager_secret_version" "app_config" {
+  count = length(var.secrets) > 0 ? 1 : 0
 
-  project_id = var.gcp_project_id
-  secrets = {
-    for secret_name in nonsensitive(local.secret_names) :
-    secret_name => var.secrets[secret_name].value
-  }
+  secret      = google_secret_manager_secret.app_config[0].id
+  secret_data = jsonencode(var.secrets)
 }
 
 # Service Account
 
-# Cloud Run service account
 resource "google_service_account" "cloud_run" {
   account_id   = "${var.app_name}-run"
   description  = "Cloud Run service account for ${var.app_name}"
@@ -28,37 +27,16 @@ resource "google_service_account" "cloud_run" {
   project      = var.gcp_project_id
 }
 
-# Grant service account access to database secret
-resource "google_secret_manager_secret_iam_member" "database_url_transaction" {
-  count = var.database_url_transaction_secret_id != "" ? 1 : 0
+resource "google_secret_manager_secret_iam_member" "cloud_run_access" {
+  count = length(var.secrets) > 0 ? 1 : 0
 
-  member    = "serviceAccount:${google_service_account.cloud_run.email}"
   project   = var.gcp_project_id
+  secret_id = google_secret_manager_secret.app_config[0].secret_id
   role      = "roles/secretmanager.secretAccessor"
-  secret_id = var.database_url_transaction_secret_id
+  member    = "serviceAccount:${google_service_account.cloud_run.email}"
 }
 
-# Grant service account access to app secrets
-resource "google_secret_manager_secret_iam_member" "secrets" {
-  for_each = module.secrets.secrets
-
-  member    = "serviceAccount:${google_service_account.cloud_run.email}"
-  project   = var.gcp_project_id
-  role      = "roles/secretmanager.secretAccessor"
-  secret_id = each.value.id
-}
-
-# Grant service account access to existing secrets
-resource "google_secret_manager_secret_iam_member" "existing_secrets" {
-  for_each = nonsensitive(local.existing_secret_names)
-
-  member    = "serviceAccount:${google_service_account.cloud_run.email}"
-  project   = var.gcp_project_id
-  role      = "roles/secretmanager.secretAccessor"
-  secret_id = each.value
-}
-
-# Storage Bucket (for app-specific data, not publicly accessible)
+# Storage Bucket
 
 resource "google_storage_bucket" "bucket" {
   force_destroy               = false
@@ -91,7 +69,6 @@ resource "google_storage_bucket_iam_member" "bucket_storage" {
 
 # Cloud Run Service
 
-# Cloud Run service (placeholder image, deployed via CI/CD)
 resource "google_cloud_run_v2_service" "app" {
   ingress  = "INGRESS_TRAFFIC_ALL"
   location = var.gcp_region
@@ -108,45 +85,6 @@ resource "google_cloud_run_v2_service" "app" {
     containers {
       image = "us-docker.pkg.dev/cloudrun/container/hello"
 
-      dynamic "env" {
-        for_each = var.database_url_transaction_secret_id != "" ? [1] : []
-        content {
-          name = "DATABASE_URL_TRANSACTION"
-          value_source {
-            secret_key_ref {
-              secret  = var.database_url_transaction_secret_id
-              version = "latest"
-            }
-          }
-        }
-      }
-
-      dynamic "env" {
-        for_each = nonsensitive(local.secret_names)
-        content {
-          name = var.secrets[env.value].env_name
-          value_source {
-            secret_key_ref {
-              secret  = module.secrets.secrets[env.value].secret_id
-              version = "latest"
-            }
-          }
-        }
-      }
-
-      dynamic "env" {
-        for_each = nonsensitive(local.existing_secret_names)
-        content {
-          name = var.existing_secrets[env.value].env_name
-          value_source {
-            secret_key_ref {
-              secret  = env.value
-              version = "latest"
-            }
-          }
-        }
-      }
-
       env {
         name  = "BUCKET_NAME"
         value = google_storage_bucket.bucket.name
@@ -157,6 +95,14 @@ resource "google_cloud_run_v2_service" "app" {
         content {
           name  = env.key
           value = env.value
+        }
+      }
+
+      dynamic "volume_mounts" {
+        for_each = length(var.secrets) > 0 ? [1] : []
+        content {
+          name       = "app-config"
+          mount_path = "/secrets"
         }
       }
 
@@ -199,6 +145,20 @@ resource "google_cloud_run_v2_service" "app" {
       }
     }
 
+    dynamic "volumes" {
+      for_each = length(var.secrets) > 0 ? [1] : []
+      content {
+        name = "app-config"
+        secret {
+          secret = google_secret_manager_secret.app_config[0].secret_id
+          items {
+            version = "latest"
+            path    = "config.json"
+          }
+        }
+      }
+    }
+
     scaling {
       max_instance_count = 2
       min_instance_count = 0
@@ -206,9 +166,8 @@ resource "google_cloud_run_v2_service" "app" {
   }
 
   depends_on = [
-    google_secret_manager_secret_iam_member.database_url_transaction,
-    google_secret_manager_secret_iam_member.existing_secrets,
-    google_secret_manager_secret_iam_member.secrets,
+    google_secret_manager_secret_iam_member.cloud_run_access,
+    google_secret_manager_secret_version.app_config,
   ]
 
   lifecycle {
@@ -237,44 +196,13 @@ resource "google_service_account_iam_member" "deploy_can_act_as" {
   service_account_id = google_service_account.cloud_run.name
 }
 
-# Grant deploy SA access to database secret (required for Cloud Run deployment validation)
-resource "google_secret_manager_secret_iam_member" "deploy_database_url_transaction" {
-  count = var.database_url_transaction_secret_id != "" ? 1 : 0
+resource "google_secret_manager_secret_iam_member" "deploy_access" {
+  count = length(var.secrets) > 0 ? 1 : 0
 
-  member    = "serviceAccount:github-actions-deploy@${var.gcp_project_id}.iam.gserviceaccount.com"
   project   = var.gcp_project_id
+  secret_id = google_secret_manager_secret.app_config[0].secret_id
   role      = "roles/secretmanager.secretAccessor"
-  secret_id = var.database_url_transaction_secret_id
-}
-
-# Grant deploy SA access to session database secret (required for CI migrations)
-resource "google_secret_manager_secret_iam_member" "deploy_database_url_session" {
-  count = var.database_url_session_secret_id != "" ? 1 : 0
-
   member    = "serviceAccount:github-actions-deploy@${var.gcp_project_id}.iam.gserviceaccount.com"
-  project   = var.gcp_project_id
-  role      = "roles/secretmanager.secretAccessor"
-  secret_id = var.database_url_session_secret_id
-}
-
-# Grant deploy SA access to app secrets (required for Cloud Run deployment validation)
-resource "google_secret_manager_secret_iam_member" "deploy_secrets" {
-  for_each = module.secrets.secrets
-
-  member    = "serviceAccount:github-actions-deploy@${var.gcp_project_id}.iam.gserviceaccount.com"
-  project   = var.gcp_project_id
-  role      = "roles/secretmanager.secretAccessor"
-  secret_id = each.value.id
-}
-
-# Grant deploy SA access to existing secrets (required for Cloud Run deployment validation)
-resource "google_secret_manager_secret_iam_member" "deploy_existing_secrets" {
-  for_each = nonsensitive(local.existing_secret_names)
-
-  member    = "serviceAccount:github-actions-deploy@${var.gcp_project_id}.iam.gserviceaccount.com"
-  project   = var.gcp_project_id
-  role      = "roles/secretmanager.secretAccessor"
-  secret_id = each.value
 }
 
 # Custom Domain

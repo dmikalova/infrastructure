@@ -3,80 +3,57 @@
 # App-specific configuration using the cloud-run-app module.
 
 locals {
-  app_name              = "todos"
-  supabase_project_name = "mklv"
-
+  app_name         = "todos"
   supabase_secrets = provider::sops::file("${local.repo_root}/secrets/supabase.sops.json").data
 }
 
-# Database Setup
+# Database
 
-# Lookup Supabase database connection secrets
-module "db_secrets" {
-  source = "${local.modules_dir}/gcp/secret-manager-secret-data"
+module "supabase_config" {
+  source = "${local.modules_dir}/supabase/config"
 
-  project_id = local.project_id
-  secrets = {
-    db_name         = "supabase-${local.supabase_project_name}-db-name"
-    db_password     = "supabase-${local.supabase_project_name}-db-password"
-    db_session_host = "supabase-${local.supabase_project_name}-db-session-host"
-    db_session_port = "supabase-${local.supabase_project_name}-db-session-port"
-    db_user         = "supabase-${local.supabase_project_name}-db-user"
-  }
+  project_id  = local.project_id
+  secret_name = "supabase-mklv"
 }
 
 # Configure postgresql provider with session pooler
 # Session pooler (port 5432): IPv4 + prepared statements - required for Terraform DDL
-# Transaction pooler (port 6543): IPv4, no prepared statements - used for app runtime
+# Transaction pooler (port 6543): IPv4, no prepared statements - used for app runtimeprovider "postgresql" {
 provider "postgresql" {
   connect_timeout = 15
-  database        = module.db_secrets.secrets["db_name"].secret_data
-  host            = module.db_secrets.secrets["db_session_host"].secret_data
-  password        = module.db_secrets.secrets["db_password"].secret_data
-  port            = tonumber(module.db_secrets.secrets["db_session_port"].secret_data)
+  database        = module.supabase_config.values.db_name
+  host            = module.supabase_config.values.db_session_host
+  password        = module.supabase_config.values.db_password
+  port            = tonumber(module.supabase_config.values.db_session_port)
   scheme          = "postgres"
   superuser       = false
-  username        = module.db_secrets.secrets["db_user"].secret_data
+  username        = module.supabase_config.values.db_user
 }
 
-# Create app-specific database with credentials stored in Secret Manager
 module "app_database" {
   source = "${local.modules_dir}/supabase/app-database"
 
-  app_name              = local.app_name
-  gcp_project_id        = local.project_id
-  modules_dir           = local.modules_dir
-  supabase_project_name = local.supabase_project_name
+  app_name             = local.app_name
+  supabase_project_ref = module.supabase_config.values.project_ref
+  supabase_region      = module.supabase_config.values.region
 }
 
-# Cloud Run Service
+# Cloud Run
 
 module "cloud_run" {
   source = "${local.modules_dir}/gcp/cloud-run-app"
 
-  app_name                           = local.app_name
-  database_url_session_secret_id     = module.app_database.database_url_session_secret_id
-  database_url_transaction_secret_id = module.app_database.database_url_transaction_secret_id
-  domain                             = "mklv.tech"
-  gcp_project_id                     = local.project_id
-  gcp_region                         = local.gcp_region
-  modules_dir                        = local.modules_dir
-
-  existing_secrets = {
-    "supabase-mklv-url" = {
-      env_name = "SUPABASE_URL"
-    }
-  }
+  app_name       = local.app_name
+  domain         = "mklv.tech"
+  gcp_project_id = local.project_id
+  gcp_region     = local.gcp_region
 
   secrets = {
-    "todos-supabase-jwt-key" = {
-      env_name = "SUPABASE_JWT_KEY"
-      value    = local.supabase_secrets.SUPABASE_MKLV_JWT_KEY
-    }
-    "todos-supabase-publishable-key" = {
-      env_name = "SUPABASE_PUBLISHABLE_KEY"
-      value    = local.supabase_secrets.SUPABASE_PUBLISHABLE_KEY
-    }
+    DATABASE_URL_SESSION     = module.app_database.database_url_session
+    DATABASE_URL_TRANSACTION = module.app_database.database_url_transaction
+    SUPABASE_JWT_KEY         = local.supabase_secrets.SUPABASE_MKLV_JWT_KEY
+    SUPABASE_PUBLISHABLE_KEY = local.supabase_secrets.SUPABASE_PUBLISHABLE_KEY
+    SUPABASE_URL             = module.supabase_config.values.url
   }
 }
 

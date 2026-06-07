@@ -1,12 +1,7 @@
 # Variables for supabase-project module
 
 variable "gcp_project_id" {
-  description = "GCP project ID for Secret Manager"
-  type        = string
-}
-
-variable "modules_dir" {
-  description = "Path to terraform modules directory"
+  description = "GCP project ID"
   type        = string
 }
 

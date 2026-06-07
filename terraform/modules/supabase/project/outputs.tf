@@ -1,5 +1,11 @@
 # Outputs for supabase-project module
 
+output "config" {
+  description = "Supabase project configuration (all connection details)"
+  value       = jsondecode(google_secret_manager_secret_version.config.secret_data)
+  sensitive   = true
+}
+
 output "project_id" {
   description = "Supabase project reference ID"
   value       = supabase_project.main.id
@@ -10,9 +16,9 @@ output "project_name" {
   value       = supabase_project.main.name
 }
 
-output "secret_ids" {
-  description = "Map of secret names to their Secret Manager secret IDs"
-  value       = { for k, v in module.secrets.secrets : k => v.secret_id }
+output "secret_id" {
+  description = "Secret Manager secret ID for the supabase config"
+  value       = google_secret_manager_secret.config.secret_id
 }
 
 output "supabase_region" {

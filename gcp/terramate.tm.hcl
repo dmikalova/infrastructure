@@ -35,10 +35,10 @@ generate_hcl "_terraform.tf" {
     }
 
     locals {
-      repo_root          = terramate.stack.path.to_root
-      modules_dir        = abspath("${path.root}/${local.repo_root}/terraform/modules")
       gcp_region         = global.gcp.region
+      modules_dir        = abspath("${path.root}/${local.repo_root}/terraform/modules")
       project_id         = global.gcp.project_id
+      repo_root          = terramate.stack.path.to_root
       service_account_id = global.gcp.service_account_id
     }
 
