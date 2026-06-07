@@ -50,3 +50,8 @@ output "zone_names" {
   description = "Zone names per domain"
   value       = { for domain, zone in module.dns_zones : domain => zone.zone_name }
 }
+
+output "dnssec" {
+  description = "DNSSEC configuration per domain - use to create DS records at registrar"
+  value       = { for domain, zone in module.dns_zones : domain => zone.dnssec_key_specs }
+}
