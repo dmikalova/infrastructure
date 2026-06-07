@@ -1,4 +1,4 @@
-# Todos Infra: Review
+# Tasks Infra: Review
 
 ## Summary
 
@@ -29,7 +29,7 @@ No alternatives identified - using established modules is correct choice.
 
 ## Simplifications
 
-- [x] **No sidecars or scheduled jobs**: Unlike email-unsubscribe, todos doesn't
+- [x] **No sidecars or scheduled jobs**: Unlike email-unsubscribe, tasks doesn't
       need browser automation or scheduled tasks. **Address**: Simpler configuration.
 
 ## Missing Considerations

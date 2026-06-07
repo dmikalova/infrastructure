@@ -1,4 +1,4 @@
-# Todos Infra: Tasks
+# Tasks Infra: Tasks
 
 ## 1. Secrets Setup
 
@@ -7,7 +7,7 @@
 
 ## 2. Stack Creation
 
-- [x] 2.1 Create gcp/apps/todos/ directory
+- [x] 2.1 Create gcp/apps/tasks/ directory
 - [x] 2.2 Create stack.tm.hcl with dependencies on baseline, platform, wif, and
       supabase
 - [x] 2.3 Create \_terraform.tf (Terramate generated via `terramate generate`)
@@ -15,15 +15,15 @@
 
 ## 3. Main Configuration
 
-- [x] 3.1 Configure app_name = "todos"
-- [x] 3.2 Configure domain = "mklv.tech" for todos.mklv.tech subdomain
+- [x] 3.1 Configure app_name = "tasks"
+- [x] 3.2 Configure domain = "mklv.tech" for tasks.mklv.tech subdomain
 - [x] 3.3 Add existing_secrets for SUPABASE_URL
 - [x] 3.4 Add secrets block for SUPABASE_JWT_KEY and SUPABASE_PUBLISHABLE_KEY
       from supabase.sops.json
 
 ## 4. Validation
 
-- [x] 4.1 Run tofu init in gcp/apps/todos/
+- [x] 4.1 Run tofu init in gcp/apps/tasks/
 - [x] 4.2 Run tofu plan and verify no errors
 - [x] 4.3 Review plan output for expected resources (28 resources to add)
 

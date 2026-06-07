@@ -1,31 +1,31 @@
-# Todos Cloud Run: Spec
+# Tasks Cloud Run: Spec
 
 ## ADDED Requirements
 
-### Requirement: Cloud Run service at gcp/apps/todos
+### Requirement: Cloud Run service at gcp/apps/tasks
 
-The infrastructure SHALL create a Terramate stack at `gcp/apps/todos/` using the
-`cloud-run-app` module to deploy the todos application.
+The infrastructure SHALL create a Terramate stack at `gcp/apps/tasks/` using the
+`cloud-run-app` module to deploy the tasks application.
 
 #### Scenario: Stack creation
 
 - **WHEN** stack is applied
-- **THEN** Cloud Run service is created with name "todos"
+- **THEN** Cloud Run service is created with name "tasks"
 
-### Requirement: Custom domain todos.mklv.tech
+### Requirement: Custom domain tasks.mklv.tech
 
-The infrastructure SHALL map the Cloud Run service to todos.mklv.tech with
+The infrastructure SHALL map the Cloud Run service to tasks.mklv.tech with
 automatic SSL certificate provisioning.
 
 #### Scenario: Domain mapping
 
 - **WHEN** stack is applied
-- **THEN** Cloud Run service responds at <https://todos.mklv.tech>
+- **THEN** Cloud Run service responds at <https://tasks.mklv.tech>
 
 ### Requirement: Supabase database via app-database module
 
 The infrastructure SHALL use the app-database submodule to create an isolated
-database schema for todos in the shared mklv Supabase project.
+database schema for tasks in the shared mklv Supabase project.
 
 #### Scenario: Database credentials
 
@@ -52,4 +52,4 @@ federation, and Supabase stacks.
 #### Scenario: Dependency ordering
 
 - **WHEN** running `terramate run` across all stacks
-- **THEN** todos stack runs after its dependencies
+- **THEN** tasks stack runs after its dependencies

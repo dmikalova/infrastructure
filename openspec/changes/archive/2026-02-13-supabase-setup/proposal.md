@@ -1,6 +1,6 @@
 # Why
 
-Multiple apps (email-unsubscribe, lists, recipes, todos) need PostgreSQL
+Multiple apps (email-unsubscribe, lists, recipes, tasks) need PostgreSQL
 databases. Supabase provides managed PostgreSQL with connection pooling, a
 generous free tier, and the ability to host multiple isolated schemas in a
 single project. Each app should have true database-level isolation via roles and

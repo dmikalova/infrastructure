@@ -15,7 +15,7 @@ and links to applications.
 #### Scenario: Landing page includes app links
 
 - **WHEN** the landing page is rendered
-- **THEN** it includes links to email-unsubscribe, login, and todos apps
+- **THEN** it includes links to email-unsubscribe, login, and tasks apps
 
 ### Requirement: MKLV favicon
 

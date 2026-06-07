@@ -23,5 +23,5 @@ All repos now under `dmikalova`:
 
 - **Kept**: brocket, dmikalova, dotfiles, infrastructure, synths
 - **Added**: email-unsubscribe, github-meta
-- **Transferred from cddc39**: lists, recipes, todos
+- **Transferred from cddc39**: lists, recipes, tasks
 - **Deleted**: all screeptorio repos, all e91e63 terraform-\* repos

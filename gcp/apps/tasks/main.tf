@@ -1,9 +1,9 @@
-# todos Cloud Run service
+# tasks Cloud Run service
 #
 # App-specific configuration using the cloud-run-app module.
 
 locals {
-  app_name         = "todos"
+  app_name         = "tasks"
   supabase_secrets = provider::sops::file("${local.repo_root}/secrets/supabase.sops.json").data
 }
 
