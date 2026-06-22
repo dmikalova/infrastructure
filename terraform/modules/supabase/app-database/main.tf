@@ -54,11 +54,12 @@ resource "postgresql_grant" "schema" {
   depends_on = [postgresql_schema.app]
 }
 
-# Grant table permissions (SELECT, INSERT, UPDATE, DELETE)
+# Grant table permissions (SELECT, INSERT, UPDATE, DELETE, REFERENCES)
+# REFERENCES is required for creating foreign key constraints during migrations
 resource "postgresql_grant" "tables" {
   database    = "postgres"
   object_type = "table"
-  privileges  = ["DELETE", "INSERT", "SELECT", "UPDATE"]
+  privileges  = ["DELETE", "INSERT", "REFERENCES", "SELECT", "UPDATE"]
   role        = postgresql_role.app.name
   schema      = local.schema_name
 
