@@ -35,6 +35,10 @@ module "repositories" {
       description = "terramate infrastructure configuration"
       topics      = ["infra-deploy", "mklv-deploy"]
     }
+    "keyforge.cards" = {
+      description = "landing pages for keyforge.cards and its subdomains"
+      topics      = ["keyforge-cards", "mklv-deploy"]
+    }
     lists = {
       description = "manage lists"
     }
@@ -54,6 +58,10 @@ module "repositories" {
     }
     tasks = {
       description = "manage tasks"
+      topics      = ["mklv-deploy", "mklv-tech"]
+    }
+    vactrol = {
+      description = "a KeyForge-style card game engine in Go, playable in the browser"
       topics      = ["mklv-deploy", "mklv-tech"]
     }
   }
