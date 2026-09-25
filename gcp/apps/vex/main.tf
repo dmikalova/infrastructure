@@ -1,12 +1,12 @@
-# vactrol Cloud Run service
+# vex Cloud Run service
 #
-# Serves the Vactrol browser client (Go + WebAssembly) at vactrol.mklv.tech.
-# subdomain defaults to app_name, so the module maps vactrol.mklv.tech and
+# Serves the Vex browser client (Go + WebAssembly) at vex.mklv.tech.
+# subdomain defaults to app_name, so the module maps vex.mklv.tech and
 # creates its CNAME in the mklv-tech managed zone. warm defaults to true, so the
 # mklv warming service keeps it warm.
 
 locals {
-  app_name = "vactrol"
+  app_name = "vex"
 }
 
 # Cloud Run

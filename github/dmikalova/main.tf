@@ -60,7 +60,7 @@ module "repositories" {
       description = "manage tasks"
       topics      = ["mklv-deploy", "mklv-tech"]
     }
-    vactrol = {
+    vex = {
       description = "a KeyForge-style card game engine in Go, playable in the browser"
       topics      = ["mklv-deploy", "mklv-tech"]
     }
@@ -68,6 +68,23 @@ module "repositories" {
   secrets = {
     PKG_READ_TOKEN = local.github_secrets.PKG_READ_TOKEN
   }
+}
+
+# Renames
+
+moved {
+  from = module.repositories.github_repository.repos["vactrol"]
+  to   = module.repositories.github_repository.repos["vex"]
+}
+
+moved {
+  from = module.repositories.github_repository_ruleset.main["vactrol"]
+  to   = module.repositories.github_repository_ruleset.main["vex"]
+}
+
+moved {
+  from = module.repositories.github_actions_secret.deploy_secrets["vactrol:PKG_READ_TOKEN"]
+  to   = module.repositories.github_actions_secret.deploy_secrets["vex:PKG_READ_TOKEN"]
 }
 
 data "github_user" "current" {
