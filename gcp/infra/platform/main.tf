@@ -155,3 +155,32 @@ resource "google_artifact_registry_repository_iam_member" "mcr_deploy" {
   repository = google_artifact_registry_repository.mcr.name
   role       = "roles/artifactregistry.reader"
 }
+
+# Discord webhooks for deploy and conformance notifications
+#
+# Every project's cicd workflow posts deploy results to #deploys, and the
+# weekly project-standards conformance bot posts its run summary to
+# #maintenance. Both read the webhook URLs through WIF as the deploy SA.
+
+locals {
+  discord_secrets = provider::sops::file("${local.repo_root}/secrets/discord.sops.json").data
+}
+
+module "discord_webhooks" {
+  source = "${local.modules_dir}/gcp/secret-manager-secret"
+
+  project_id = local.project_id
+  secrets = {
+    "discord-webhook-deploys"     = local.discord_secrets.DEPLOYS_WEBHOOK_URL
+    "discord-webhook-maintenance" = local.discord_secrets.MAINTENANCE_WEBHOOK_URL
+  }
+}
+
+resource "google_secret_manager_secret_iam_member" "discord_webhooks_deploy" {
+  for_each = module.discord_webhooks.secrets
+
+  member    = "serviceAccount:github-actions-deploy@${local.project_id}.iam.gserviceaccount.com"
+  project   = local.project_id
+  role      = "roles/secretmanager.secretAccessor"
+  secret_id = each.value.secret_id
+}
