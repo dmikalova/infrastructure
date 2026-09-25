@@ -1,6 +1,15 @@
 # GitHub repositories module
 # Creates and manages GitHub repositories for a single owner
 
+terraform {
+  required_providers {
+    github = {
+      source  = "integrations/github"
+      version = "~> 6.0"
+    }
+  }
+}
+
 resource "github_repository" "repos" {
   for_each = var.repositories
 
@@ -72,7 +81,7 @@ locals {
 resource "github_actions_secret" "deploy_secrets" {
   for_each = local.repo_secret_keys
 
-  plaintext_value = var.secrets[each.value.name]
+  value = var.secrets[each.value.name]
   repository      = github_repository.repos[each.value.repo].name
   secret_name     = each.value.name
 }
