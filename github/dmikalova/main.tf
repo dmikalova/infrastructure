@@ -73,23 +73,6 @@ module "repositories" {
   }
 }
 
-# Renames
-
-moved {
-  from = module.repositories.github_repository.repos["github-meta"]
-  to   = module.repositories.github_repository.repos["project-standards"]
-}
-
-moved {
-  from = module.repositories.github_repository_ruleset.main["github-meta"]
-  to   = module.repositories.github_repository_ruleset.main["project-standards"]
-}
-
-moved {
-  from = module.repositories.github_actions_secret.deploy_secrets["github-meta:PKG_READ_TOKEN"]
-  to   = module.repositories.github_actions_secret.deploy_secrets["project-standards:PKG_READ_TOKEN"]
-}
-
 data "github_user" "current" {
   username = ""
 }
