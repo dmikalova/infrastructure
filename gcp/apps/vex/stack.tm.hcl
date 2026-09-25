@@ -1,7 +1,7 @@
 stack {
-  name        = "vactrol Cloud Run"
-  description = "Vactrol browser client (Go + WebAssembly) at vactrol.mklv.tech"
-  id          = "gcp-apps-vactrol"
+  name        = "vex Cloud Run"
+  description = "Vex browser client (Go + WebAssembly) at vex.mklv.tech"
+  id          = "gcp-apps-vex"
   tags        = ["google", "sops"]
 
   after = [
