@@ -26,9 +26,9 @@ github/
 | dmikalova         | personal profile                       |
 | dotfiles          | personal dotfiles                      |
 | email-unsubscribe | Gmail inbox cleanup automation         |
-| github-meta       | reusable workflows and repo standards  |
 | infrastructure    | terramate infrastructure configuration |
 | lists             | manage lists                           |
+| project-standards | project standards and conformance      |
 | recipes           | manage recipes                         |
 | synths            | personal synth notes                   |
 | tasks             | manage tasks                           |

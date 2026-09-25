@@ -16,6 +16,9 @@ module "repositories" {
     brocket = {
       description = "run-or-raise script for declarative window navigation"
     }
+    diatom = {
+      description = "priority-queued agent loop harness"
+    }
     dmikalova = {
       description = "personal profile"
       topics      = ["dmikalova-dev"]
@@ -26,10 +29,6 @@ module "repositories" {
     email-unsubscribe = {
       description = "Gmail inbox cleanup automation"
       topics      = ["mklv-deploy", "mklv-tech"]
-    }
-    github-meta = {
-      description = "reusable workflows, Dagger pipelines, and repo standards"
-      topics      = ["mklv-deploy"]
     }
     infrastructure = {
       description = "terramate infrastructure configuration"
@@ -49,6 +48,10 @@ module "repositories" {
     "mklv.tech" = {
       description = "warming service and landing page for mklv.tech"
       topics      = ["mklv-deploy", "mklv-tech"]
+    }
+    project-standards = {
+      description = "standards every project follows, and the automation that keeps them in conformance"
+      topics      = ["mklv-deploy"]
     }
     recipes = {
       description = "manage recipes"
@@ -73,18 +76,18 @@ module "repositories" {
 # Renames
 
 moved {
-  from = module.repositories.github_repository.repos["vactrol"]
-  to   = module.repositories.github_repository.repos["vex"]
+  from = module.repositories.github_repository.repos["github-meta"]
+  to   = module.repositories.github_repository.repos["project-standards"]
 }
 
 moved {
-  from = module.repositories.github_repository_ruleset.main["vactrol"]
-  to   = module.repositories.github_repository_ruleset.main["vex"]
+  from = module.repositories.github_repository_ruleset.main["github-meta"]
+  to   = module.repositories.github_repository_ruleset.main["project-standards"]
 }
 
 moved {
-  from = module.repositories.github_actions_secret.deploy_secrets["vactrol:PKG_READ_TOKEN"]
-  to   = module.repositories.github_actions_secret.deploy_secrets["vex:PKG_READ_TOKEN"]
+  from = module.repositories.github_actions_secret.deploy_secrets["github-meta:PKG_READ_TOKEN"]
+  to   = module.repositories.github_actions_secret.deploy_secrets["project-standards:PKG_READ_TOKEN"]
 }
 
 data "github_user" "current" {
