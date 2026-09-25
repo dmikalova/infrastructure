@@ -184,3 +184,35 @@ resource "google_secret_manager_secret_iam_member" "discord_webhooks_deploy" {
   role      = "roles/secretmanager.secretAccessor"
   secret_id = each.value.secret_id
 }
+
+# GitHub token for automation
+#
+# The same full-permission token the github Terramate stacks use (SOPS
+# GITHUB_TOKEN), synced for project-standards' weekly conformance workflow,
+# which checks out and commits to repos with it. Only project-standards may
+# read it: access is granted to that repository's own federated identity, not
+# a service account other repos can impersonate. infrastructure already
+# decrypts it from SOPS. Every other repo gets only PKG_READ_TOKEN.
+
+locals {
+  github_secrets  = provider::sops::file("${local.repo_root}/secrets/github.sops.json").data
+  github_wif_pool = "projects/${data.google_project.main.number}/locations/global/workloadIdentityPools/github"
+}
+
+module "github_token" {
+  source = "${local.modules_dir}/gcp/secret-manager-secret"
+
+  project_id = local.project_id
+  secrets = {
+    "github-token" = local.github_secrets.GITHUB_TOKEN
+  }
+}
+
+resource "google_secret_manager_secret_iam_member" "github_token_project_standards" {
+  for_each = module.github_token.secrets
+
+  member    = "principalSet://iam.googleapis.com/${local.github_wif_pool}/attribute.repository/dmikalova/project-standards"
+  project   = local.project_id
+  role      = "roles/secretmanager.secretAccessor"
+  secret_id = each.value.secret_id
+}
