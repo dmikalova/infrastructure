@@ -36,7 +36,6 @@ module "repositories" {
       description = "personal dotfiles"
     }
     email-unsubscribe = {
-      conform     = false
       description = "Gmail inbox cleanup automation"
       topics      = ["mklv-deploy", "mklv-tech"]
     }
@@ -46,7 +45,6 @@ module "repositories" {
       topics      = ["infra-deploy", "mklv-deploy"]
     }
     "keyforge.cards" = {
-      conform     = false
       description = "landing pages for keyforge.cards and its subdomains"
       topics      = ["keyforge-cards", "mklv-deploy"]
     }
@@ -55,7 +53,6 @@ module "repositories" {
       description = "manage lists"
     }
     login = {
-      conform     = false
       description = "centralized login portal for multi-domain authentication"
       topics      = ["mklv-deploy", "mklv-tech"]
     }
