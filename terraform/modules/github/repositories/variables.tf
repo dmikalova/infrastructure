@@ -9,8 +9,10 @@ variable "repositories" {
     # Opt the repository into the weekly conformance bot (mklv-conform topic).
     conform     = optional(bool, true)
     description = optional(string, "")
-    topics      = optional(list(string), [])
-    visibility  = optional(string, "public")
+    # Issues are off unless a repository needs them.
+    has_issues = optional(bool, false)
+    topics     = optional(list(string), [])
+    visibility = optional(string, "public")
   }))
 }
 

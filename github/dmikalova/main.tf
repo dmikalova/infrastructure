@@ -49,6 +49,8 @@ module "repositories" {
       # Off: not on the standards.
       conform     = false
       description = "Collection of small Factorio mods"
+      # Keeps its issues: it has open ones.
+      has_issues = true
     }
     infrastructure = {
       description = "terramate infrastructure configuration"
