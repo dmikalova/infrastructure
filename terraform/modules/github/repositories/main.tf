@@ -20,7 +20,7 @@ resource "github_repository" "repos" {
   visibility       = each.value.visibility
 
   # Standard settings for all repos
-  has_issues      = false
+  has_issues      = each.value.has_issues
   has_discussions = false
   has_projects    = false
   has_wiki        = false
