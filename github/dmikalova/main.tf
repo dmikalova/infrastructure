@@ -14,7 +14,7 @@ module "repositories" {
   owner = "dmikalova"
   # Every repository gets the conformance bot (mklv-conform) unless it sets
   # conform = false. Rolling out a few at a time: remove a repository's
-  # conform = false once it is ready.
+  # conform = false once it is ready, unless a comment says it never will be.
   repositories = {
     brocket = {
       conform     = false
@@ -30,6 +30,7 @@ module "repositories" {
       topics      = ["dmikalova-dev"]
     }
     dotfiles = {
+      # Never conformed: configuration files, not a code project.
       conform     = false
       description = "personal dotfiles"
     }
