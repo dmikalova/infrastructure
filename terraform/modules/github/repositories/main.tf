@@ -16,7 +16,7 @@ resource "github_repository" "repos" {
   name             = each.key
   description      = each.value.description
   license_template = "apache-2.0"
-  topics           = each.value.topics
+  topics           = sort(distinct(concat(each.value.topics, each.value.conform ? ["mklv-conform"] : [])))
   visibility       = each.value.visibility
 
   # Standard settings for all repos

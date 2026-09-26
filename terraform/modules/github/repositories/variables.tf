@@ -6,6 +6,8 @@ variable "owner" {
 variable "repositories" {
   description = "Map of repository names to their configuration"
   type = map(object({
+    # Opt the repository into the weekly conformance bot (mklv-conform topic).
+    conform     = optional(bool, true)
     description = optional(string, "")
     topics      = optional(list(string), [])
     visibility  = optional(string, "public")
