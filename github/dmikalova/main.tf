@@ -17,10 +17,12 @@ module "repositories" {
   # conform = false once it is ready, unless a comment says it never will be.
   repositories = {
     brocket = {
+      # Off until the larger rework it needs.
       conform     = false
       description = "run-or-raise script for declarative window navigation"
     }
     diatom = {
+      # Off while it is built separately.
       conform     = false
       description = "priority-queued agent loop harness"
     }
@@ -40,7 +42,6 @@ module "repositories" {
       topics      = ["mklv-deploy", "mklv-tech"]
     }
     infrastructure = {
-      conform     = false
       description = "terramate infrastructure configuration"
       topics      = ["infra-deploy", "mklv-deploy"]
     }
@@ -49,6 +50,7 @@ module "repositories" {
       topics      = ["keyforge-cards", "mklv-deploy"]
     }
     lists = {
+      # Off until the larger rework it needs.
       conform     = false
       description = "manage lists"
     }
@@ -65,6 +67,7 @@ module "repositories" {
       topics      = ["mklv-deploy"]
     }
     recipes = {
+      # Off until the larger rework it needs.
       conform     = false
       description = "manage recipes"
     }
