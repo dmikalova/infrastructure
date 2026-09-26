@@ -14,8 +14,8 @@ locals {
       most_recent_versions = null
     },
     {
-      id     = "keep-last-50"
-      action = "KEEP"
+      id        = "keep-last-50"
+      action    = "KEEP"
       condition = null
       most_recent_versions = {
         keep_count = 50

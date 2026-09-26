@@ -64,7 +64,7 @@ resource "google_secret_manager_secret" "config" {
 }
 
 resource "google_secret_manager_secret_version" "config" {
-  secret      = google_secret_manager_secret.config.id
+  secret = google_secret_manager_secret.config.id
   secret_data = jsonencode({
     # API keys
     publishable_key = data.supabase_apikeys.main.publishable_key
