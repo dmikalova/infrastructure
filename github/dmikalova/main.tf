@@ -25,6 +25,7 @@ module "repositories" {
       description = "priority-queued agent loop harness"
     }
     dmikalova = {
+      # Never conformed: the profile README, not a code project.
       conform     = false
       description = "personal profile"
       topics      = ["dmikalova-dev"]
@@ -71,6 +72,7 @@ module "repositories" {
       description = "manage recipes"
     }
     synths = {
+      # Never conformed: notes, not a code project.
       conform     = false
       description = "personal notes and resources on eurorack synths"
     }
