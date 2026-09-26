@@ -37,9 +37,18 @@ module "repositories" {
       conform     = false
       description = "personal dotfiles"
     }
+    droid = {
+      # Off: not a code project.
+      conform = false
+    }
     email-unsubscribe = {
       description = "Gmail inbox cleanup automation"
       topics      = ["mklv-deploy", "mklv-tech"]
+    }
+    factorio-mods = {
+      # Off: not on the standards.
+      conform     = false
+      description = "Collection of small Factorio mods"
     }
     infrastructure = {
       description = "terramate infrastructure configuration"
@@ -48,6 +57,11 @@ module "repositories" {
     "keyforge.cards" = {
       description = "landing pages for keyforge.cards and its subdomains"
       topics      = ["keyforge-cards", "mklv-deploy"]
+    }
+    keyforge-scripts = {
+      # Off: not on the standards.
+      conform     = false
+      description = "Collection of KeyForge scripts"
     }
     lists = {
       # Off until the larger rework it needs.
