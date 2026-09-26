@@ -23,6 +23,7 @@ module "repositories" {
     }
     diatom = {
       description = "priority-queued agent loop harness"
+      topics      = ["mklv-deploy"]
     }
     dmikalova = {
       # Never conformed: the profile README, not a code project.
