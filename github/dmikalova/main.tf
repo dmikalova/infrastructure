@@ -65,7 +65,7 @@ module "repositories" {
     }
     vex = {
       description = "a KeyForge-style card game engine in Go, playable in the browser"
-      topics      = ["mklv-deploy", "mklv-tech"]
+      topics      = ["mklv-conform", "mklv-deploy", "mklv-tech"]
     }
   }
   secrets = {
