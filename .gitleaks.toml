@@ -4,13 +4,5 @@
 # mklv.config.json merged onto it. Edit mklv.config.json instead, then run
 # `mage ci:fix`, or `project-standards fix` without Go, to regenerate it.
 
-[[allowlists]]
-commits = ["c9ecdacfee80330e9b0df570fe5546ba7e9a1744"]
-description = "Historical: the 2021 tekton demo's GitLab deploy key, removed from the tree in d7b3ff1 and revoked. It stays in public history."
-
-[[allowlists]]
-commits = ["0ba5c2501e328a434c7ea5ca5dd38a587fe59ac5"]
-description = "False positive: prose in an archived openspec design doc."
-
 [extend]
 useDefault = true
