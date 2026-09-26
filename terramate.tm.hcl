@@ -5,7 +5,7 @@ terramate {
   config {
     # Allow git to have unsaved changes when running plan/apply
     disable_safeguards = ["git"]
-    experiments = ["scripts"]
+    experiments        = ["scripts"]
   }
 }
 
