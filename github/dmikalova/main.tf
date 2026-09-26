@@ -12,36 +12,48 @@ module "repositories" {
   source = "${local.modules_dir}/github/repositories"
 
   owner = "dmikalova"
+  # Every repository gets the conformance bot (mklv-conform) unless it sets
+  # conform = false. Rolling out a few at a time: remove a repository's
+  # conform = false once it is ready.
   repositories = {
     brocket = {
+      conform     = false
       description = "run-or-raise script for declarative window navigation"
     }
     diatom = {
+      conform     = false
       description = "priority-queued agent loop harness"
     }
     dmikalova = {
+      conform     = false
       description = "personal profile"
       topics      = ["dmikalova-dev"]
     }
     dotfiles = {
+      conform     = false
       description = "personal dotfiles"
     }
     email-unsubscribe = {
+      conform     = false
       description = "Gmail inbox cleanup automation"
       topics      = ["mklv-deploy", "mklv-tech"]
     }
     infrastructure = {
+      conform     = false
       description = "terramate infrastructure configuration"
       topics      = ["infra-deploy", "mklv-deploy"]
     }
     "keyforge.cards" = {
+      conform     = false
       description = "landing pages for keyforge.cards and its subdomains"
       topics      = ["keyforge-cards", "mklv-deploy"]
     }
     lists = {
+      conform     = false
       description = "manage lists"
     }
     login = {
+      conform     = false
       description = "centralized login portal for multi-domain authentication"
       topics      = ["mklv-deploy", "mklv-tech"]
     }
@@ -54,9 +66,11 @@ module "repositories" {
       topics      = ["mklv-deploy"]
     }
     recipes = {
+      conform     = false
       description = "manage recipes"
     }
     synths = {
+      conform     = false
       description = "personal notes and resources on eurorack synths"
     }
     tasks = {
@@ -65,7 +79,7 @@ module "repositories" {
     }
     vex = {
       description = "a KeyForge-style card game engine in Go, playable in the browser"
-      topics      = ["mklv-conform", "mklv-deploy", "mklv-tech"]
+      topics      = ["mklv-deploy", "mklv-tech"]
     }
   }
   secrets = {
