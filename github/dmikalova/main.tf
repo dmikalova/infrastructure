@@ -22,8 +22,6 @@ module "repositories" {
       description = "run-or-raise script for declarative window navigation"
     }
     diatom = {
-      # Off while it is built separately.
-      conform     = false
       description = "priority-queued agent loop harness"
     }
     dmikalova = {
