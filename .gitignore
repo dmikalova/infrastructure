@@ -78,6 +78,10 @@ override.tf.json
 *_override.tf
 *_override.tf.json
 
+# diatom's state: its queue, sessions and worktrees. Kept out of git and of
+# every check, whose tools read .gitignore but not the global excludes file.
+.diatom/
+
 # Logs and scratch files
 *.log
 npm-debug.log*
