@@ -47,8 +47,7 @@ tofu init
 tofu plan
 
 # Across all stacks
-terramate run -- tofu init
-terramate run -- tofu plan
+terramate script run apply
 ```
 
 **Never run `tofu apply`** - do not execute it or ask to execute it. Instead,
