@@ -21,6 +21,10 @@ module "repositories" {
       conform     = false
       description = "run-or-raise script for declarative window navigation"
     }
+    den = {
+      description = "home server config, autoinstall builder, and the den operational binary"
+      topics      = ["mklv-deploy"]
+    }
     diatom = {
       description = "priority-queued agent loop harness"
       topics      = ["mklv-deploy"]
