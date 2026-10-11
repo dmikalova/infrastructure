@@ -63,6 +63,8 @@ let them resolve it.
 - `gcp/` - Terramate stacks for GCP infrastructure
 - `github/` - Terramate stacks for GitHub repository management
 - `secrets/` - SOPS-encrypted secrets (`*.sops.json`)
+- `docs/adr/` - Architecture decision records. Read these before changing how a
+  stack is wired; they record why, which the code cannot.
 - `openspec/` - Change specifications and design docs
 
 ## Stack Dependencies

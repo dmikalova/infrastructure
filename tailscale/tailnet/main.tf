@@ -13,13 +13,6 @@ data "terraform_remote_state" "github_dmikalova" {
 locals {
   github_wif_pool = "projects/${data.google_project.main.number}/locations/global/workloadIdentityPools/github"
 
-  # The account id behind the dmikalova login. Pinned rather than wildcarded
-  # because a login can be released and re-registered by someone else, and an
-  # id cannot. No try(): a missing id should fail the apply, not silently widen
-  # the pattern.
-  github_owner    = data.terraform_remote_state.github_dmikalova.outputs.owner
-  github_owner_id = data.terraform_remote_state.github_dmikalova.outputs.owner_id
-
   # Filter repos by mklv-tailscale topic
   ci_repos = {
     for name, repo in try(data.terraform_remote_state.github_dmikalova.outputs.repositories, {}) :
@@ -107,18 +100,10 @@ resource "tailscale_federated_identity" "ci" {
   description = "${each.key} CI"
   issuer      = "https://token.actions.githubusercontent.com"
 
-  # GitHub issues immutable subjects, so the sub claim is not
-  # repo:owner/name:... but repo:owner@ownerID/name@repoID:..., for example
-  # repo:dmikalova@324548/den@1412746511:ref:refs/heads/main. A pattern built
-  # from the logins alone never matches and the exchange returns 403.
-  #
-  # Both ids are pinned, so neither a released login nor a released repo name
-  # can be re-registered by someone else and inherit this trust. Only the ref
-  # is a wildcard.
   subject = format(
     "repo:%s@%s/%s@%s:*",
-    local.github_owner,
-    local.github_owner_id,
+    data.terraform_remote_state.github_dmikalova.outputs.owner,
+    data.terraform_remote_state.github_dmikalova.outputs.owner_id,
     each.value.name,
     each.value.repo_id,
   )
