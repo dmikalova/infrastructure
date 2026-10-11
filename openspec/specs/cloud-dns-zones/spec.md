@@ -5,7 +5,7 @@
 ## Requirement: Reusable Cloud DNS zone module
 
 The system SHALL provide a reusable Terraform module at
-`terraform/modules/gcp/cloud-dns-zone` that creates a single GCP Cloud DNS
+`tofu/modules/gcp/cloud-dns-zone` that creates a single GCP Cloud DNS
 managed zone for a given domain.
 
 ### Scenario: Create a managed zone

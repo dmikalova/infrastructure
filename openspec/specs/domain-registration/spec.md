@@ -5,7 +5,7 @@
 ## Requirement: Reusable Namecheap domain module
 
 The system SHALL provide a reusable Terraform module at
-`terraform/modules/namecheap/domain` that manages NS delegation for a single
+`tofu/modules/namecheap/domain` that manages NS delegation for a single
 domain on Namecheap.
 
 ### Scenario: Delegate a domain to external nameservers

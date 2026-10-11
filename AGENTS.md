@@ -104,7 +104,7 @@ proactively if they're clearly needed for the new resource type.
 
 ## Module Design
 
-- Use existing modules from `terraform/modules/` when available
+- Use existing modules from `tofu/modules/` when available
 - Prefer opinionated defaults derived from existing inputs over extra variables
 - If a value can be computed from inputs the module already has, compute it internally
 

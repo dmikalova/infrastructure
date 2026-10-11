@@ -42,7 +42,7 @@ github/
 
 ## Local Module
 
-Repository definitions use `terraform/modules/github/repositories` local module,
+Repository definitions use `tofu/modules/github/repositories` local module,
 which wraps `github_repository` resources with standard defaults:
 
 - Visibility: public (default)

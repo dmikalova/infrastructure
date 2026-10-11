@@ -14,13 +14,13 @@ context: |
   - Never run `tofu apply` - only `tofu init` and `tofu plan`
   - Secrets in secrets/*.sops.json, accessed via SOPS provider
   - Alphabetize lists, variables, and resource arguments
-  - Use modules from terraform/modules/ when available
+  - Use modules from tofu/modules/ when available
 
   # File Structure
   - gcp/ - Terramate stacks for GCP infrastructure
   - github/ - Terramate stacks for GitHub repository management
   - supabase/ - Terramate stacks for Supabase projects
-  - terraform/modules/ - Reusable OpenTofu modules
+  - tofu/modules/ - Reusable OpenTofu modules
   - secrets/ - SOPS-encrypted secrets
 
   # Stack Dependencies
