@@ -12,5 +12,3 @@ config:
   MD040: false
   MD049: false
 gitignore: true
-ignores:
-  - openspec/changes/archive/**

@@ -8,11 +8,11 @@ and why the other two cannot work.
 Supabase exposes the same database three ways, and they are not
 interchangeable:
 
-| Endpoint | Port | IPv4 | Prepared statements |
-| --- | --- | --- | --- |
-| Direct | 5432 | no, IPv6 only | yes |
-| Session pooler | 5432 | yes | yes |
-| Transaction pooler | 6543 | yes | no |
+| Endpoint           | Port | IPv4          | Prepared statements |
+| ------------------ | ---- | ------------- | ------------------- |
+| Direct             | 5432 | no, IPv6 only | yes                 |
+| Session pooler     | 5432 | yes           | yes                 |
+| Transaction pooler | 6543 | yes           | no                  |
 
 The PostgreSQL provider needs prepared statements to run DDL. GitHub Actions
 runners have no IPv6.

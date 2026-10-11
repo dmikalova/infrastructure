@@ -1,12 +1,5 @@
 {
   "$schema": "https://raw.githubusercontent.com/dmikalova/project-standards/main/schema/mklv.config.schema.json",
   "name": "infrastructure",
-  "kind": "infra",
-  "tools": {
-    "markdownlint": {
-      "ignores": [
-        "openspec/changes/archive/**"
-      ]
-    }
-  }
+  "kind": "infra"
 }
