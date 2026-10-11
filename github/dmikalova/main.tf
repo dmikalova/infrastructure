@@ -23,7 +23,7 @@ module "repositories" {
     }
     den = {
       description = "home server config, autoinstall builder, and the den operational binary"
-      topics      = ["mklv-deploy"]
+      topics      = ["mklv-deploy", "mklv-tailscale"]
     }
     diatom = {
       description = "priority-queued agent loop harness"

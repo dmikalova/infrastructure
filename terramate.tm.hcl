@@ -112,5 +112,6 @@ globals {
     random      = "~> 3.0"
     sops        = "~> 0.3"
     supabase    = "~> 1.7"
+    tailscale   = "~> 0.29"
   }
 }
