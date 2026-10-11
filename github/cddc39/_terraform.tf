@@ -18,7 +18,7 @@ terraform {
   }
 }
 locals {
-  modules_dir = abspath("${path.root}/${local.repo_root}/terraform/modules")
+  modules_dir = abspath("${path.root}/${local.repo_root}/tofu/modules")
   repo_root   = "../.."
 }
 provider "github" {

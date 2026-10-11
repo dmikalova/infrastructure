@@ -23,7 +23,7 @@ generate_hcl "_terraform.tf" {
     }
 
     locals {
-      modules_dir  = abspath("${path.root}/${local.repo_root}/terraform/modules")
+      modules_dir  = abspath("${path.root}/${local.repo_root}/tofu/modules")
       repo_root    = terramate.stack.path.to_root
       state_bucket = global.state_bucket
     }
