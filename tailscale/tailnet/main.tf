@@ -15,9 +15,9 @@ locals {
 
   # The account id behind the dmikalova login. Pinned rather than wildcarded
   # because a login can be released and re-registered by someone else, and an
-  # id cannot. Hardcoded because the github stack's outputs carry full_name,
-  # urls and topics, but no numeric id.
-  github_owner_id = "324548"
+  # id cannot. No try(): a missing id should fail the apply, not silently widen
+  # the pattern.
+  github_owner_id = data.terraform_remote_state.github_dmikalova.outputs.owner_id
 
   # Filter repos by mklv-tailscale topic
   ci_repos = {
@@ -112,9 +112,8 @@ resource "tailscale_federated_identity" "ci" {
   # from full_name alone never matches and the exchange returns 403.
   #
   # The owner id is pinned, so a login released and re-registered by someone
-  # else cannot inherit this trust. The repo id stays a wildcard: this stack
-  # does not have it, and a repo name can only be re-registered by whoever
-  # already holds the pinned owner id.
+  # else cannot inherit this trust. The repo id stays a wildcard: a repo name
+  # can only be re-registered by whoever already holds the pinned owner id.
   subject = format(
     "repo:%s@%s/%s@*:*",
     split("/", each.value.full_name)[0],
