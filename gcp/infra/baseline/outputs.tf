@@ -16,11 +16,11 @@ output "project_id" {
 }
 
 output "state_bucket_name" {
-  description = "Terraform state bucket name"
+  description = "Tofu state bucket name"
   value       = module.state_bucket.name
 }
 
 output "state_bucket_url" {
-  description = "Terraform state bucket URL"
+  description = "Tofu state bucket URL"
   value       = module.state_bucket.url
 }
