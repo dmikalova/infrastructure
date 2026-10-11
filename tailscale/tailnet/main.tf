@@ -68,6 +68,15 @@ resource "tailscale_acl" "tailnet" {
         dst    = ["tag:den"]
         users  = ["root"]
       },
+      # Without this nobody can log in at all, which is what den reports as a
+      # health warning. "accept" rather than "check" so recovering den never
+      # depends on reaching a browser to re-authenticate.
+      {
+        action = "accept"
+        src    = ["autogroup:member"]
+        dst    = ["tag:den"]
+        users  = ["autogroup:nonroot", "root"]
+      },
     ]
 
     # The policy file is validated at plan time, so a failing test blocks the
