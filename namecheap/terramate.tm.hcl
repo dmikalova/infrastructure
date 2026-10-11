@@ -1,6 +1,6 @@
 # Namecheap stacks - generate Terraform config using centralized provider versions
 
-generate_hcl "_terraform.tf" {
+generate_hcl "_tofu.tf" {
   content {
     terraform {
       required_version = ">= 1.8"

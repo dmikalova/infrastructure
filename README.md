@@ -11,7 +11,7 @@ are encrypted with [SOPS](https://github.com/mozilla/sops) and
 ├── gcp/                    # Google Cloud Platform stacks
 ├── github/                 # GitHub repository management
 ├── secrets/                # SOPS-encrypted secrets
-└── terraform/
+└── tofu/
     └── modules/            # Reusable OpenTofu modules
 ```
 
