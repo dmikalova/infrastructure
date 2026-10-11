@@ -13,6 +13,12 @@ data "terraform_remote_state" "github_dmikalova" {
 locals {
   github_wif_pool = "projects/${data.google_project.main.number}/locations/global/workloadIdentityPools/github"
 
+  # The account id behind the dmikalova login. Pinned rather than wildcarded
+  # because a login can be released and re-registered by someone else, and an
+  # id cannot. Hardcoded because the github stack's outputs carry full_name,
+  # urls and topics, but no numeric id.
+  github_owner_id = "324548"
+
   # Filter repos by mklv-tailscale topic
   ci_repos = {
     for name, repo in try(data.terraform_remote_state.github_dmikalova.outputs.repositories, {}) :
@@ -105,13 +111,14 @@ resource "tailscale_federated_identity" "ci" {
   # repo:dmikalova@324548/den@1412746511:ref:refs/heads/main. A pattern built
   # from full_name alone never matches and the exchange returns 403.
   #
-  # The IDs are wildcards because this stack does not have them: the github
-  # stack's repositories output carries full_name and topics, not repo_id.
-  # Pinning them would be stricter, since an ID cannot be re-registered the way
-  # a name can, and is the reason to prefer IDs when they are available.
+  # The owner id is pinned, so a login released and re-registered by someone
+  # else cannot inherit this trust. The repo id stays a wildcard: this stack
+  # does not have it, and a repo name can only be re-registered by whoever
+  # already holds the pinned owner id.
   subject = format(
-    "repo:%s@*/%s@*:*",
+    "repo:%s@%s/%s@*:*",
     split("/", each.value.full_name)[0],
+    local.github_owner_id,
     split("/", each.value.full_name)[1],
   )
 
