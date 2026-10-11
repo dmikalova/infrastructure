@@ -17,6 +17,7 @@ locals {
   # because a login can be released and re-registered by someone else, and an
   # id cannot. No try(): a missing id should fail the apply, not silently widen
   # the pattern.
+  github_owner    = data.terraform_remote_state.github_dmikalova.outputs.owner
   github_owner_id = data.terraform_remote_state.github_dmikalova.outputs.owner_id
 
   # Filter repos by mklv-tailscale topic
@@ -109,16 +110,17 @@ resource "tailscale_federated_identity" "ci" {
   # GitHub issues immutable subjects, so the sub claim is not
   # repo:owner/name:... but repo:owner@ownerID/name@repoID:..., for example
   # repo:dmikalova@324548/den@1412746511:ref:refs/heads/main. A pattern built
-  # from full_name alone never matches and the exchange returns 403.
+  # from the logins alone never matches and the exchange returns 403.
   #
-  # The owner id is pinned, so a login released and re-registered by someone
-  # else cannot inherit this trust. The repo id stays a wildcard: a repo name
-  # can only be re-registered by whoever already holds the pinned owner id.
+  # Both ids are pinned, so neither a released login nor a released repo name
+  # can be re-registered by someone else and inherit this trust. Only the ref
+  # is a wildcard.
   subject = format(
-    "repo:%s@%s/%s@*:*",
-    split("/", each.value.full_name)[0],
+    "repo:%s@%s/%s@%s:*",
+    local.github_owner,
     local.github_owner_id,
-    split("/", each.value.full_name)[1],
+    each.value.name,
+    each.value.repo_id,
   )
 
   scopes = ["auth_keys"]

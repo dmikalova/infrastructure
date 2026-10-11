@@ -10,6 +10,10 @@ terraform {
   }
 }
 
+data "github_user" "owner" {
+  username = var.owner
+}
+
 resource "github_repository" "repos" {
   for_each = var.repositories
 

@@ -8,9 +8,14 @@ output "authenticated_user" {
 
 # GitHub's immutable OIDC subjects name the account by id, not login, so any
 # stack that trusts this account's workflows needs the number.
+output "owner" {
+  description = "The account that owns these repositories"
+  value       = module.repositories.owner
+}
+
 output "owner_id" {
   description = "Numeric GitHub account id of the owner"
-  value       = data.github_user.current.id
+  value       = module.repositories.owner_id
 }
 
 output "repositories" {
