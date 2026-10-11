@@ -99,9 +99,35 @@ resource "tailscale_federated_identity" "ci" {
 
   description = "${each.key} CI"
   issuer      = "https://token.actions.githubusercontent.com"
-  subject     = "repo:${each.value.full_name}:*"
-  scopes      = ["auth_keys"]
-  tags        = ["tag:ci"]
+
+  # GitHub issues immutable subjects, so the sub claim is not
+  # repo:owner/name:... but repo:owner@ownerID/name@repoID:..., for example
+  # repo:dmikalova@324548/den@1412746511:ref:refs/heads/main. A pattern built
+  # from full_name alone never matches and the exchange returns 403.
+  #
+  # The IDs are wildcards because this stack does not have them: the github
+  # stack's repositories output carries full_name and topics, not repo_id.
+  # Pinning them would be stricter, since an ID cannot be re-registered the way
+  # a name can, and is the reason to prefer IDs when they are available.
+  subject = format(
+    "repo:%s@*/%s@*:*",
+    split("/", each.value.full_name)[0],
+    split("/", each.value.full_name)[1],
+  )
+
+  scopes = ["auth_keys"]
+  tags   = ["tag:ci"]
+}
+
+# The console is the only place a rejected exchange explains itself, and the
+# URL is just the client id. Printed here so nobody has to read it out of a
+# failed job's logs.
+output "tailscale_ci_trust_credentials" {
+  description = "Admin console page for each CI federated identity"
+  value = {
+    for name, identity in tailscale_federated_identity.ci :
+    name => "https://login.tailscale.com/admin/settings/trust-credentials/view/${identity.id}"
+  }
 }
 
 # Neither value is a credential: a federated identity has no secret, and a
