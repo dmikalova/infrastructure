@@ -207,7 +207,7 @@ resource "google_secret_manager_secret_iam_member" "deploy_access" {
 
 # Custom Domain
 #
-# PREREQUISITE: The Terraform service account must be a verified owner of the domain
+# PREREQUISITE: The Tofu service account must be a verified owner of the domain
 # in Google Search Console. Without this, domain mapping creation will fail with:
 # "Caller is not authorized to administer the domain"
 #
