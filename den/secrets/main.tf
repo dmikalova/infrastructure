@@ -7,7 +7,6 @@
 locals {
   den_secrets     = provider::sops::file("${local.repo_root}/secrets/den.sops.json").data
   discord_secrets = provider::sops::file("${local.repo_root}/secrets/discord.sops.json").data
-  owner_email     = provider::sops::file("${local.repo_root}/secrets/dmikalova.sops.json").data.email
 }
 
 # Created by the tailnet stack, not here: a key that enrols machines cannot be
@@ -34,21 +33,24 @@ module "host_secret" {
   }
 }
 
-# These build the machine. den must never read them: root on den would then
-# hold the passphrase to den's own disk, which defeats the encryption.
+# These build the machine, and no binding is written for them: the project
+# owner already reads every secret, so the absence of a grant is what keeps
+# den out. den must not read these. Root on den holding the passphrase to
+# den's own disk defeats the encryption, and den reading GCP_KEY here would
+# let it re-fetch a key that had just been revoked.
 module "install_secret" {
   source = "${local.modules_dir}/gcp/secret-manager-project-secret"
 
   project_id = local.project_id
   secret_id  = "den-install"
   data = {
+    GCP_KEY         = base64decode(google_service_account_key.den_host.private_key)
     LUKS_PASSPHRASE = local.den_secrets.LUKS_PASSPHRASE
     PASSWORD        = local.den_secrets.PASSWORD
   }
 }
 
-# The host identity. No key is created here, and none is stored anywhere: den
-# mints one at bootstrap, seals it to its TPM, and holds the only copy.
+# The host identity.
 resource "google_service_account" "den_host" {
   account_id   = "den-host"
   description  = "den reads its own runtime secret and nothing else"
@@ -56,17 +58,16 @@ resource "google_service_account" "den_host" {
   project      = local.project_id
 }
 
+# Minted here rather than on den so the key has a declared owner. A key den
+# issued itself would outlive a rebuild with nothing tracking it, and revoking
+# it would mean first discovering that it existed. Rotate with -replace.
+resource "google_service_account_key" "den_host" {
+  service_account_id = google_service_account.den_host.name
+}
+
 resource "google_secret_manager_secret_iam_member" "den_host_reads_host_secret" {
   member    = "serviceAccount:${google_service_account.den_host.email}"
   project   = local.project_id
   role      = "roles/secretmanager.secretAccessor"
   secret_id = module.host_secret.secret_id
-}
-
-# Only a human at a laptop builds a machine.
-resource "google_secret_manager_secret_iam_member" "owner_reads_install_secret" {
-  member    = "user:${local.owner_email}"
-  project   = local.project_id
-  role      = "roles/secretmanager.secretAccessor"
-  secret_id = module.install_secret.secret_id
 }
