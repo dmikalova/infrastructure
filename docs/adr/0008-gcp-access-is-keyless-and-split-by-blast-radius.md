@@ -47,7 +47,11 @@ long-lived key or no access at all.
   definition of its blast radius, and that list lives in this repository.
 - **Installer secrets stay out of reach.** The host must not be able to read
   the passphrase to its own disk. Secrets used to build the machine are a
-  separate secret with a separate binding.
+  separate secret carrying no binding at all, so only project admins reach
+  them.
+- **The key is minted here, not by the host.** A key a machine issues for
+  itself has no declared owner, outlives a rebuild, and can only be revoked by
+  someone who first works out that it exists.
 - **The key is the only credential delivered to the host.** Everything else is
   fetched. A second delivery channel would recreate the problem this amendment
   exists to avoid.
