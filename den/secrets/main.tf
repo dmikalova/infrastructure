@@ -58,11 +58,23 @@ resource "google_service_account" "den_host" {
   project      = local.project_id
 }
 
+# Scoped to this one account on purpose. roles/iam.serviceAccountKeyAdmin at
+# the project level would let anything running as tofu-ci mint a key for
+# tofu-ci itself, which is a permanent copy of project admin. Here the worst
+# it can mint is another den-host key, and den-host reads one secret.
+resource "google_service_account_iam_member" "tofu_mints_den_host_key" {
+  member             = "serviceAccount:${local.service_account_id}"
+  role               = "roles/iam.serviceAccountKeyAdmin"
+  service_account_id = google_service_account.den_host.name
+}
+
 # Minted here rather than on den so the key has a declared owner. A key den
 # issued itself would outlive a rebuild with nothing tracking it, and revoking
 # it would mean first discovering that it existed. Rotate with -replace.
 resource "google_service_account_key" "den_host" {
   service_account_id = google_service_account.den_host.name
+
+  depends_on = [google_service_account_iam_member.tofu_mints_den_host_key]
 }
 
 resource "google_secret_manager_secret_iam_member" "den_host_reads_host_secret" {
