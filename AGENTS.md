@@ -168,12 +168,18 @@ resource "example" "main" {
 
 Available SOPS files:
 
-| File                  | Contains                         |
-| --------------------- | -------------------------------- |
-| `dmikalova.sops.json` | Personal info (email)            |
-| `gcp.sops.json`       | GCP billing account ID           |
-| `github.sops.json`    | GitHub tokens                    |
-| `supabase.sops.json`  | Supabase access token and org ID |
+| File                  | Contains                              |
+| --------------------- | ------------------------------------- |
+| `den.sops.json`       | Secrets for den that have no provider |
+| `dmikalova.sops.json` | Personal info (email)                 |
+| `gcp.sops.json`       | GCP billing account ID                |
+| `github.sops.json`    | GitHub tokens                         |
+| `supabase.sops.json`  | Supabase access token and org ID      |
+
+Files are grouped by the provider that issues the secret. A Tailscale key
+belongs in `tailscale.sops.json` whatever reads it. `den.sops.json` holds only
+secrets that den itself defines, such as a disk passphrase or an application
+password.
 
 **If a required value is missing from SOPS**, prompt the user to add it rather
 than hardcoding.
