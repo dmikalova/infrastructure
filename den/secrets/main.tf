@@ -26,8 +26,8 @@ module "host_secret" {
   project_id = local.project_id
   secret_id  = "den-host"
   data = {
-    # TODO: give den its own webhook so an alert from den is distinguishable
-    # from a maintenance alert, and so one can be revoked without the other.
+    # den's alerts are maintenance alerts, so they share the maintenance
+    # webhook rather than splitting into a channel nobody watches.
     DISCORD_WEBHOOK_URL = local.discord_secrets.MAINTENANCE_WEBHOOK_URL
     TAILSCALE_AUTHKEY   = module.tailnet.json.den.AUTHKEY
   }
