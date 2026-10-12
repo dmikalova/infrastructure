@@ -166,23 +166,21 @@ locals {
   discord_secrets = provider::sops::file("${local.repo_root}/secrets/discord.sops.json").data
 }
 
+# One secret, keyed exactly like discord.sops.json, because both webhooks have
+# the same reader and the grant is per secret.
 module "discord_webhooks" {
-  source = "${local.modules_dir}/gcp/secret-manager-secret"
+  source = "${local.modules_dir}/gcp/secret-manager-project-secret"
 
   project_id = local.project_id
-  secrets = {
-    "discord-webhook-deploys"     = local.discord_secrets.DEPLOYS_WEBHOOK_URL
-    "discord-webhook-maintenance" = local.discord_secrets.MAINTENANCE_WEBHOOK_URL
-  }
+  secret_id  = "discord"
+  data       = local.discord_secrets
 }
 
 resource "google_secret_manager_secret_iam_member" "discord_webhooks_deploy" {
-  for_each = module.discord_webhooks.secrets
-
   member    = "serviceAccount:github-actions-deploy@${local.project_id}.iam.gserviceaccount.com"
   project   = local.project_id
   role      = "roles/secretmanager.secretAccessor"
-  secret_id = each.value.secret_id
+  secret_id = module.discord_webhooks.secret_id
 }
 
 # GitHub token for automation

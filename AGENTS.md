@@ -168,13 +168,20 @@ resource "example" "main" {
 
 Available SOPS files:
 
-| File                  | Contains                              |
-| --------------------- | ------------------------------------- |
-| `den.sops.json`       | Secrets for den that have no provider |
-| `dmikalova.sops.json` | Personal info (email)                 |
-| `gcp.sops.json`       | GCP billing account ID                |
-| `github.sops.json`    | GitHub tokens                         |
-| `supabase.sops.json`  | Supabase access token and org ID      |
+| File                      | Contains                                |
+| ------------------------- | --------------------------------------- |
+| `age.sops.json`           | Age keypair used to decrypt these files |
+| `den.sops.json`           | Secrets for den that have no provider   |
+| `discord.sops.json`       | Webhook URLs                            |
+| `dmikalova.sops.json`     | Personal info (email)                   |
+| `gcp.sops.json`           | GCP billing account ID                  |
+| `github.sops.json`        | GitHub tokens                           |
+| `gpg.sops.json`           | GPG signing key                         |
+| `namecheap.sops.json`     | Namecheap API credentials               |
+| `ssh.sops.json`           | SSH keys                                |
+| `supabase.sops.json`      | Supabase access token and org ID        |
+| `tailscale.sops.json`     | Tailscale API credentials               |
+| `traefik-users.sops.json` | Traefik basic-auth users                |
 
 Files are grouped by the provider that issues the secret. A Tailscale key
 belongs in `tailscale.sops.json` whatever reads it. `den.sops.json` holds only
@@ -183,3 +190,43 @@ password.
 
 **If a required value is missing from SOPS**, prompt the user to add it rather
 than hardcoding.
+
+### Secret Manager secrets are JSON, grouped by reader
+
+SOPS files are grouped by **issuer**. Secret Manager secrets are grouped by
+**reader**, because an IAM grant is per secret: everything one identity may
+read belongs in one secret, and nothing it may not read may be in there too.
+
+Always use the `secret-manager-project-secret` module, which stores a JSON
+object. Name the secret after the reader, and keep the keys inside identical to
+the SOPS keys they came from.
+
+```hcl
+module "discord_webhooks" {
+  source = "${local.modules_dir}/gcp/secret-manager-project-secret"
+
+  project_id = local.project_id
+  secret_id  = "discord"
+  data       = local.discord_secrets
+}
+```
+
+Rules that follow from this:
+
+- One secret per reader, not one per value. Two values with the same reader are
+  two keys in one secret, so the reader makes one call and carries one grant.
+- Two readers means two secrets, even for the same provider. `tailscale-ci-den`
+  and `tailscale-den` are separate because different identities read them.
+- A JSON object with one key is still correct. The shape is what lets a second
+  value land as a key rather than as a new secret with a new grant.
+- Read secrets back with the `secret-manager-secret-data` module. Its `json`
+  output decodes **every** secret it is given, and Terraform evaluates module
+  outputs whether or not you reference them, so one bare-string secret in the
+  map fails the whole plan.
+- `secret-manager-secret` stores bare strings and predates this rule. Do not
+  use it for anything new. The remaining users are `sops-age-key` and
+  `github-token`, whose consumers read the raw value outside Terraform.
+
+Renaming a secret is a cross-repo change: consumers read them by name with
+`gcloud secrets versions access`. Grep the sibling repos before renaming, and
+apply the infrastructure change only once the consumers are merged.
