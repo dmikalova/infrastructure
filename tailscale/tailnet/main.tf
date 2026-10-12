@@ -20,12 +20,9 @@ locals {
   }
 
   # Which repo may read each secret, keyed the same way the module keys them.
-  ci_secret_owners = merge([
-    for name, repo in local.ci_repos : {
-      "tailscale-ci-${name}-audience"  = repo.full_name
-      "tailscale-ci-${name}-client-id" = repo.full_name
-    }
-  ]...)
+  ci_secret_owners = {
+    for name, repo in local.ci_repos : "tailscale-ci-${name}" => repo.full_name
+  }
 }
 
 # Tags have no registry of their own: a tag exists only as a key in tagOwners,
@@ -126,24 +123,27 @@ output "tailscale_ci_trust_credentials" {
 # Neither value is a credential: a federated identity has no secret, and a
 # token from the owning repo is required to use them. They live here so each
 # repo has one way to read config, not because they need hiding.
+#
+# One secret per repo rather than one per value, because the grant is per
+# secret: a repo that reads its own config should make one call, not two.
 module "ci" {
-  source = "${local.modules_dir}/gcp/secret-manager-secret"
+  source   = "${local.modules_dir}/gcp/secret-manager-project-secret"
+  for_each = tailscale_federated_identity.ci
 
   project_id = local.project_id
-  secrets = merge([
-    for name, identity in tailscale_federated_identity.ci : {
-      "tailscale-ci-${name}-audience"  = identity.audience
-      "tailscale-ci-${name}-client-id" = identity.id
-    }
-  ]...)
+  secret_id  = "tailscale-ci-${each.key}"
+  data = {
+    AUDIENCE  = each.value.audience
+    CLIENT_ID = each.value.id
+  }
 }
 
 # Granted to each repo's own federated identity rather than a service account,
 # so no repo can impersonate its way to another's.
 resource "google_secret_manager_secret_iam_member" "ci" {
-  for_each = module.ci.secrets
+  for_each = module.ci
 
-  member    = "principalSet://iam.googleapis.com/${local.github_wif_pool}/attribute.repository/${local.ci_secret_owners[each.key]}"
+  member    = "principalSet://iam.googleapis.com/${local.github_wif_pool}/attribute.repository/${local.ci_secret_owners[each.value.secret_id]}"
   project   = local.project_id
   role      = "roles/secretmanager.secretAccessor"
   secret_id = each.value.secret_id
@@ -164,11 +164,15 @@ resource "tailscale_tailnet_key" "den" {
   tags                = ["tag:den"]
 }
 
-module "gcp_secret_manager_secret" {
-  source = "${local.modules_dir}/gcp/secret-manager-secret"
+# den's half of the tailnet config. JSON with one key today, because the shape
+# is what makes it extensible: a second value for den lands here rather than
+# becoming a second secret with a second grant.
+module "den" {
+  source = "${local.modules_dir}/gcp/secret-manager-project-secret"
 
   project_id = local.project_id
-  secrets = {
-    "tailscale-den-authkey" = tailscale_tailnet_key.den.key
+  secret_id  = "tailscale-den"
+  data = {
+    AUTHKEY = tailscale_tailnet_key.den.key
   }
 }

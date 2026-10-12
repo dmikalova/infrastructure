@@ -11,12 +11,14 @@ locals {
 }
 
 # Created by the tailnet stack, not here: a key that enrols machines cannot be
-# issued by the machine it enrols. Read directly rather than through the
-# secret-manager-secret-data module, which decodes every secret as JSON and
-# this one is a bare string.
-data "google_secret_manager_secret_version" "tailscale_authkey" {
-  project = local.project_id
-  secret  = "tailscale-den-authkey"
+# issued by the machine it enrols.
+module "tailnet" {
+  source = "${local.modules_dir}/gcp/secret-manager-secret-data"
+
+  project_id = local.project_id
+  secrets = {
+    den = "tailscale-den"
+  }
 }
 
 module "host_secret" {
@@ -28,7 +30,7 @@ module "host_secret" {
     # TODO: give den its own webhook so an alert from den is distinguishable
     # from a maintenance alert, and so one can be revoked without the other.
     DISCORD_WEBHOOK_URL = local.discord_secrets.MAINTENANCE_WEBHOOK_URL
-    TAILSCALE_AUTHKEY   = data.google_secret_manager_secret_version.tailscale_authkey.secret_data
+    TAILSCALE_AUTHKEY   = module.tailnet.json.den.AUTHKEY
   }
 }
 
