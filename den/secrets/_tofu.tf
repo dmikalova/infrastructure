@@ -23,6 +23,7 @@ locals {
   project_id         = "mklv-infrastructure"
   repo_root          = "../.."
   service_account_id = "tofu-ci@mklv-infrastructure.iam.gserviceaccount.com"
+  state_bucket       = "mklv-infrastructure-tfstate"
 }
 provider "google" {
   impersonate_service_account = local.service_account_id
