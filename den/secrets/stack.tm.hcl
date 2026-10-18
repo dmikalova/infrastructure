@@ -4,6 +4,10 @@ stack {
   id          = "den-secrets"
   tags        = ["den", "sops"]
 
-  # The tailnet key is folded into the runtime secret, so it has to exist first.
-  after = ["/tailscale/tailnet"]
+  # The tailnet key and the backup credentials are folded into the runtime
+  # secret, so both have to exist first.
+  after = [
+    "/backblaze/den-backup",
+    "/tailscale/tailnet",
+  ]
 }

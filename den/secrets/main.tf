@@ -20,16 +20,48 @@ module "tailnet" {
   }
 }
 
+# Created by the Backblaze stack, which owns the bucket and the key that
+# reaches it. Folded in here because den reads one secret and this is it.
+module "backup" {
+  source = "${local.modules_dir}/gcp/secret-manager-secret-data"
+
+  project_id = local.project_id
+  secrets = {
+    den = "den-backup"
+  }
+}
+
+# Samba keeps its own password database, so the login account's password does
+# not reach it. Chosen rather than generated: a Mac asks for it at the Finder
+# connect prompt, and a passphrase someone can read off a phone beats one that
+# needs a gcloud login to recover.
 module "host_secret" {
   source = "${local.modules_dir}/gcp/secret-manager-project-secret"
 
   project_id = local.project_id
   secret_id  = "den-host"
   data = {
+    # The offsite repository: where kopia writes, the bucket-scoped key that
+    # lets it, and the password that makes the ciphertext readable.
+    B2_BUCKET = module.backup.json.den.B2_BUCKET
+    B2_KEY    = module.backup.json.den.B2_KEY
+    B2_KEY_ID = module.backup.json.den.B2_KEY_ID
     # den's alerts are maintenance alerts, so they share the maintenance
     # webhook rather than splitting into a channel nobody watches.
     DISCORD_WEBHOOK_URL = local.discord_secrets.MAINTENANCE_WEBHOOK_URL
-    TAILSCALE_AUTHKEY   = module.tailnet.json.den.AUTHKEY
+    # The dead-man's switch den pings after a successful boot and after each
+    # nightly job. Empty until kestrel exists, which den treats as "do not
+    # ping" rather than as an error, so the plumbing can land first.
+    HEALTHCHECK_URL = lookup(local.den_secrets, "HEALTHCHECK_URL", "")
+    # Chosen rather than generated, and kept in SOPS beside the LUKS
+    # passphrase. It is the only secret in the backup path that cannot be
+    # reissued: lose it and the bucket is noise. SOPS means a clone of this
+    # repository and the Bitwarden age key recover it with GCP gone.
+    KOPIA_PASSWORD = local.den_secrets.KOPIA_PASSWORD
+    # Changing it silently breaks every connected client, including a Time
+    # Machine target that then stops backing up and says nothing useful.
+    SAMBA_PASSWORD    = local.den_secrets.SAMBA_PASSWORD
+    TAILSCALE_AUTHKEY = module.tailnet.json.den.AUTHKEY
   }
 }
 

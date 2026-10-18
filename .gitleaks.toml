@@ -4,5 +4,10 @@
 # mklv.config.json merged onto it. Edit mklv.config.json instead, then run
 # `mage ci:fix`, or `project-standards fix` without Go, to regenerate it.
 
+[[allowlists]]
+description = "HCL references, not values. Every secret here arrives through SOPS or Secret Manager, so an assignment whose right side is a dotted identifier names a secret rather than containing one."
+regexTarget = "secret"
+regexes = ["^[a-z][A-Za-z0-9_]*(\\.[A-Za-z0-9_-]+){1,6}$"]
+
 [extend]
 useDefault = true

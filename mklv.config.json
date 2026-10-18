@@ -1,5 +1,18 @@
 {
   "$schema": "https://raw.githubusercontent.com/dmikalova/project-standards/main/schema/mklv.config.schema.json",
   "name": "infrastructure",
-  "kind": "infra"
+  "kind": "infra",
+  "tools": {
+    "gitleaks": {
+      "allowlists": [
+        {
+          "description": "HCL references, not values. Every secret here arrives through SOPS or Secret Manager, so an assignment whose right side is a dotted identifier names a secret rather than containing one.",
+          "regexTarget": "secret",
+          "regexes": [
+            "^[a-z][A-Za-z0-9_]*(\\.[A-Za-z0-9_-]+){1,6}$"
+          ]
+        }
+      ]
+    }
+  }
 }
