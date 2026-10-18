@@ -28,6 +28,7 @@ generate_hcl "_tofu.tf" {
       project_id         = global.gcp.project_id
       repo_root          = terramate.stack.path.to_root
       service_account_id = global.gcp.service_account_id
+      state_bucket       = global.state_bucket
     }
 
     provider "google" {

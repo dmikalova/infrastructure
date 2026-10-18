@@ -176,3 +176,11 @@ module "den" {
     AUTHKEY = tailscale_tailnet_key.den.key
   }
 }
+
+# den's addresses live here rather than being pasted into a DNS record. The
+# lookup fails until den has enrolled, which is the one-time cost of den
+# holding its own identity: the tailnet key must exist before the machine that
+# uses it does.
+data "tailscale_device" "den" {
+  hostname = "den"
+}
