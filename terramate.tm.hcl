@@ -104,6 +104,7 @@ globals {
 
   # Provider versions (shared across all directories)
   provider_versions = {
+    b2          = "~> 0.14"
     github      = "~> 6.0"
     google      = "~> 7.0"
     google-beta = "~> 7.0"

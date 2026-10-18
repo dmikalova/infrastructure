@@ -13,5 +13,5 @@ Terramate stacks for managing GitHub repositories with OpenTofu.
 Each repository gets:
 
 - Apache 2.0 license
-- Branch ruleset protecting `main` (signed commits, linear history)
+- Branch ruleset protecting `main` (signed commits, no force push, no deletion)
 - Standard repository settings (no wiki, no projects, no issues)

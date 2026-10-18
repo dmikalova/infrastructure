@@ -53,10 +53,9 @@ resource "github_repository_ruleset" "main" {
   }
 
   rules {
-    deletion                = true
-    non_fast_forward        = true
-    required_linear_history = true
-    required_signatures     = true
+    deletion            = true
+    non_fast_forward    = true
+    required_signatures = true
   }
 }
 
