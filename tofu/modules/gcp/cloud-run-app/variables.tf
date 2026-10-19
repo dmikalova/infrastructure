@@ -90,3 +90,12 @@ variable "warm" {
   type        = bool
   default     = true
 }
+
+# The public services can take two. A service holding a SQLite database
+# replicated by litestream must be pinned to one, because litestream assumes a
+# single writer and a second instance corrupts the replica.
+variable "max_instance_count" {
+  description = "Maximum Cloud Run instances. Set to 1 for any service with a single-writer datastore."
+  type        = number
+  default     = 2
+}
