@@ -46,6 +46,10 @@ alone.**
 - **The `den-host` account is granted `roles/dns.admin` on the child zone
   only.** A second account for DNS would mean a second key on the same disk,
   which is a different name for the same blast radius.
+- **It also holds a custom project role carrying `dns.managedZones.list`
+  alone.** The ACME client resolves a zone name to a zone id by listing the
+  project's zones, so a per-zone grant on its own returns 403 before any
+  record is written.
 - **Each service gets a name, not a path.** `beszel.den.mklv.tech` rather
   than `den.mklv.tech/beszel`, because an app that assumes it owns `/` is the
   common case and rewriting its links is work that never ends.
@@ -62,6 +66,14 @@ Zone-scoped `roles/dns.admin` is wider than writing TXT records. Cloud DNS
 has no predefined role for record sets alone, so the alternative is a custom
 role. The zone holds nothing but den's own names, so the gap between what the
 role allows and what den needs is bounded by a blast radius den already has.
+
+ADR 0008 says a host account is never granted a project-wide role. The zone
+lister is one, and this ADR narrows that rule rather than keeping it intact:
+a host may hold a project role that reads metadata it cannot act on. The
+permission returns zone names and nameservers, both already published in
+public DNS, and no record data and no write. The rule it replaces was aimed
+at predefined roles such as `roles/dns.reader`, which would hand den every
+record in every zone in the estate.
 
 Certificate renewal now depends on Cloud DNS being reachable from den. A
 renewal failure is silent for up to thirty days before it becomes an outage,

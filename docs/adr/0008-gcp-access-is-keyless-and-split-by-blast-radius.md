@@ -43,7 +43,10 @@ long-lived key or no access at all.
   The file on disk is useless on any other machine. A stolen drive yields
   ciphertext.
 - **The account is named for the host and is granted access per secret.** It
-  is never granted a project-wide role. The list of secrets it can read is the
+  is never granted a project-wide role that can act on anything. ADR 0010
+  narrows this to allow a project role carrying read-only metadata
+  permissions that a per-resource grant cannot otherwise be resolved without.
+  The list of secrets it can read is the
   definition of its blast radius, and that list lives in this repository.
 - **Installer secrets stay out of reach.** The host must not be able to read
   the passphrase to its own disk. Secrets used to build the machine are a

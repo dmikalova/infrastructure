@@ -64,6 +64,7 @@ module "ci_service_account" {
       "roles/billing.projectManager",          # Manage project billing
       "roles/cloudscheduler.admin",            # Cloud Scheduler Admin
       "roles/dns.admin",                       # Cloud DNS Admin
+      "roles/iam.roleAdmin",                   # Manage custom roles
       "roles/iam.serviceAccountAdmin",         # Manage service accounts
       "roles/iam.serviceAccountUser",          # Act as service accounts (for Cloud Run)
       "roles/iam.workloadIdentityPoolAdmin",   # Manage WIF pools

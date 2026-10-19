@@ -123,3 +123,26 @@ resource "google_dns_managed_zone_iam_member" "den_writes_challenges" {
   project      = local.project_id
   role         = "roles/dns.admin"
 }
+
+# The zone grant above is necessary but not sufficient. libdns/googleclouddns
+# resolves a zone name to a zone id by calling managedZones.list, which is
+# scoped to the project, so per-zone IAM cannot authorise it and every
+# challenge fails with 403 before a record is ever written.
+#
+# This is the smallest project-level permission that unblocks it. It returns
+# zone names and nameservers, which are already public in DNS, and no record
+# data and no write. roles/dns.reader would also work and would hand den every
+# record in every zone.
+resource "google_project_iam_custom_role" "dns_zone_lister" {
+  description = "List managed zones, so a per-zone grant can be resolved to a zone id."
+  permissions = ["dns.managedZones.list"]
+  project     = local.project_id
+  role_id     = "dnsZoneLister"
+  title       = "DNS Zone Lister"
+}
+
+resource "google_project_iam_member" "den_lists_zones" {
+  member  = "serviceAccount:${data.terraform_remote_state.den_secrets.outputs.host_service_account_email}"
+  project = local.project_id
+  role    = google_project_iam_custom_role.dns_zone_lister.id
+}
