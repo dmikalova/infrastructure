@@ -10,7 +10,15 @@
 
 locals {
   bucket_name = "mklv-den-backup"
+
+  # kopia talks S3, not the B2 native API, so it needs the host and the region
+  # rather than the URL. Both are properties of the account's cluster, which is
+  # why they are read rather than written down.
+  s3_host   = replace(data.b2_account_info.this.s3_api_url, "https://", "")
+  s3_region = split(".", local.s3_host)[1]
 }
+
+data "b2_account_info" "this" {}
 
 resource "b2_bucket" "den_backup" {
   bucket_name = local.bucket_name
@@ -62,8 +70,10 @@ module "backup_secret" {
   project_id = local.project_id
   secret_id  = "den-backup"
   data = {
-    B2_BUCKET = b2_bucket.den_backup.bucket_name
-    B2_KEY    = b2_application_key.den.application_key
-    B2_KEY_ID = b2_application_key.den.application_key_id
+    B2_BUCKET   = b2_bucket.den_backup.bucket_name
+    B2_ENDPOINT = local.s3_host
+    B2_KEY      = b2_application_key.den.application_key
+    B2_KEY_ID   = b2_application_key.den.application_key_id
+    B2_REGION   = local.s3_region
   }
 }

@@ -42,10 +42,14 @@ module "host_secret" {
   secret_id  = "den-host"
   data = {
     # The offsite repository: where kopia writes, the bucket-scoped key that
-    # lets it, and the password that makes the ciphertext readable.
-    B2_BUCKET = module.backup.json.den.B2_BUCKET
-    B2_KEY    = module.backup.json.den.B2_KEY
-    B2_KEY_ID = module.backup.json.den.B2_KEY_ID
+    # lets it, and the password that makes the ciphertext readable. The
+    # endpoint and region are here because kopia reaches the bucket over
+    # Backblaze's S3-compatible API; the B2 native API is closed to this key.
+    B2_BUCKET   = module.backup.json.den.B2_BUCKET
+    B2_ENDPOINT = module.backup.json.den.B2_ENDPOINT
+    B2_KEY      = module.backup.json.den.B2_KEY
+    B2_KEY_ID   = module.backup.json.den.B2_KEY_ID
+    B2_REGION   = module.backup.json.den.B2_REGION
     # den's alerts are maintenance alerts, so they share the maintenance
     # webhook rather than splitting into a channel nobody watches.
     DISCORD_WEBHOOK_URL = local.discord_secrets.MAINTENANCE_WEBHOOK_URL
