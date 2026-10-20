@@ -63,6 +63,10 @@ module "repositories" {
       description = "landing pages for keyforge.cards and its subdomains"
       topics      = ["keyforge-cards", "mklv-deploy"]
     }
+    kestrel = {
+      description = "dead-man's switch watcher: jobs ping it, it says so in Discord when they stop"
+      topics      = ["mklv-deploy", "mklv-tech"]
+    }
     keyforge-scripts = {
       # Off: not on the standards.
       conform     = false

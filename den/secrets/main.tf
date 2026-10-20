@@ -31,6 +31,17 @@ module "backup" {
   }
 }
 
+# Created by the kestrel stack, which declares the check and mints its token.
+# den is told the URL, never the token, and the URL is the whole credential.
+module "healthcheck" {
+  source = "${local.modules_dir}/gcp/secret-manager-secret-data"
+
+  project_id = local.project_id
+  secrets = {
+    kestrel = "kestrel-checks"
+  }
+}
+
 # Samba keeps its own password database, so the login account's password does
 # not reach it. Chosen rather than generated: a Mac asks for it at the Finder
 # connect prompt, and a passphrase someone can read off a phone beats one that
@@ -54,9 +65,8 @@ module "host_secret" {
     # webhook rather than splitting into a channel nobody watches.
     DISCORD_WEBHOOK_URL = local.discord_secrets.MAINTENANCE_WEBHOOK_URL
     # The dead-man's switch den pings after a successful boot and after each
-    # nightly job. Empty until kestrel exists, which den treats as "do not
-    # ping" rather than as an error, so the plumbing can land first.
-    HEALTHCHECK_URL = lookup(local.den_secrets, "HEALTHCHECK_URL", "")
+    # nightly job. kestrel declares the check; this is only the URL it minted.
+    HEALTHCHECK_URL = module.healthcheck.json.kestrel.DEN
     # Chosen rather than generated, and kept in SOPS beside the LUKS
     # passphrase. It is the only secret in the backup path that cannot be
     # reissued: lose it and the bucket is noise. SOPS means a clone of this
