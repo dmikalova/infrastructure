@@ -82,6 +82,15 @@ resource "google_cloud_run_v2_service" "app" {
   template {
     service_account = google_service_account.cloud_run.email
 
+    # Apps read their config once at boot, and a scheduled job can keep one
+    # instance alive forever. Naming the config version here makes a secret
+    # change a template change, so Cloud Run rolls a new revision and every
+    # instance boots on the new config.
+    annotations = length(var.secrets) > 0 ? {
+      # The version number inherits secret_data's sensitivity, but is not secret.
+      "mklv.tech/config-version" = nonsensitive(google_secret_manager_secret_version.app_config[0].version)
+    } : {}
+
     containers {
       image = "us-docker.pkg.dev/cloudrun/container/hello"
 

@@ -87,6 +87,9 @@ module "install_secret" {
     GCP_KEY         = base64decode(google_service_account_key.den_host.private_key)
     LUKS_PASSPHRASE = local.den_secrets.LUKS_PASSPHRASE
     PASSWORD        = local.den_secrets.PASSWORD
+    # Every install gets the same host key, so a reinstall never changes what
+    # known_hosts trusts and the first connection is verified by construction.
+    SSH_HOST_ED25519_KEY = local.den_secrets.SSH_HOST_ED25519_KEY
   }
 }
 
