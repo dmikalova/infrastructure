@@ -149,31 +149,33 @@ resource "google_secret_manager_secret_iam_member" "ci" {
   secret_id = each.value.secret_id
 }
 
-# den authenticates to the tailnet with a key, not a token: tailscaled has no
-# OIDC identity to present the way a CI runner does. Reusable so a rebuild does
-# not need a new one, and recreated by Terraform once it expires.
+# den authenticates to the tailnet with an OAuth client, not a token:
+# tailscaled has no OIDC identity to present the way a CI runner does. The
+# client secret is itself an auth key and never expires, unlike a tailnet key,
+# so a rebuild months from now still enrols.
 #
-# Deliberately not granted to the mklv-tailscale repos: this key enrols new
+# devices:core is what lets `den apply` delete the dead den node a reinstall
+# leaves behind, so the new one enrols as den and not den-1. The tag bounds
+# both scopes to tag:den devices.
+#
+# Deliberately not granted to the mklv-tailscale repos: this client enrols new
 # machines as tag:den, which is a larger thing than reading a client ID.
-resource "tailscale_tailnet_key" "den" {
-  description         = "den host enrolment"
-  ephemeral           = false
-  preauthorized       = true
-  recreate_if_invalid = "always"
-  reusable            = true
-  tags                = ["tag:den"]
+resource "tailscale_oauth_client" "den" {
+  description = "den host enrolment"
+  scopes      = ["auth_keys", "devices:core"]
+  tags        = ["tag:den"]
 }
 
-# den's half of the tailnet config. JSON with one key today, because the shape
-# is what makes it extensible: a second value for den lands here rather than
-# becoming a second secret with a second grant.
+# den's half of the tailnet config, read by `den apply` on the operator's
+# laptop. Never folded into den-host: den itself has no use for either value.
 module "den" {
   source = "${local.modules_dir}/gcp/secret-manager-project-secret"
 
   project_id = local.project_id
   secret_id  = "tailscale-den"
   data = {
-    AUTHKEY = tailscale_tailnet_key.den.key
+    CLIENT_ID     = tailscale_oauth_client.den.id
+    CLIENT_SECRET = tailscale_oauth_client.den.key
   }
 }
 

@@ -9,17 +9,6 @@ locals {
   discord_secrets = provider::sops::file("${local.repo_root}/secrets/discord.sops.json").data
 }
 
-# Created by the tailnet stack, not here: a key that enrols machines cannot be
-# issued by the machine it enrols.
-module "tailnet" {
-  source = "${local.modules_dir}/gcp/secret-manager-secret-data"
-
-  project_id = local.project_id
-  secrets = {
-    den = "tailscale-den"
-  }
-}
-
 # Created by the Backblaze stack, which owns the bucket and the key that
 # reaches it. Folded in here because den reads one secret and this is it.
 module "backup" {
@@ -71,8 +60,7 @@ module "host_secret" {
     KOPIA_PASSWORD = local.den_secrets.KOPIA_PASSWORD
     # Changing it silently breaks every connected client, including a Time
     # Machine target that then stops backing up and says nothing useful.
-    SAMBA_PASSWORD    = local.den_secrets.SAMBA_PASSWORD
-    TAILSCALE_AUTHKEY = module.tailnet.json.den.AUTHKEY
+    SAMBA_PASSWORD = local.den_secrets.SAMBA_PASSWORD
     },
     # One dead-man's switch per nightly job, named after the job that pings it.
     # Merged rather than listed, so declaring a check in the kestrel stack is
