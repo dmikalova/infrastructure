@@ -17,12 +17,26 @@ locals {
 
   # The checks. period_seconds is the job's schedule; grace_seconds is how late
   # it may be before kestrel says anything.
+  #
+  # One check per job, not one per host. A single den check would let a healthy
+  # snapraid mask a dead kopia, because either ping resets the same switch, and
+  # the alert could only say den went quiet rather than which job stopped.
+  #
+  # Both jobs run daily, so the period is a day. Grace covers how long the job
+  # itself may take, because the deadline runs from the previous success: a
+  # backup that starts on schedule and takes ten hours still pings ten hours
+  # late. Twelve hours matches kopia-backup.service's TimeoutStartSec.
   checks = {
-    # den pings after a successful boot and after each nightly job. A day plus
-    # two hours, so a slow backup does not page anyone.
-    DEN = {
+    # den/mgmt/.../kopia-backup.timer, 22:00 with a 30 minute jitter.
+    KOPIA_BACKUP = {
       period_seconds = 86400
-      grace_seconds  = 7200
+      grace_seconds  = 43200
+    }
+
+    # den/mgmt/.../snapraid-sync.timer, daily with a 30 minute jitter.
+    SNAPRAID_SYNC = {
+      period_seconds = 86400
+      grace_seconds  = 43200
     }
   }
 

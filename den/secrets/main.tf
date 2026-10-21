@@ -51,7 +51,7 @@ module "host_secret" {
 
   project_id = local.project_id
   secret_id  = "den-host"
-  data = {
+  data = merge({
     # The offsite repository: where kopia writes, the bucket-scoped key that
     # lets it, and the password that makes the ciphertext readable. The
     # endpoint and region are here because kopia reaches the bucket over
@@ -64,9 +64,6 @@ module "host_secret" {
     # den's alerts are maintenance alerts, so they share the maintenance
     # webhook rather than splitting into a channel nobody watches.
     DISCORD_WEBHOOK_URL = local.discord_secrets.MAINTENANCE_WEBHOOK_URL
-    # The dead-man's switch den pings after a successful boot and after each
-    # nightly job. kestrel declares the check; this is only the URL it minted.
-    HEALTHCHECK_URL = module.healthcheck.json.kestrel.DEN
     # Chosen rather than generated, and kept in SOPS beside the LUKS
     # passphrase. It is the only secret in the backup path that cannot be
     # reissued: lose it and the bucket is noise. SOPS means a clone of this
@@ -76,7 +73,16 @@ module "host_secret" {
     # Machine target that then stops backing up and says nothing useful.
     SAMBA_PASSWORD    = local.den_secrets.SAMBA_PASSWORD
     TAILSCALE_AUTHKEY = module.tailnet.json.den.AUTHKEY
-  }
+    },
+    # One dead-man's switch per nightly job, named after the job that pings it.
+    # Merged rather than listed, so declaring a check in the kestrel stack is
+    # the only edit a new switch needs. den writes each value to a file under
+    # /etc/den/healthcheck and `den ping <check>` reads it.
+    {
+      for name, url in module.healthcheck.json.kestrel :
+      "HEALTHCHECK_URL_${name}" => url
+    }
+  )
 }
 
 # These build the machine, and no binding is written for them: the project
