@@ -13,15 +13,11 @@ locals {
   # One line per service. The certificate is a wildcard, so this list only
   # decides what resolves, not what is trusted.
   services = ["beszel"]
-}
 
-data "terraform_remote_state" "tailnet" {
-  backend = "gcs"
-
-  config = {
-    bucket = local.state_bucket
-    prefix = "tfstate/tailscale/tailnet"
-  }
+  # den's tailnet IPv4. Set once in the Tailscale admin console, and `den
+  # apply` sets it again after every reinstall. Keep it in step with
+  # tailnetIPv4 in the den repo's cmd/den/host.go.
+  den_ipv4 = "100.64.0.1"
 }
 
 data "terraform_remote_state" "den_secrets" {
@@ -69,19 +65,17 @@ resource "google_dns_record_set" "delegation_ds" {
   ]
 }
 
-# Tailnet addresses, read rather than written down. A CNAME to den's MagicDNS
-# name would be shorter and would not work: ts.net resolves only through
-# Tailscale's own resolver, so a public recursor hands back nothing.
+# den's tailnet address. A CNAME to den's MagicDNS name would be shorter and
+# would not work: ts.net resolves only through Tailscale's own resolver, so a
+# public recursor hands back nothing.
 #
-# IPv4 only. `den apply` gives a reinstalled den its old IPv4 back, so these
-# records survive a reinstall untouched. Tailscale cannot set a node's IPv6,
-# so an AAAA record would go stale on every reinstall, and every tailnet
-# client has an IPv4 address anyway.
+# IPv4 only. Tailscale cannot set a node's IPv6, so an AAAA record would go
+# stale on every reinstall, and every tailnet client has an IPv4 address.
 resource "google_dns_record_set" "den_v4" {
   managed_zone = module.zone.zone_name
   name         = "${local.domain}."
   project      = local.project_id
-  rrdatas      = data.terraform_remote_state.tailnet.outputs.den_ipv4_addresses
+  rrdatas      = [local.den_ipv4]
   ttl          = 300
   type         = "A"
 }
@@ -92,7 +86,7 @@ resource "google_dns_record_set" "service_v4" {
   managed_zone = module.zone.zone_name
   name         = "${each.value}.${local.domain}."
   project      = local.project_id
-  rrdatas      = data.terraform_remote_state.tailnet.outputs.den_ipv4_addresses
+  rrdatas      = [local.den_ipv4]
   ttl          = 300
   type         = "A"
 }

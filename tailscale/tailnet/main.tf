@@ -178,11 +178,3 @@ module "den" {
     CLIENT_SECRET = tailscale_oauth_client.den.key
   }
 }
-
-# den's addresses live here rather than being pasted into a DNS record. The
-# lookup fails until den has enrolled, which is the one-time cost of den
-# holding its own identity: the tailnet key must exist before the machine that
-# uses it does.
-data "tailscale_device" "den" {
-  hostname = "den"
-}

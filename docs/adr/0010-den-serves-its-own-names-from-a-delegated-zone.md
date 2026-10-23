@@ -36,8 +36,9 @@ alone.**
   `mklv.tech` with `NS` records and, because the parent is signed, `DS`
   records. A credential scoped to this zone can break den's names and no
   others.
-- **Records point at den's tailnet addresses,** read from the
-  `/tailscale/tailnet` stack rather than written down. The names are public;
+- **Records point at den's fixed tailnet IPv4, `100.64.0.1`.** `den apply`
+  sets that address after every reinstall, so the records never change. The
+  names are public;
   the addresses are not routable from outside the tailnet, so publishing them
   costs nothing and reveals nothing an off-tailnet client can use.
 - **Caddy on den obtains a wildcard certificate for `*.den.mklv.tech` by
