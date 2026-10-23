@@ -72,6 +72,11 @@ resource "google_dns_record_set" "delegation_ds" {
 # Tailnet addresses, read rather than written down. A CNAME to den's MagicDNS
 # name would be shorter and would not work: ts.net resolves only through
 # Tailscale's own resolver, so a public recursor hands back nothing.
+#
+# IPv4 only. `den apply` gives a reinstalled den its old IPv4 back, so these
+# records survive a reinstall untouched. Tailscale cannot set a node's IPv6,
+# so an AAAA record would go stale on every reinstall, and every tailnet
+# client has an IPv4 address anyway.
 resource "google_dns_record_set" "den_v4" {
   managed_zone = module.zone.zone_name
   name         = "${local.domain}."
@@ -79,15 +84,6 @@ resource "google_dns_record_set" "den_v4" {
   rrdatas      = data.terraform_remote_state.tailnet.outputs.den_ipv4_addresses
   ttl          = 300
   type         = "A"
-}
-
-resource "google_dns_record_set" "den_v6" {
-  managed_zone = module.zone.zone_name
-  name         = "${local.domain}."
-  project      = local.project_id
-  rrdatas      = data.terraform_remote_state.tailnet.outputs.den_ipv6_addresses
-  ttl          = 300
-  type         = "AAAA"
 }
 
 resource "google_dns_record_set" "service_v4" {
@@ -99,17 +95,6 @@ resource "google_dns_record_set" "service_v4" {
   rrdatas      = data.terraform_remote_state.tailnet.outputs.den_ipv4_addresses
   ttl          = 300
   type         = "A"
-}
-
-resource "google_dns_record_set" "service_v6" {
-  for_each = toset(local.services)
-
-  managed_zone = module.zone.zone_name
-  name         = "${each.value}.${local.domain}."
-  project      = local.project_id
-  rrdatas      = data.terraform_remote_state.tailnet.outputs.den_ipv6_addresses
-  ttl          = 300
-  type         = "AAAA"
 }
 
 # Caddy on den answers the ACME DNS-01 challenge, which means writing a TXT
