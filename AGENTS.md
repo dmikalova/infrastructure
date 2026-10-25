@@ -178,7 +178,7 @@ Available SOPS files:
 | `github.sops.json`        | GitHub tokens                           |
 | `gpg.sops.json`           | GPG signing key                         |
 | `namecheap.sops.json`     | Namecheap API credentials               |
-| `ssh.sops.json`           | SSH keys                                |
+| `ssh.sops.json`           | id_dmikalova SSH key and passphrase     |
 | `supabase.sops.json`      | Supabase access token and org ID        |
 | `tailscale.sops.json`     | Tailscale API credentials               |
 | `traefik-users.sops.json` | Traefik basic-auth users                |

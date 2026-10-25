@@ -9,6 +9,7 @@ locals {
   discord_secrets = provider::sops::file("${local.repo_root}/secrets/discord.sops.json").data
   # Paseo owns these. den only carries them to the containers.
   paseo_secrets = provider::sops::file("${local.repo_root}/secrets/paseo.sops.json").data
+  ssh_secrets   = provider::sops::file("${local.repo_root}/secrets/ssh.sops.json").data
 }
 
 # Created by the Backblaze stack, which owns the bucket and the key that
@@ -75,6 +76,12 @@ module "host_secret" {
     PASEO_WORK_PASSWORD                = local.paseo_secrets.GS_PASSWORD
     PASEO_WORK_CLAUDE_CODE_OAUTH_TOKEN = local.paseo_secrets.GS_CLAUDE_CODE_OAUTH_TOKEN
     PASEO_WORK_GH_TOKEN                = local.paseo_secrets.GS_GH_TOKEN
+    # The id_dmikalova SSH key, base64 and passphrase-encrypted, and its
+    # passphrase. It signs git commits as dmikalova. It is a den secret and
+    # not an app secret, so that each app that signs as dmikalova gets it
+    # through the den-user-env allowlist.
+    DMIKALOVA_SSH_KEY            = local.ssh_secrets.private_key_base64
+    DMIKALOVA_SSH_KEY_PASSPHRASE = local.ssh_secrets.passphrase
     },
     # One dead-man's switch per nightly job, named after the job that pings it.
     # Merged rather than listed, so declaring a check in the kestrel stack is
