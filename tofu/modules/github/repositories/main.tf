@@ -32,12 +32,23 @@ resource "github_repository" "repos" {
   # Delete the head branch after a pull request merges.
   delete_branch_on_merge = true
 
+  # Keep the alerts. Renovate reads them and opens the security PRs.
+  vulnerability_alerts = true
+
   # Prevent accidental deletion
   archive_on_destroy = true
 
   lifecycle {
     prevent_destroy = true
   }
+}
+
+# Renovate owns all dependency PRs, so Dependabot opens none.
+resource "github_repository_dependabot_security_updates" "repos" {
+  for_each = var.repositories
+
+  repository = github_repository.repos[each.key].name
+  enabled    = false
 }
 
 resource "github_repository_ruleset" "main" {
