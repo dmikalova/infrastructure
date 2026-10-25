@@ -29,6 +29,9 @@ resource "github_repository" "repos" {
   has_projects    = false
   has_wiki        = false
 
+  # Delete the head branch after a pull request merges.
+  delete_branch_on_merge = true
+
   # Prevent accidental deletion
   archive_on_destroy = true
 
