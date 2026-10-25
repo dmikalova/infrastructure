@@ -12,7 +12,7 @@ locals {
 
   # One line per service. The certificate is a wildcard, so this list only
   # decides what resolves, not what is trusted.
-  services = ["beszel"]
+  services = ["beszel", "paseo", "paseo-work"]
 
   # den's tailnet IPv4. Set once in the Tailscale admin console, and `den
   # apply` sets it again after every reinstall. Keep it in step with

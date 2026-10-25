@@ -117,13 +117,6 @@ module "repositories" {
   }
 }
 
-# The paseo repository was created by hand before this stack managed it.
-# Remove this block after the first apply.
-import {
-  to = module.repositories.github_repository.repos["paseo"]
-  id = "paseo"
-}
-
 data "github_user" "current" {
   username = ""
 }

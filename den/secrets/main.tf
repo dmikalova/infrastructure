@@ -7,6 +7,8 @@
 locals {
   den_secrets     = provider::sops::file("${local.repo_root}/secrets/den.sops.json").data
   discord_secrets = provider::sops::file("${local.repo_root}/secrets/discord.sops.json").data
+  # Paseo owns these. den only carries them to the containers.
+  paseo_secrets = provider::sops::file("${local.repo_root}/secrets/paseo.sops.json").data
 }
 
 # Created by the Backblaze stack, which owns the bucket and the key that
@@ -61,6 +63,18 @@ module "host_secret" {
     # Changing it silently breaks every connected client, including a Time
     # Machine target that then stops backing up and says nothing useful.
     SAMBA_PASSWORD = local.den_secrets.SAMBA_PASSWORD
+    # The two Paseo instances. DM is the personal instance (paseo) and GS is
+    # the work instance (paseo-work). den-user-env.service writes each set
+    # into an env file for its quadlet. See den/docs/paseo.md.
+    # - PASSWORD: the web UI password.
+    # - CLAUDE_CODE_OAUTH_TOKEN: from `claude setup-token`.
+    # - GH_TOKEN: a fine-grained PAT, scoped to the repos of that instance.
+    PASEO_PASSWORD                     = local.paseo_secrets.DM_PASSWORD
+    PASEO_CLAUDE_CODE_OAUTH_TOKEN      = local.paseo_secrets.DM_CLAUDE_CODE_OAUTH_TOKEN
+    PASEO_GH_TOKEN                     = local.paseo_secrets.DM_GH_TOKEN
+    PASEO_WORK_PASSWORD                = local.paseo_secrets.GS_PASSWORD
+    PASEO_WORK_CLAUDE_CODE_OAUTH_TOKEN = local.paseo_secrets.GS_CLAUDE_CODE_OAUTH_TOKEN
+    PASEO_WORK_GH_TOKEN                = local.paseo_secrets.GS_GH_TOKEN
     },
     # One dead-man's switch per nightly job, named after the job that pings it.
     # Merged rather than listed, so declaring a check in the kestrel stack is
