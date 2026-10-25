@@ -85,6 +85,10 @@ module "repositories" {
       description = "warming service and landing page for mklv.tech"
       topics      = ["mklv-deploy", "mklv-tech"]
     }
+    paseo = {
+      description = "Paseo image, workflow plugin, agent profiles and shared skills for den"
+      topics      = ["mklv-deploy"]
+    }
     project-standards = {
       description = "standards every project follows, and the automation that keeps them in conformance"
       topics      = ["mklv-deploy"]
