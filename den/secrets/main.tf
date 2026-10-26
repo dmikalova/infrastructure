@@ -70,12 +70,16 @@ module "host_secret" {
     # - PASSWORD: the web UI password.
     # - CLAUDE_CODE_OAUTH_TOKEN: from `claude setup-token`.
     # - GH_TOKEN: a fine-grained PAT, scoped to the repos of that instance.
+    # - NOTION_TOKEN: a Notion internal integration token, for the Notion MCP
+    #   server. An empty value turns the server off for that instance.
     PASEO_PASSWORD                     = local.paseo_secrets.DM_PASSWORD
     PASEO_CLAUDE_CODE_OAUTH_TOKEN      = local.paseo_secrets.DM_CLAUDE_CODE_OAUTH_TOKEN
     PASEO_GH_TOKEN                     = local.paseo_secrets.DM_GH_TOKEN
+    PASEO_NOTION_TOKEN                 = local.paseo_secrets.DM_NOTION_TOKEN
     PASEO_WORK_PASSWORD                = local.paseo_secrets.GS_PASSWORD
     PASEO_WORK_CLAUDE_CODE_OAUTH_TOKEN = local.paseo_secrets.GS_CLAUDE_CODE_OAUTH_TOKEN
     PASEO_WORK_GH_TOKEN                = local.paseo_secrets.GS_GH_TOKEN
+    PASEO_WORK_NOTION_TOKEN            = local.paseo_secrets.GS_NOTION_TOKEN
     # The id_dmikalova SSH key, base64 and passphrase-encrypted, and its
     # passphrase. It signs git commits as dmikalova. It is a den secret and
     # not an app secret, so that each app that signs as dmikalova gets it
