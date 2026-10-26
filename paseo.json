@@ -1,0 +1,8 @@
+{
+  "worktree": {
+    "setup": [
+      "if command -v paseo-trust >/dev/null; then paseo-trust \"$PASEO_WORKTREE_PATH\"; fi",
+      "if command -v lefthook >/dev/null; then lefthook install; fi"
+    ]
+  }
+}
