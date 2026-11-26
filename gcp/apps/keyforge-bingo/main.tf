@@ -58,9 +58,8 @@ module "cloud_run" {
   gcp_region     = local.gcp_region
 
   secrets = {
-    # The app posts suggestions here. Until the key is in discord.sops.json,
-    # the app stores suggestions without posting them.
-    BINGO_SUGGESTIONS_WEBHOOK_URL = try(local.discord_secrets.BINGO_SUGGESTIONS_WEBHOOK_URL, "")
+    # The app posts suggestions to the #feedback channel webhook.
+    BINGO_SUGGESTIONS_WEBHOOK_URL = local.discord_secrets.FEEDBACK_WEBHOOK_URL
     # CI reads the session URL to apply db/schema.hcl. The app uses the
     # transaction pooler.
     DATABASE_URL_SESSION     = module.app_database.database_url_session
