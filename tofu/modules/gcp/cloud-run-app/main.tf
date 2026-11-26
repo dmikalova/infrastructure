@@ -67,6 +67,47 @@ resource "google_storage_bucket_iam_member" "bucket_storage" {
   role   = "roles/storage.objectAdmin"
 }
 
+# Public Storage Bucket
+#
+# Anyone may read its objects at
+# https://storage.googleapis.com/mklv-<app_name>-public/<path>. Google's edge
+# caches a public object for as long as its Cache-Control says. GCS has no
+# bucket default for Cache-Control, so the upload sets it on each object.
+
+resource "google_storage_bucket" "public" {
+  count = var.public_bucket_enabled ? 1 : 0
+
+  force_destroy               = false
+  location                    = var.gcp_region
+  name                        = "mklv-${var.app_name}-public"
+  project                     = var.gcp_project_id
+  public_access_prevention    = "inherited"
+  uniform_bucket_level_access = true
+
+  cors {
+    max_age_seconds = 86400
+    method          = ["GET", "HEAD"]
+    origin          = ["*"]
+    response_header = ["Content-Type"]
+  }
+}
+
+resource "google_storage_bucket_iam_member" "public_read" {
+  count = var.public_bucket_enabled ? 1 : 0
+
+  bucket = google_storage_bucket.public[0].name
+  member = "allUsers"
+  role   = "roles/storage.objectViewer"
+}
+
+resource "google_storage_bucket_iam_member" "public_storage" {
+  count = var.public_bucket_enabled ? 1 : 0
+
+  bucket = google_storage_bucket.public[0].name
+  member = "serviceAccount:${google_service_account.cloud_run.email}"
+  role   = "roles/storage.objectAdmin"
+}
+
 # Cloud Run Service
 
 resource "google_cloud_run_v2_service" "app" {

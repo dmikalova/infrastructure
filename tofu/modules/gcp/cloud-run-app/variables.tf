@@ -6,6 +6,7 @@
 # - Public access
 # - GitHub Actions deploy permission
 # - GCS bucket for app storage
+# - Optional public GCS bucket for assets that anyone may read
 # - startup_cpu_boost for faster cold starts
 # - warm label for centralized warming
 
@@ -43,6 +44,15 @@ variable "gcp_project_id" {
 variable "gcp_region" {
   description = "GCP region for Cloud Run"
   type        = string
+}
+
+# Uniform bucket-level access makes access all-or-nothing per bucket. An allUsers
+# grant cannot carry an IAM condition, so one prefix of the private bucket
+# cannot be made public. Public assets get their own bucket instead.
+variable "public_bucket_enabled" {
+  description = "Whether to create a second bucket, mklv-<app_name>-public, that anyone may read"
+  type        = bool
+  default     = false
 }
 
 variable "scheduled_jobs" {
