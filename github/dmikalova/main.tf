@@ -71,6 +71,12 @@ module "repositories" {
       description = "daily KeyForge card-guessing game at keyfordle.keyforge.cards"
       topics      = ["keyforge-cards", "mklv-deploy"]
     }
+    keyforge-amasser = {
+      # Off: not on the standards yet. It moved here from keyforge-scripts.
+      conform     = false
+      description = "Amasser browser extension: sync KeyForge decks from Master Vault to DoK and TCO"
+      topics      = ["keyforge-cards"]
+    }
     keyforge-bingo = {
       description = "weekly KeyForge bingo board at bingo.keyforge.cards"
       topics      = ["keyforge-cards", "mklv-deploy"]
