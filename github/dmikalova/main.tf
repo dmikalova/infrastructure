@@ -67,6 +67,10 @@ module "repositories" {
       description = "landing pages for keyforge.cards and its subdomains"
       topics      = ["keyforge-cards", "mklv-deploy"]
     }
+    keyfordle = {
+      description = "daily KeyForge card-guessing game at keyfordle.keyforge.cards"
+      topics      = ["keyforge-cards", "mklv-deploy"]
+    }
     kestrel = {
       description = "dead-man's switch watcher: jobs ping it, it says so in Discord when they stop"
       topics      = ["mklv-deploy", "mklv-tech"]
