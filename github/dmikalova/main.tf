@@ -23,6 +23,7 @@ module "repositories" {
     }
     card-proxies = {
       description = "proxy print runs for missing and errata'd trading cards"
+      topics      = ["mklv-deploy"]
     }
     den = {
       description = "home server config, autoinstall builder, and the den operational binary"
