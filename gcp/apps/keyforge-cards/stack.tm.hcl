@@ -1,6 +1,6 @@
 stack {
   name        = "keyforge-cards Cloud Run"
-  description = "Landing pages for keyforge.cards, its amasser/bingo subdomains, and the shared public bucket"
+  description = "Landing pages for keyforge.cards, its amasser subdomain, and the shared public bucket"
   id          = "gcp-apps-keyforge-cards"
   tags        = ["google", "sops"]
 

@@ -5,6 +5,7 @@ stack {
   tags        = ["google", "google-beta", "sops"]
 
   after = [
+    "/gcp/apps/keyforge-cards",
     "/gcp/infra/baseline",
     "/gcp/infra/domains",
     "/gcp/infra/platform",

@@ -1,13 +1,14 @@
 # keyforge-cards Cloud Run service
 #
 # Landing pages for keyforge.cards served from a single Cloud Run service.
-# The app routes by request host to serve the apex site plus the amasser and
-# bingo subdomains, so all three domains map to this one service.
+# The app routes by request host to serve the apex site plus the amasser
+# subdomain, so both domains map to this one service. bingo.keyforge.cards
+# moved to the keyforge-bingo service.
 
 locals {
   app_name   = "keyforge-cards"
   domain     = "keyforge.cards"
-  subdomains = ["amasser", "bingo"]
+  subdomains = ["amasser"]
 }
 
 # Cloud Run Service
@@ -36,7 +37,7 @@ module "cloud_run" {
 
 # Subdomain Domain Mappings
 #
-# amasser.keyforge.cards and bingo.keyforge.cards map to the same service for
+# amasser.keyforge.cards maps to the same service for
 # host-based routing.
 
 resource "google_cloud_run_domain_mapping" "subdomains" {

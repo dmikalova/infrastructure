@@ -3,12 +3,13 @@
 # The weekly KeyForge bingo board. Postgres holds every board and the spot
 # suggestions. Suggestions are also posted to a Discord channel webhook.
 #
-# The service starts without a domain mapping: bingo.keyforge.cards still maps
-# to the keyforge-cards service. Validate on the run.app URL, then move the
-# subdomain here in one change (see keyforge-bingo docs/plan.md, Rollout).
+# bingo.keyforge.cards used to map to the keyforge-cards service. This stack
+# runs after keyforge-cards, so keyforge-cards drops its mapping and CNAME
+# before this stack makes them.
 
 locals {
   app_name        = "keyforge-bingo"
+  domain          = "keyforge.cards"
   discord_secrets = provider::sops::file("${local.repo_root}/secrets/discord.sops.json").data
 }
 
@@ -44,12 +45,15 @@ module "app_database" {
 
 # Cloud Run
 #
-# No domain yet, so the module creates no domain mapping and no DNS record.
+# The module maps bingo.keyforge.cards and creates its CNAME in the
+# keyforge-cards managed zone.
 
 module "cloud_run" {
   source = "${local.modules_dir}/gcp/cloud-run-app"
 
   app_name       = local.app_name
+  subdomain      = "bingo"
+  domain         = local.domain
   gcp_project_id = local.project_id
   gcp_region     = local.gcp_region
 
