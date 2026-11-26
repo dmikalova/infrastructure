@@ -1,7 +1,7 @@
 # keyfordle Cloud Run service
 #
 # The daily KeyForge card-guessing game at keyfordle.keyforge.cards. It is a
-# port of Keyfordle from KFStats. Postgres holds the daily card and the daily
+# port of KeyFordle from KFStats. Postgres holds the daily card and the daily
 # play counts. The card pool is embedded in the image.
 
 locals {
