@@ -14,15 +14,24 @@ locals {
 #
 # The module creates the apex (keyforge.cards) domain mapping and A/AAAA
 # records. warm defaults to true, so the mklv warming service keeps it warm.
+#
+# The public bucket, mklv-keyforge-cards-public, holds assets every
+# keyforge.cards site reads. Card images live under images/cards/<set>/. A
+# path never changes content, so the upload marks each image immutable:
+#
+#   gcloud storage rsync --recursive \
+#     --cache-control="public, max-age=31536000, immutable" \
+#     <images dir> gs://mklv-keyforge-cards-public/images/cards
 
 module "cloud_run" {
   source = "${local.modules_dir}/gcp/cloud-run-app"
 
-  app_name       = local.app_name
-  domain         = local.domain
-  gcp_project_id = local.project_id
-  gcp_region     = local.gcp_region
-  subdomain      = "" # Deploy to apex domain (keyforge.cards)
+  app_name              = local.app_name
+  domain                = local.domain
+  gcp_project_id        = local.project_id
+  gcp_region            = local.gcp_region
+  public_bucket_enabled = true
+  subdomain             = "" # Deploy to apex domain (keyforge.cards)
 }
 
 # Subdomain Domain Mappings
