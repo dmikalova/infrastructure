@@ -71,6 +71,10 @@ module "repositories" {
       description = "daily KeyForge card-guessing game at keyfordle.keyforge.cards"
       topics      = ["keyforge-cards", "mklv-deploy"]
     }
+    keyforge-bingo = {
+      description = "weekly KeyForge bingo board at bingo.keyforge.cards"
+      topics      = ["keyforge-cards", "mklv-deploy"]
+    }
     keyforge-card-search = {
       description = "KeyForge card search at search.keyforge.cards"
       topics      = ["keyforge-cards", "mklv-deploy"]
