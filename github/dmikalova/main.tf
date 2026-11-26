@@ -71,6 +71,13 @@ module "repositories" {
       description = "daily KeyForge card-guessing game at keyfordle.keyforge.cards"
       topics      = ["keyforge-cards", "mklv-deploy"]
     }
+    keyforge-card-search = {
+      description = "KeyForge card search at search.keyforge.cards"
+      topics      = ["keyforge-cards", "mklv-deploy"]
+    }
+    keyforge-data = {
+      description = "shared KeyForge card data, Master Vault crawler, and query engine"
+    }
     kestrel = {
       description = "dead-man's switch watcher: jobs ping it, it says so in Discord when they stop"
       topics      = ["mklv-deploy", "mklv-tech"]
