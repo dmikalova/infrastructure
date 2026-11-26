@@ -21,6 +21,9 @@ module "repositories" {
       conform     = false
       description = "run-or-raise script for declarative window navigation"
     }
+    card-proxies = {
+      description = "proxy print runs for missing and errata'd trading cards"
+    }
     den = {
       description = "home server config, autoinstall builder, and the den operational binary"
       topics      = ["mklv-deploy", "mklv-tailscale"]
