@@ -59,6 +59,10 @@ module "repositories" {
       # Keeps its issues: it has open ones.
       has_issues = true
     }
+    "gallery.keyforge.cards" = {
+      description = "KeyForge card gallery at gallery.keyforge.cards"
+      topics      = ["keyforge-cards", "mklv-deploy"]
+    }
     infrastructure = {
       description = "terramate infrastructure configuration"
       topics      = ["infra-deploy", "mklv-deploy"]
@@ -79,10 +83,6 @@ module "repositories" {
     }
     keyforge-bingo = {
       description = "weekly KeyForge bingo board at bingo.keyforge.cards"
-      topics      = ["keyforge-cards", "mklv-deploy"]
-    }
-    keyforge-card-search = {
-      description = "KeyForge card search at search.keyforge.cards"
       topics      = ["keyforge-cards", "mklv-deploy"]
     }
     keyforge-data = {
@@ -151,4 +151,28 @@ data "github_user" "current" {
 
 resource "github_user_gpg_key" "main" {
   armored_public_key = base64decode(local.gpg_secrets.public_key_base64)
+}
+
+# keyforge-card-search became gallery.keyforge.cards on 2026-11-27. The moves
+# rename the repository in place, so it keeps its history, and GitHub
+# redirects the old name.
+
+moved {
+  from = module.repositories.github_repository.repos["keyforge-card-search"]
+  to   = module.repositories.github_repository.repos["gallery.keyforge.cards"]
+}
+
+moved {
+  from = module.repositories.github_repository_dependabot_security_updates.repos["keyforge-card-search"]
+  to   = module.repositories.github_repository_dependabot_security_updates.repos["gallery.keyforge.cards"]
+}
+
+moved {
+  from = module.repositories.github_repository_ruleset.main["keyforge-card-search"]
+  to   = module.repositories.github_repository_ruleset.main["gallery.keyforge.cards"]
+}
+
+moved {
+  from = module.repositories.github_actions_secret.deploy_secrets["keyforge-card-search:PKG_READ_TOKEN"]
+  to   = module.repositories.github_actions_secret.deploy_secrets["gallery.keyforge.cards:PKG_READ_TOKEN"]
 }

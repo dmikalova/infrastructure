@@ -4,7 +4,7 @@ terraform {
   required_version = ">= 1.8"
   backend "gcs" {
     bucket = "mklv-infrastructure-tfstate"
-    prefix = "tfstate/gcp/apps/keyforge-card-search"
+    prefix = "tfstate/gcp/apps/keyforge-card-gallery"
   }
   required_providers {
     google = {
