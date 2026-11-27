@@ -35,8 +35,7 @@ module "cloud_run" {
   }
 
   secrets = {
-    # Feedback from the site goes to the maintenance channel, with the
-    # dataset problems.
-    DISCORD_WEBHOOK = local.discord_secrets.MAINTENANCE_WEBHOOK_URL
+    # Feedback from the site goes to the Discord feedback channel.
+    DISCORD_WEBHOOK = local.discord_secrets.FEEDBACK_WEBHOOK_URL
   }
 }
