@@ -25,6 +25,6 @@ module "cloud_run" {
   gcp_region     = local.gcp_region
 
   env_vars = {
-    DATASET_URL = "https://storage.googleapis.com/mklv-keyforge-cards-public/data/cards.json"
+    DATASET_URL = "https://storage.googleapis.com/mklv-keyforge-cards-public/data/latest.json"
   }
 }
