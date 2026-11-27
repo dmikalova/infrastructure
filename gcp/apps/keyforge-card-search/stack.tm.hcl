@@ -2,7 +2,7 @@ stack {
   name        = "keyforge-card-search Cloud Run"
   description = "Cloud Run service for keyforge-card-search (search.keyforge.cards)"
   id          = "gcp-apps-keyforge-card-search"
-  tags        = ["google", "google-beta"]
+  tags        = ["google", "google-beta", "sops"]
 
   after = [
     "/gcp/apps/keyforge-cards",
