@@ -106,6 +106,9 @@ module "repositories" {
       description = "centralized login portal for multi-domain authentication"
       topics      = ["mklv-deploy", "mklv-tech"]
     }
+    mklv-ui = {
+      description = "shared UI framework for templ, Datastar and Tailwind sites, starting with themes"
+    }
     "mklv.tech" = {
       description = "warming service and landing page for mklv.tech"
       topics      = ["mklv-deploy", "mklv-tech"]
